@@ -63,14 +63,14 @@ public class JDBCUtils {
      */
     public static String correctTableName(Connection connection, String table) throws SQLException {
 
-        LOG.debug("Calling correctTableName with parameters: " + connection + " and table: " + table);
+        LOG.debug("Calling correctTableName with parameters: %s and table: %s", connection, table);
 
         if (table == null)
             return null;
 
         List<String> corrected = correctTableNames(connection, new String[] { table });
 
-        LOG.debug("Done Calling correctTableName with parameters: " + connection + " and table: " + table + "Result list: " + corrected);
+        LOG.debug("Done Calling correctTableName with parameters: %s and table: %s Result list: %s", connection, table, corrected);
 
         return !corrected.isEmpty() ? corrected.get(0) : null;
     }
@@ -87,7 +87,7 @@ public class JDBCUtils {
      */
     public static List<String> correctTableNames(Connection connection, String[] tables) throws SQLException {
 
-        LOG.debug("Calling multi correctTableNames with parameters: " + connection + " and tables: " + tables);
+        LOG.debug("Calling multi correctTableNames with parameters: %s and tables: %s", connection, tables);
 
         List<String> dbTables = getAllTableNames(connection);
         List<String> corrected = new ArrayList<String>(tables.length);
@@ -103,7 +103,7 @@ public class JDBCUtils {
         	}
         }
 
-        LOG.debug("Done Calling multi correctTableNames with parameters: " + connection + " and tables: " + tables + " Returning result: " + corrected);
+        LOG.debug("Done Calling multi correctTableNames with parameters: %s and tables: %s Returning result: %s", connection, tables, corrected);
 
         return corrected;
     }
@@ -138,14 +138,14 @@ public class JDBCUtils {
      */
     public static String correctColumnName(Connection connection, String tableName, String column) throws SQLException {
 
-        LOG.debug("Calling correctColumnName with parameters: " + connection + " table: " + tableName + " and column: " + column);
+        LOG.debug("Calling correctColumnName with parameters: %s and table: %s and column: %s", connection, tableName, column);
 
         if (column == null) 
             return null;
 
         List<String> corrected = correctColumnNames(connection, tableName, new String[] { column });
 
-        LOG.debug("Done Calling correctColumnName with parameters: " + connection + " table: " + tableName + " and column: " + column + " Result list" + corrected);
+        LOG.debug("Done Calling correctColumnName with parameters: %s and table: %s and column: %s Result list %s", connection, tableName, column, corrected);
 
         return !corrected.isEmpty() ? corrected.get(0) : null;
     }
@@ -164,7 +164,7 @@ public class JDBCUtils {
     public static List<String> correctColumnNames(Connection connection, String tableName, String[] columns)
             throws SQLException {
 
-        LOG.debug("Calling multiple correctColumnNames with parameters: " + connection + " table: " + tableName + " and columns: " + columns);
+        LOG.debug("Calling multiple correctColumnNames with parameters: %s and table: %s and columns: %s", connection, tableName, columns);
         
         List<String> dbColumns = getAllColumnNames(connection, tableName);
         List<String> corrected = new ArrayList<String>(columns.length);
@@ -180,7 +180,7 @@ public class JDBCUtils {
         	}
         }
 
-        LOG.debug("Done Calling multiple correctColumnNames with parameters: " + connection + " table: " + tableName + " and columns: " + columns + " Result: " + corrected);
+        LOG.debug("Done Calling multiple correctColumnNames with parameters: %s table: %s and columns: %s Result: %s", connection, tableName, columns, corrected);
 
         return corrected;
     }
@@ -194,7 +194,7 @@ public class JDBCUtils {
      * @throws java.sql.SQLException if connection fails or meta-data could not be retrieved
      */
     public static List<String> getAllColumnNames(Connection connection, String tableName) throws SQLException {
-    	LOG.debug("tableName from JDBCUtils " + tableName);
+    	LOG.debug("tableName from JDBCUtils %s", tableName);
         List<String> columns = new ArrayList<String>();
 
         ResultSet rs = connection.getMetaData().getColumns(null, null, tableName, null);
@@ -213,7 +213,7 @@ public class JDBCUtils {
      * @throws SQLException
      */
     public static List<String> getPrimaryKeyColumnNames(Connection connection, String tableName) throws SQLException {
-        LOG.debug("tableName from JDBCUtils " + tableName);
+        LOG.debug("tableName from JDBCUtils %s", tableName);
         List<String> columns = new ArrayList<String>();
 
         ResultSet rs = connection.getMetaData().getPrimaryKeys(null, null, tableName);

@@ -16,9 +16,11 @@
 
 package com.sapienter.jbilling.server.mediation.task;
 
+import com.sapienter.jbilling.common.FormatLogger;
 import com.sapienter.jbilling.common.SessionInternalError;
 import com.sapienter.jbilling.server.item.PricingField;
 import com.sapienter.jbilling.server.mediation.Record;
+
 import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 
@@ -50,7 +52,7 @@ import java.util.List;
  * @since 27-09-2010
  */
 public class JDBCReader extends AbstractJDBCReader {
-    private static final Logger LOG = Logger.getLogger(JDBCReader.class);
+	private static final FormatLogger LOG = new FormatLogger(JDBCReader.class);
 
     private String timestampUpdateSql = null;
 
@@ -105,7 +107,7 @@ public class JDBCReader extends AbstractJDBCReader {
             }
         }
 
-        LOG.debug("SQL query: '" + query + "'");
+        LOG.debug("SQL query: '%s'", query);
         return query.toString();
     }
 
@@ -126,7 +128,7 @@ public class JDBCReader extends AbstractJDBCReader {
         if (getMarkMethod() == MarkMethod.TIMESTAMP) {
             if (timestampUpdateSql == null) {
                 timestampUpdateSql = buildTimestampUpdateSql(record, keyColumnIndexes);
-                LOG.debug("Timestamp update SQL: '" + timestampUpdateSql + "'");
+                LOG.debug("Timestamp update SQL: '%s'", timestampUpdateSql);
             }
         }
 

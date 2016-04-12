@@ -110,7 +110,7 @@ public class BasicOrderFilterTask
 	            } else {
 	            	billingUntil = userBL.getBillingUntilDate(customerNextInvoiceDate, process.getBillingDate());
 	            }
-                LOG.debug("Calculating billing until for user, " + order.getUser() + " is " + billingUntil);
+                LOG.debug("Calculating billing until for user, %s is %s", order.getUser(), billingUntil);
             }
 
             EventLogger eLog = EventLogger.getInstance();

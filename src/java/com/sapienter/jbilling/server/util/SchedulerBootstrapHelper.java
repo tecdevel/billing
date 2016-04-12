@@ -75,7 +75,7 @@ public class SchedulerBootstrapHelper {
                     try {
                         if(task.getJobDetail() != null && task.getTrigger() != null){
                             scheduler.getScheduler().scheduleJob(task.getJobDetail(), task.getTrigger());
-                            LOG.debug("Scheduled: [" + task.getTaskName() + "]");
+                            LOG.debug("Scheduled: [%s]", task.getTaskName());
                         }
                     } catch (PluggableTaskException e) {
                         LOG.warn("Failed to schedule pluggable task [%s]", task.getTaskName());

@@ -145,7 +145,7 @@ public class SaveACHExternallyTask extends PluggableTask implements IInternalEve
     private void updateAch(PaymentInformationDTO ach, String gatewayKey) {
     	PaymentInformationBL piBl = new PaymentInformationBL();
     	if (gatewayKey != null) {
-            LOG.debug("Storing ach gateway key: " + gatewayKey);
+            LOG.debug("Storing ach gateway key: %s", gatewayKey);
             piBl.updateStringMetaField(ach, gatewayKey, MetaFieldType.GATEWAY_KEY);
             piBl.obscureBankAccountNumber(ach);
             new PaymentInformationDAS().makePersistent(ach);

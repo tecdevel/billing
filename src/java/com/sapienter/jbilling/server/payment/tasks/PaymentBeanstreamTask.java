@@ -263,7 +263,7 @@ public class PaymentBeanstreamTask extends PaymentTaskWithTimeout implements
 
             //TODO: check this log also check values of postVars
             String maskedCCNumber = postVars.toString().replaceAll("trnCardNumber=[^&]*", "trnCardNumber=*****");
-            LOG.debug("HTTP POST vars going to beanstream:  " + maskedCCNumber);
+            LOG.debug("HTTP POST vars going to beanstream:  %s", maskedCCNumber);
 
             postVars.append("&").append("password=").append(password);
 
@@ -313,7 +313,7 @@ public class PaymentBeanstreamTask extends PaymentTaskWithTimeout implements
                 responseText.append((char) ch);
 
             istream.close();
-            LOG.debug("Beanstream responseText: " + responseText);
+            LOG.debug("Beanstream responseText: %s", responseText);
             return responseText.toString();
         } catch (Exception e) {
 

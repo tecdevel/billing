@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.sapienter.jbilling.common.FormatLogger;
 import com.sapienter.jbilling.server.pluggableTask.admin.PluggableTaskException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -35,7 +36,8 @@ import com.sapienter.jbilling.server.pluggableTask.admin.ParameterDescription;
 public abstract class AbstractReader extends PluggableTask implements
         IMediationReader {
 
-    private static final Logger LOG = Logger.getLogger(AbstractReader.class);
+	private static final FormatLogger LOG = new FormatLogger(AbstractReader.class);
+    
     private int batchSize;
     
     public static final ParameterDescription PARAMETER_BATCH_SIZE = 
@@ -51,7 +53,7 @@ public abstract class AbstractReader extends PluggableTask implements
         try {
             // the parameter is optional and defaults to 1000 records
             batchSize = getParameter(PARAMETER_BATCH_SIZE.getName(), 100);
-            LOG.debug("Batch size for this reader is " + getBatchSize());
+            LOG.debug("Batch size for this reader is %s", getBatchSize());
 
         } catch (PluggableTaskException e) {
             retValue = false;

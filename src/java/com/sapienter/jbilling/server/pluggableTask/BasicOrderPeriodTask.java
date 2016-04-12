@@ -305,7 +305,7 @@ public class BasicOrderPeriodTask
             Date viewLimit = userBL.getBillingUntilDate(
             		userBL.getDto().getCustomer().getNextInvoiceDate(),
             		processDate);
-            LOG.debug("Calculating view limit for user, " + userId + " is " + viewLimit);
+            LOG.debug("Calculating view limit for user, %s is %s", userId, viewLimit);
             return viewLimit;
         } catch (Exception e) {
             throw new SessionInternalError("Calculating view limit", BasicOrderPeriodTask.class, e);

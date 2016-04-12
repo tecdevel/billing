@@ -133,8 +133,8 @@ public class PaymentsGatewayTask extends PaymentTaskWithTimeout implements
                     && paymentInfo.getIsPreauth().intValue() == 1) {
                 preAuth = true;
             }
-            log.debug("Payment request Received ; Method : "
-                    + paymentInfo.getMethod());
+            log.debug("Payment request Received ; Method : %s",
+                      paymentInfo.getMethod());
             
             PaymentInformationBL piBl = new PaymentInformationBL();
             if (piBl.isCreditCard(paymentInfo.getInstrument())) {
@@ -166,7 +166,7 @@ public class PaymentsGatewayTask extends PaymentTaskWithTimeout implements
             PaymentAuthorizationDTO response = processPGRequest(data);
             paymentInfo.setAuthorization(response);
 
-            log.debug("Response code " + response.getCode1());
+            log.debug("Response code %s", response.getCode1());
             if (RESPONSE_CODE_APPROVED.equals(response.getCode1())) {
                 paymentInfo.setPaymentResult(new PaymentResultDAS()
                         .find(ServerConstants.RESULT_OK));
@@ -188,7 +188,7 @@ public class PaymentsGatewayTask extends PaymentTaskWithTimeout implements
             throw new PluggableTaskException(e);
         }
 
-        log.debug("process returning " + retValue);
+        log.debug("process returning %s", retValue);
 
         return retValue;
 
@@ -298,8 +298,8 @@ public class PaymentsGatewayTask extends PaymentTaskWithTimeout implements
                 } else if (accountType.equalsIgnoreCase(ServerConstants.ACH_SAVING)) {
                     accType += "S";
                 } else {
-                    log.error("unknown Account Type : "
-                            + accountType);
+                    log.error("unknown Account Type : %s",
+                              accountType);
                     throw new PluggableTaskException("unknown Account Type");
                 }
 
@@ -327,7 +327,7 @@ public class PaymentsGatewayTask extends PaymentTaskWithTimeout implements
 
         //TODO: check this log and payloadData values
         String maskedCCNumber = payloadData.replaceAll("ecom_payment_card_number=[^\n]*", "ecom_payment_card_number=******");
-        log.debug("charge data : " + maskedCCNumber);
+        log.debug("charge data : %s", maskedCCNumber);
         return payloadData;
 
     }
@@ -379,7 +379,7 @@ public class PaymentsGatewayTask extends PaymentTaskWithTimeout implements
             } else if (method == PAYMENT_METHOD_ACH) {
                 transType += EFT_CRED;
             } else {
-                log.error("Can't process refund for this method: " + method);
+                log.error("Can't process refund for this method: %s", method);
                 throw new PluggableTaskException(
                         "Can't process refund for this method");
             }
@@ -404,13 +404,13 @@ public class PaymentsGatewayTask extends PaymentTaskWithTimeout implements
                 transType += EFT_VERIFY;
                 break;
             default:
-                log.error("Unknown payment method : " + method);
+                log.error("Unknown payment method : %s", method);
                 throw new PluggableTaskException(
                         "Unknown payment method : Neither Credit Card, Cheque nor ACH ");
             }
         } else {
-            log.error("Unknown transaction type : "
-                    + paymentInfo.getIsRefund());
+            log.error("Unknown transaction type : %s",
+                      paymentInfo.getIsRefund());
             throw new PluggableTaskException(
                     "Unknown transaction type : Neither Credit Card, Cheque nor ACH");
         }
@@ -419,7 +419,7 @@ public class PaymentsGatewayTask extends PaymentTaskWithTimeout implements
 
     public String getCCType(Integer type) {
 
-        log.debug("credit card type: " + type);
+        log.debug("credit card type: %s", type);
         String ccType = "";
         switch (type) {
 
@@ -447,7 +447,7 @@ public class PaymentsGatewayTask extends PaymentTaskWithTimeout implements
             break;
 
         default:
-            log.error("Unknown credit card type: " + type);
+            log.error("Unknown credit card type: %s", type);
             break;
         // throw new PluggableTaskException("Cannot find credit type");
         }
@@ -473,12 +473,12 @@ public class PaymentsGatewayTask extends PaymentTaskWithTimeout implements
                     break;
                 }
 
-                log.debug("Response line: " + line);
+                log.debug("Response line: %s", line);
                 // parse and display name/value pair
                 int equalPos = line.indexOf('=');
                 String name = line.substring(0, equalPos);
                 String value = line.substring(equalPos + 1);
-                log.debug(name + "=" + value);
+                log.debug(name + "= %s", value);
                 if (name.equals("pg_response_type")) {
                     dbRow.setCode1(value); // code if 1 it is ok
                 }
@@ -621,7 +621,7 @@ public class PaymentsGatewayTask extends PaymentTaskWithTimeout implements
                     break;
                 }
 
-                log.debug("Response line: " + line);
+                log.debug("Response line: %s", line);
                 // parse and display name/value pair
                 int equalPos = line.indexOf('=');
                 String name = line.substring(0, equalPos);
@@ -696,14 +696,14 @@ public class PaymentsGatewayTask extends PaymentTaskWithTimeout implements
                     .getDefault();
 
             SSLSocket s = (SSLSocket) factory.createSocket(host, port);
-            log.debug("connected to :" + host + "on " + port);
+            log.debug("connected to : %s on %s", host, port);
             s.setEnabledCipherSuites(s.getSupportedCipherSuites());
-            log.debug("cipher=" + s.getSession().getCipherSuite());
+            log.debug("cipher=%s", s.getSession().getCipherSuite());
 
             DataOutputStream dos = new DataOutputStream(s.getOutputStream());
 
             // write the content and be sure to flush
-            log.debug("Writing data to PG " + data);
+            log.debug("Writing data to PG %s", data);
             dos.writeBytes(data);
             dos.flush();
 

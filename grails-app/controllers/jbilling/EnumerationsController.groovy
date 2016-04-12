@@ -129,7 +129,7 @@ class EnumerationsController {
                 log.debug "found enumeration ${enumer}"
                 if (new MetaFieldDAS().getFieldCountByDataTypeAndName(DataType.ENUMERATION, enumer.getName(),session['company_id']) > 0
                         || new MetaFieldDAS().getFieldCountByDataTypeAndName(DataType.LIST, enumer.getName(),session['company_id']) > 0) {
-                    log.debug('Can not delete enumeration ' + enumer.getName() + ', it is in use.')
+                    log.debug("Can not delete enumeration ${enumer.getName()}, it is in use.")
                     flash.error = 'Can not delete enumeration ' + enumer.getName() + ', it is in use.'
                 } else {
                     webServicesSession.deleteEnumeration(enumerationId)

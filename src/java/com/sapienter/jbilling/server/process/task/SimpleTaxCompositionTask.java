@@ -103,7 +103,7 @@ public class SimpleTaxCompositionTask extends AbstractChargeTask {
     }
 
     public boolean isTaxCalculationNeeded(NewInvoiceContext invoice, Integer userId) {
-    	LOG.debug("isTaxCalculationNeeded for user " + userId + " having exemptProperty " + exemptCustomerAttributeID );
+    	LOG.debug("isTaxCalculationNeeded for user %s having exemptProperty %s", userId, exemptCustomerAttributeID );
     	//default true
     	boolean retVal= true;
     	if ( null != exemptCustomerAttributeID ) { 
@@ -113,7 +113,7 @@ public class SimpleTaxCompositionTask extends AbstractChargeTask {
 	        	LOG.debug ("User and Customer resolved. ");
 		        MetaFieldValue customField = customer.getMetaField(exemptCustomerAttributeID);
 		        if ( null != customField) {
-		        	LOG.debug("Exempt field value " + customField.getValue());
+		        	LOG.debug("Exempt field value %s", customField.getValue());
 			        String value = (String) customField.getValue();
 			        if ("yes".equalsIgnoreCase(value) || "true".equalsIgnoreCase(value)) {
 			            retVal= false;
@@ -134,7 +134,7 @@ public class SimpleTaxCompositionTask extends AbstractChargeTask {
         
         BigDecimal invoiceAmountSum= super.calculateAndApplyTax(invoice, userId);
         
-        LOG.debug("Exempt Category " + exemptItemCategoryID);
+        LOG.debug("Exempt Category %s", exemptItemCategoryID);
         if (exemptItemCategoryID != null) {
             // find exemp items and subtract price
             for (int i = 0; i < invoice.getResultLines().size(); i++) {
@@ -145,7 +145,7 @@ public class SimpleTaxCompositionTask extends AbstractChargeTask {
                     Set<ItemTypeDTO> itemTypes = new ItemDAS().find(item.getId()).getItemTypes();
                     for (ItemTypeDTO itemType : itemTypes) {
                         if (itemType.getId() == exemptItemCategoryID) {
-                            LOG.debug("Item " + item.getDescription() + " is Exempt. Category " + itemType.getId());
+                            LOG.debug("Item %s is Exempt. Category %s", item.getDescription(), itemType.getId());
                             invoiceAmountSum = invoiceAmountSum.subtract(invoiceLine.getAmount());
                             break;
                         }

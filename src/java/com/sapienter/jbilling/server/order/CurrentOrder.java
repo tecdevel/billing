@@ -135,7 +135,7 @@ public class CurrentOrder {
 	     * created. This logic is not valid anymore but the implementation logic in
 	     * date calculation was preserved*/
 	    final Date newOrderDate = calculateDate(0, mainSubscription);
-	    LOG.debug("Calculated one timer date: " + newOrderDate);
+	    LOG.debug("Calculated one timer date: %s", newOrderDate);
 
         if (newOrderDate == null) {
             // this is an error, there isn't a good date give
@@ -184,7 +184,7 @@ public class CurrentOrder {
 	    if (!orderFound) {
             // there aren't any one-time orders for this date that are 'open'. Create one.
             Integer newOrderId = create(newOrderDate, currencyId, entityId);
-            LOG.debug("Created new one-time order, Order ID:", newOrderId);
+            LOG.debug("Created new one-time order, Order ID: %s", newOrderId);
         }
 
         currentOrder = orderBl.getEntity().getId();

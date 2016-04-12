@@ -187,7 +187,7 @@ class OrderController {
 
         def orderIds = parameterIds
 
-        log.debug(" ### filters: "+filters)        
+        log.debug(" ### filters: ${filters}")        
 
         def selected = params.id ? webServicesSession.getOrder(params.int("id")) : null
         def orders = getFilteredOrders(filters, params, orderIds)

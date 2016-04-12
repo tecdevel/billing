@@ -39,13 +39,13 @@ public class InactiveUserManagementTask extends AbstractCronTask {
 
         try {
             preferenceBL.set(getEntityId(), ClientConstants.PREFERENCE_EXPIRE_INACTIVE_AFTER_DAYS);
-            LOG.debug("preferenceBL.getInt() " + preferenceBL.getInt());
+            LOG.debug("preferenceBL.getInt() %s", preferenceBL.getInt());
             maxDaysOfInactivity = preferenceBL.getInt();
         } catch ( Exception e) {
-            LOG.error("Error occurred Cannot get preference : " + e.getMessage());
+            LOG.error("Error occurred Cannot get preference : %s", e.getMessage());
         }
 
-        LOG.debug("daysToMakeUserInActive " + maxDaysOfInactivity);
+        LOG.debug("daysToMakeUserInActive %s", maxDaysOfInactivity);
         
         if (null != maxDaysOfInactivity && maxDaysOfInactivity.equals(new Integer(0))) {
             LOG.debug("Account Expiry Feature is Disabled. The plug-in will now exit." );
@@ -60,15 +60,15 @@ public class InactiveUserManagementTask extends AbstractCronTask {
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.DAY_OF_YEAR, cal.get(Calendar.DAY_OF_YEAR) - maxDaysOfInactivity);
         Date activityThresholdDate = cal.getTime();
-        LOG.debug("Account activity threshold date calculated using preference value = " + activityThresholdDate);
+        LOG.debug("Account activity threshold date calculated using preference value = %s", activityThresholdDate);
 
         // Get users that have not logged in since the provided date obtained in last step
         List<UserDTO> inActiveUserList = getUsersInactiveSince(activityThresholdDate);
 
         if (null != inActiveUserList && !inActiveUserList.isEmpty()) { // means there are users that have lastLogin before activityThresholdDate
-            LOG.debug("Number of inactive users since " + activityThresholdDate + " = " + inActiveUserList.size());
+            LOG.debug("Number of inactive users since %s = %s", activityThresholdDate, inActiveUserList.size());
         } else {
-            LOG.debug("There are NO inactive users since " + activityThresholdDate);
+            LOG.debug("There are NO inactive users since %s", activityThresholdDate);
             return;
         }
 
@@ -85,7 +85,7 @@ public class InactiveUserManagementTask extends AbstractCronTask {
             List<UserDTO> inactiveUserList = userDas.findUsersInActiveSince(activityThresholdDate, getEntityId());
             return inactiveUserList;
         } catch (Exception e) {
-            LOG.error("Exception caught while getting Inactive Users : " + e.getMessage());
+            LOG.error("Exception caught while getting Inactive Users : %s", e.getMessage());
             return null;
         }
     }

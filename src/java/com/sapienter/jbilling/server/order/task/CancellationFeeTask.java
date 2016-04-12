@@ -107,8 +107,7 @@ public class CancellationFeeTask extends PluggableTask implements IInternalEvent
 			// or the new one is null don't process
 			if (myEvent.getNewActiveUntil() == null
 					|| (myEvent.getOldActiveUntil() != null && !myEvent.getNewActiveUntil().before(myEvent.getOldActiveUntil()))) {
-				LOG.debug("New active until is not earlier than old one. Skipping cancellation fees. "
-						+ "Order id" + myEvent.getOrderId());
+				LOG.debug("New active until is not earlier than old one. Skipping cancellation fees. Order id %s", myEvent.getOrderId());
 				return;
 			}
 
@@ -146,7 +145,7 @@ public class CancellationFeeTask extends PluggableTask implements IInternalEvent
 			throw new SessionInternalError("Can't process anything but a new active until event");
 		}
 
-		LOG.debug("Processing event " + event + " for cancellation fee");
+		LOG.debug("Processing event %s for cancellation fee", event);
 
 		if (event != null && eventType == EventType.NEW_ACTIVE_UNTIL_EVENT) {
 			NewActiveUntilEvent myEvent = (NewActiveUntilEvent) event;
@@ -188,7 +187,7 @@ public class CancellationFeeTask extends PluggableTask implements IInternalEvent
             throw new SessionInternalError(message);
         }
 	
-    	LOG.debug("Parameters set to cancel = " + cancelled_id + " fee = " + fee_id);
+    	LOG.debug("Parameters set to cancel = %s fee = %s", cancelled_id, fee_id);
     }
 
     private void applyFee(Integer itemId, Double quantity, Integer daysInPeriod, OrderLineDTO line) {
@@ -229,7 +228,7 @@ public class CancellationFeeTask extends PluggableTask implements IInternalEvent
         }
 
         if (BigDecimal.ZERO.equals(periods)) {
-            LOG.debug("Not a single complete period cancelled: " + oldActiveUntil + " " + newActiveUntil);
+            LOG.debug("Not a single complete period cancelled: %s %s", oldActiveUntil, newActiveUntil);
             return;
         }
 
@@ -284,7 +283,7 @@ public class CancellationFeeTask extends PluggableTask implements IInternalEvent
         }
 
         Integer feeOrderId = orderBL.create(entityId, null, feeOrder);
-        LOG.debug("New fee order created: " + feeOrderId + " for cancel of " + order.getId());
+        LOG.debug("New fee order created: %s for cancel of %s", feeOrderId, order.getId());
     }
 
     // convenience method for cancellation fee quantity of 1 and period of 30

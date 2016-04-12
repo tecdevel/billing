@@ -220,7 +220,7 @@ public class PaymentAuthorizeNetCIMTask extends PaymentTaskWithTimeout
             return null;
         }
 
-        LOG.debug("Storing credit card/ach details info within " + getProcessorName() + " gateway");
+        LOG.debug("Storing credit card/ach details info within %s gateway", getProcessorName());
 
         // fetch contact info if missing
         if (contact == null) {
@@ -246,7 +246,7 @@ public class PaymentAuthorizeNetCIMTask extends PaymentTaskWithTimeout
         try {
             CustomerProfileData profile = createOrUpdateProfile(contact, instrument, createApi());
             String gatewayKey = profile.toGatewayKey();
-            LOG.debug("Obtained card reference number during external storage: " + gatewayKey);
+            LOG.debug("Obtained card reference number during external storage: %s", gatewayKey);
             return gatewayKey;
         } catch (PluggableTaskException e) {
             LOG.debug("Could not process external storage payment", e);
@@ -298,7 +298,7 @@ public class PaymentAuthorizeNetCIMTask extends PaymentTaskWithTimeout
     }
 
     private static boolean isCreditCardStored(PaymentDTOEx payment, boolean bUseCreditCard) {
-        LOG.debug("IsCreditCardStored called, bUseCreditCard = " + bUseCreditCard + ", instrument = " + payment.getInstrument());
+        LOG.debug("IsCreditCardStored called, bUseCreditCard = %s, instrument = %s", bUseCreditCard, payment.getInstrument());
         return new PaymentInformationBL().useGatewayKey(payment.getInstrument());
     }
 
@@ -678,8 +678,8 @@ class AuthorizeNetCIMApi {
                 String customerPaymentProfileId= parseCreateCustomerPaymentProfileResponse(HTTPResponse);
                 customerProfile.setCustomerPaymentProfileId(customerPaymentProfileId);
             } catch (DublicateProfileRecordException e) {
-                LOG.warn("Error creating a Payment Profile for this customer in absence of any. "
-                        + customerProfile.getCustomerProfileId());
+                LOG.warn("Error creating a Payment Profile for this customer in absence of any. %s",
+                         customerProfile.getCustomerProfileId());
                 throw new PluggableTaskException(e);
             }
         }
@@ -964,7 +964,7 @@ class AuthorizeNetCIMApi {
             conn.setConnectTimeout(timeout * 1000);
             conn.setDoOutput(true);
 
-            LOG.debug("Sending request: " + XML);
+            LOG.debug("Sending request: %s", XML);
 
             // Send the request
             OutputStream ostream = conn.getOutputStream();
@@ -978,7 +978,7 @@ class AuthorizeNetCIMApi {
             istream.close();
             responseText.replace(0, 3, ""); // KLUDGE: Strips erroneous chars from response stream.
 
-            LOG.debug("Authorize.Net response: " + responseText);
+            LOG.debug("Authorize.Net response: %s", responseText);
 
             return responseText.toString();
         } catch (Exception e) {

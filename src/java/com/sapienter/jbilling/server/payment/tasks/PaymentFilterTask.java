@@ -112,7 +112,7 @@ public class PaymentFilterTask extends PaymentTaskBase implements PaymentTask {
             BlacklistFilter.Result result = filter.checkPayment(paymentInfo);
             if (result.isBlacklisted()) {
                 // payment failed a blacklist filter, return result failed
-                LOG.debug("Blacklisted result: " + result.getMessage());
+                LOG.debug("Blacklisted result: %s", result.getMessage());
                 PaymentAuthorizationDTO authInfo = new PaymentAuthorizationDTO();
                 authInfo.setProcessor(PAYMENT_PROCESSOR_NAME);
                 authInfo.setCode1(filter.getName());
@@ -182,8 +182,7 @@ public class PaymentFilterTask extends PaymentTaskBase implements PaymentTask {
                 LOG.debug("IpAddressFilter enabled");
             } else {
                 // ccf id wasn't there or couldn't be parsed from a string param
-                LOG.warn("Invalid " + PARAM_IP_ADDRESS_CCF_ID + " parameter " +
-                        " - skipping IpAddresFilter");
+                LOG.warn("Invalid %s parameter - skipping IpAddresFilter" + PARAM_IP_ADDRESS_CCF_ID);
             }
         } 
         if (getBooleanParameter(PARAM_ENABLE_FILTER_PHONE_NUMBER.getName())) {

@@ -628,7 +628,7 @@ class CustomerController {
         def accountTypeId
 		def companyId
 
-		log.debug("params.accountTypeId:########## "+session["company_id"])
+		log.debug("params.accountTypeId:########## ${session['company_id']}")
         accountTypeId = params.accountTypeId && params.accountTypeId?.isInteger() ?
             params.int('accountTypeId') : null
 		
@@ -1263,7 +1263,7 @@ class CustomerController {
 		def paymentMethods = getRecurringPaymentMethods(accountType?.paymentMethodTypes)
 		
 		PaymentInformationWS removed = user.paymentInstruments.remove(currentIndex)
-		log.debug("user instrument is: " + user.paymentInstruments)
+		log.debug("user instrument is: ${user.paymentInstruments}")
 		// if this was saved in database then we need to remove it from database as well
 		if(removed.id != null && removed.id != 0) {
 			boolean isRemoved = webServicesSession.removePaymentInstrument(removed.id)

@@ -226,14 +226,14 @@ class NotificationsController {
 
     def show () {
         log.debug "METHOD: show"
-        log.debug "Id is=" + params.id
+        log.debug "Id is= ${params.id}"
         Integer messageTypeId = params.id.toInteger()
 
         Integer _languageId = session['language_id']
         if (params.get('language.id')) {
-            log.debug "params.language.id is not null= " + params.get('language.id')
+            log.debug "params.language.id is not null= ${params.get('language.id')}"
             _languageId = params.get('language.id')?.toInteger()
-            log.debug "setting language id from requrest= " + _languageId
+            log.debug "setting language id from requrest= ${_languageId}"
         }
 
         Integer entityId = webServicesSession.getCallerCompanyId();
@@ -268,7 +268,7 @@ class NotificationsController {
     private getPreferenceMapByTypeId() {
         Map<PreferenceDTO> subList = new HashMap<PreferenceDTO>();
         List<PreferenceDTO> masterList = PreferenceDTO.findAllByForeignId(webServicesSession.getCallerCompanyId())
-        log.debug "masterList.size=" + masterList.size()
+        log.debug "masterList.size= ${masterList.size()}"
         for (PreferenceDTO dto : masterList) {
             Integer prefid = dto.getPreferenceType().getId()
             switch (prefid) {
@@ -280,7 +280,7 @@ class NotificationsController {
                 case ServerConstants.PREFERENCE_TYPE_USE_INVOICE_REMINDERS:
                 case ServerConstants.PREFERENCE_TYPE_NO_OF_DAYS_INVOICE_GEN_1_REMINDER:
                 case ServerConstants.PREFERENCE_TYPE_NO_OF_DAYS_NEXT_REMINDER:
-                    log.debug "Adding dto: " + dto.getPreferenceType().getId()
+                    log.debug "Adding dto: ${dto.getPreferenceType().getId()}"
                     subList.put(dto.getPreferenceType().getId(), dto)
                     break;
             }
@@ -296,7 +296,7 @@ class NotificationsController {
 
         Map<PreferenceDTO> subList = new HashMap<PreferenceDTO>();
         List<PreferenceDTO> masterList = PreferenceDTO.findAllByForeignId(webServicesSession.getCallerCompanyId())
-        log.debug "masterList.size=" + masterList.size()
+        log.debug "masterList.size= ${masterList.size()}"
         for (PreferenceDTO dto : masterList) {
             Integer prefid = dto.getPreferenceType().getId()
             switch (prefid) {
@@ -308,7 +308,7 @@ class NotificationsController {
                 case ServerConstants.PREFERENCE_TYPE_USE_INVOICE_REMINDERS:
                 case ServerConstants.PREFERENCE_TYPE_NO_OF_DAYS_INVOICE_GEN_1_REMINDER:
                 case ServerConstants.PREFERENCE_TYPE_NO_OF_DAYS_NEXT_REMINDER:
-                    log.debug "Adding dto: " + dto.getPreferenceType().getId()
+                    log.debug "Adding dto: ${dto.getPreferenceType().getId()}"
                     subList.put(dto.getPreferenceType().getId(), dto)
                     break;
             }
@@ -318,7 +318,7 @@ class NotificationsController {
     }
 
     def savePrefs () {
-        log.debug "pref[5].value=" + params.get("pref[5].value")
+        log.debug "pref[5].value= ${params.get('pref[5].value')}"
         List<PreferenceWS> prefDTOs
 
         try {
@@ -327,13 +327,13 @@ class NotificationsController {
             viewUtils.resolveExceptionForValidation(flash, session.locale, e);
             redirect action: "editPreferences"
         }
-        log.debug "Calling: webServicesSession.saveNotificationPreferences(prefDTOs); List Size: " + prefDTOs.size()
+        log.debug "Calling: webServicesSession.saveNotificationPreferences(prefDTOs); List Size: ${prefDTOs.size()}"
         PreferenceWS[] array = new PreferenceWS[prefDTOs.size()]
         array = prefDTOs.toArray(array)
         try {
             webServicesSession.updatePreferences(array)
         } catch (SessionInternalError e) {
-            log.error "Error: " + e.getMessage()
+            log.error "Error: ${e.getMessage()}"
             flash.errorMessages = e.getErrorMessages()
             //boolean retValue = viewUtils.resolveExceptionForValidation(flash, session.'org.springframework.web.servlet.i18n.SessionLocaleResolver.LOCALE', e);
         }
@@ -354,7 +354,7 @@ class NotificationsController {
         def count = params.recCnt.toInteger()
 
         for (int i = 0; i < count; i++) {
-            log.debug "loop=" + params.get("pref[" + i + "].id")
+            log.debug "loop= ${params.get("pref[" + i + "].id")}"
             PreferenceWS dto = new PreferenceWS()
             dto.setPreferenceType(new PreferenceTypeWS())
 
@@ -389,7 +389,7 @@ class NotificationsController {
                         dto.setValue("0")
                     }
             }
-            log.debug "dto.intValue=" + dto.value
+            log.debug "dto.intValue= ${dto.value}"
             prefDTOs.add(dto);
         }
         return prefDTOs;
@@ -399,17 +399,17 @@ class NotificationsController {
         log.debug "METHOD: edit"
 
         //set cookies here..
-        log.debug("doNotAskAgain=" + params.doNotAskAgain + " askPreference=" + params.askPreference)
+        log.debug("doNotAskAgain= ${params.doNotAskAgain}, askPreference= ${params.askPreference}")
 
         def askPreference = request.getCookie("doNotAskAgain")
-        log.debug("Cooke set to was=" + askPreference)
+        log.debug("Cooke set to was= ${askPreference}")
         if ("true".equals(params.doNotAskAgain)) {
             response.setCookie('doNotAskAgain', String.valueOf(params.askPreference), 604800)
             log.debug("Setting the cookie to value ${params.askPreference}")
             askPreference = params.askPreference
         }
 
-        log.debug "Id is=" + params.id
+        log.debug "Id is= ${params.id}"
         Integer messageTypeId = params.id?.toInteger()
 
         if (!messageTypeId) {
@@ -447,7 +447,7 @@ class NotificationsController {
         try {
             saveAction(params)
         } catch (SessionInternalError e) {
-            log.error "Error: " + e.getMessage()
+            log.error "Error: ${e.getMessage()}"
             flash.error = "error.illegal.modification"
         }
         redirect(action: 'edit', params: params)
@@ -460,7 +460,7 @@ class NotificationsController {
         try {
             saveAction(params)
         } catch (SessionInternalError e) {
-            log.error "Error: " + e.getMessage()
+            log.error "Error: ${e.getMessage()}"
             flash.error = "error.illegal.modification"
         }
         if (_id)
@@ -516,9 +516,9 @@ class NotificationsController {
             messageId = null;
         }
 
-        log.debug "msgDTO.language.id=" + messageDTO?.getLanguageId()
-        log.debug "msgDTO.type.id=" + messageDTO?.getTypeId()
-        log.debug "msgDTO.use.flag=" + messageDTO.getUseFlag()
+        log.debug "msgDTO.language.id= ${messageDTO?.getLanguageId()}"
+        log.debug "msgDTO.type.id= ${messageDTO?.getTypeId()}"
+        log.debug "msgDTO.use.flag= ${messageDTO.getUseFlag()}"
 
         if (params.notifyAdmin) {
             messageDTO.setNotifyAdmin(1)
@@ -551,7 +551,7 @@ class NotificationsController {
                 webServicesSession.createUpdateNotification(messageId, messageDTO)
                 flash.message = 'notification.save.success'
             } catch (Exception e) {
-                log.error("ERROR: " + e.getMessage())
+                log.error("ERROR: ${e.getMessage()}")
                 throw new SessionInternalError(e)
             }
         } else {
@@ -568,8 +568,8 @@ class NotificationsController {
         MessageSection obj = null;
 
         for (int i = 1; i <= 3; i++) {
-            log.debug "messageSections[" + i + "].section=" + params.get("messageSections[" + i + "].section")
-            log.debug "messageSections[" + i + "].id=" + params.get("messageSections[" + i + "].id")
+            log.debug "messageSections[" + i + "].section= ${params.get("messageSections[" + i + "].section")}"
+            log.debug "messageSections[" + i + "].id= ${params.get("messageSections[" + i + "].id")}"
 
             if (params.get("messageSections[" + i + "].notificationMessageLines.content")) {
                 content = params.get("messageSections[" + i + "].notificationMessageLines.content")
@@ -579,9 +579,9 @@ class NotificationsController {
             }
             lines[(i - 1)] = obj;
         }
-        log.debug "Line 1= " + lines[0]
-        log.debug "Line 2= " + lines[1]
-        log.debug "Line 3= " + lines[2]
+        log.debug "Line 1= ${lines[0]}"
+        log.debug "Line 2= ${lines[1]}"
+        log.debug "Line 3= ${lines[2]}"
         return lines;
     }
 
@@ -590,7 +590,7 @@ class NotificationsController {
         try {
             saveAction(params)
         } catch (SessionInternalError e) {
-            log.error "Error: " + e.getMessage()
+            log.error "Error: ${e.getMessage()}"
             flash.error = "error.illegal.modification"
         }
         redirect(action: 'cancelEdit', params: params)
@@ -665,7 +665,7 @@ class NotificationsController {
                 redirect(action: 'editCategory')
             }
         } catch (Exception e) {
-            log.error("ERROR: " + e.getMessage())
+            log.error("ERROR: ${e.getMessage()}")
             throw new SessionInternalError(e)
         }
     }
@@ -701,7 +701,7 @@ class NotificationsController {
             }
         } catch (Exception e) {
             e.printStackTrace()
-            log.error("ERROR: " + e.getMessage())
+            log.error("ERROR: ${e.getMessage()}")
             throw new SessionInternalError(e)
         }
     }
@@ -747,7 +747,7 @@ class NotificationsController {
 
         notificationCategoryDTO.setDescription(description, language_id);
 
-        log.debug("Notification category saved successfully" + notificationCategoryDTO.getId());
+        log.debug("Notification category saved successfully ${notificationCategoryDTO.getId()}");
         return notificationCategoryDTO.getId();
     }
 
@@ -763,7 +763,7 @@ class NotificationsController {
 
         notificationMessageType.setDescription(description, language_id);
 
-        log.debug("Notification message type saved successfully" + notificationMessageType.getId());
+        log.debug("Notification message type saved successfully ${notificationMessageType.getId()}");
         return notificationMessageType.getId();
     }
 

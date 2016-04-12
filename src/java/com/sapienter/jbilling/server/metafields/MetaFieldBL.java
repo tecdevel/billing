@@ -539,6 +539,22 @@ public class MetaFieldBL {
         return new MetaFieldDAS().countMetaFieldValuesForEntity(entityType, metaFieldId) != 0;
     }
 
+    public static String getStringMetaFieldValue(Integer customerId, MetaFieldType type, Integer group, Date effectiveDate){
+        MetaFieldDAS metaFieldDAS = new MetaFieldDAS();
+        List<Integer> values = metaFieldDAS.getCustomerFieldValues(customerId, type, group, effectiveDate);
+        Integer valueId = null != values && values.size() > 0 ? values.get(0) : null;
+        MetaFieldValue valueField = null != valueId ? metaFieldDAS.getStringMetaFieldValue(valueId) : null;
+        return null != valueField ? (String) valueField.getValue() : null;
+    }
+
+    public static Integer getIntegerMetaFieldValue(Integer customerId, MetaFieldType type, Integer group, Date effectiveDate){
+        MetaFieldDAS metaFieldDAS = new MetaFieldDAS();
+        List<Integer> values = metaFieldDAS.getCustomerFieldValues(customerId, type, group, effectiveDate);
+        Integer valueId = null != values && values.size() > 0 ? values.get(0) : null;
+        MetaFieldValue valueField = null != valueId ? metaFieldDAS.getIntegerMetaFieldValue(valueId) : null;
+        return null != valueField ? (Integer) valueField.getValue() : null;
+    }
+
     public MetaField create(MetaField dto) {
 
         MetaField metaField = new MetaField();

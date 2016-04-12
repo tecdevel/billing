@@ -173,7 +173,7 @@ public class PaymentDAS extends AbstractDAS<PaymentDTO> {
         //net revenue = gross - all refunds
         BigDecimal netRevenueFromUser= grossReceipts.subtract(refunds);
         
-		LOG.debug("Gross receipts " + grossReceipts + " minus Gross Refunds " + refunds + ": " + netRevenueFromUser);
+		LOG.debug("Gross receipts %s minus Gross Refunds %s: %s", grossReceipts, refunds, netRevenueFromUser);
         
         return netRevenueFromUser;
     }

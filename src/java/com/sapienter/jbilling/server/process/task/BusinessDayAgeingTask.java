@@ -71,13 +71,13 @@ public class BusinessDayAgeingTask extends BasicAgeingTask {
 
         // last status change + step days as week days
         if (expiryDate.equals(today) || expiryDate.before(today)) {
-            LOG.debug("User status has expired (last change " + invoiceDueDate + " + "
-                      + stepDays + " days is before today " + today + ")");
+            LOG.debug("User status has expired (last change %s + %s days is before today %s)", invoiceDueDate,
+                       stepDays, today);
             return true;
         }
 
-        LOG.debug("User does not need to be aged (last change " + invoiceDueDate + " + "
-                  + stepDays + " days is after today " + today + ")");
+        LOG.debug("User does not need to be aged (last change %s + %s days is after today %s)", invoiceDueDate,
+                   stepDays, today);
         return false;
     }
 }

@@ -42,7 +42,7 @@ public class APILogger implements MethodBeforeAdvice, AfterReturningAdvice {
     private static final FormatLogger LOG = new FormatLogger(APILogger.class);
 
     public void before(Method method, Object[] args, Object target) throws Throwable {
-        LOG.debug("Call to " + method.getName() + " parameters: " + Arrays.toString(args));
+        LOG.debug("Call to %s parameters: %s", method.getName(), Arrays.toString(args));
     }
 
     public void afterReturning(Object ret, Method method, Object[] args, Object target) throws Throwable {
@@ -61,6 +61,6 @@ public class APILogger implements MethodBeforeAdvice, AfterReturningAdvice {
         } else {
             retStr.append("null");
         }
-        LOG.debug("Done call to " + method.getName() + " returning: " + retStr);
+        LOG.debug("Done call to %s returning: %s", method.getName(), retStr);
     }
 }

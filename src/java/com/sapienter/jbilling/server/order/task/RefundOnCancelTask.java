@@ -70,8 +70,7 @@ public class RefundOnCancelTask extends PluggableTask implements IInternalEvents
         if (event instanceof PeriodCancelledEvent) {
             order = ((PeriodCancelledEvent) event).getOrder();
             eventType = EventType.PERIOD_CANCELLED_EVENT;
-            LOG.debug("Plug in processing period cancelled event for order " +
-                    order.getId());
+            LOG.debug("Plug in processing period cancelled event for order %s", order.getId());
         } else if (event instanceof NewQuantityEvent) {
             NewQuantityEvent myEvent = (NewQuantityEvent) event;
             // don't process if new quantity has increased instead of decreased
@@ -85,8 +84,7 @@ public class RefundOnCancelTask extends PluggableTask implements IInternalEvents
                 return;
             }
             eventType = EventType.NEW_QUANTITY_EVENT;
-            LOG.debug("Plug in processing new quantity event for order " +
-                    order.getId());
+            LOG.debug("Plug in processing new quantity event for order %s", order.getId());
         } else {
             throw new SessionInternalError("Can't process anything but a period cancel event " +
                     "or a new quantity event");
@@ -165,14 +163,14 @@ public class RefundOnCancelTask extends PluggableTask implements IInternalEvents
         // add extra lines with items from the parameters
         for (String name : parameters.keySet()) {
             if (!name.startsWith("item")) {
-                LOG.warn("parameter is not an item:" + name);
+                LOG.warn("parameter is not an item: %s", name);
                 continue; // not an item parameter
             }
             int itemId = Integer.parseInt((String) parameters.get(name));
-            LOG.debug("adding item " + itemId + " to new order");
+            LOG.debug("adding item %s to new order", itemId);
             ItemDTO item = new ItemDAS().findNow(itemId);
             if (item == null || getEntityId() != event.getEntityId()) {
-                LOG.error("Item " + itemId + " not found");
+                LOG.error("Item %s not found", itemId);
                 continue;
             }
             OrderLineDTO newLine = new OrderLineDTO();
@@ -223,7 +221,7 @@ public class RefundOnCancelTask extends PluggableTask implements IInternalEvents
         order.setNotes(order.getNotes() + " - " +
                 bundle.getString(notesString) + " " + newOrderId);
 
-        LOG.debug("Credit done with new order " + newOrderId);
+        LOG.debug("Credit done with new order %s", newOrderId);
 
     }
 

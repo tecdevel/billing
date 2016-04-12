@@ -57,6 +57,9 @@
                 <g:layoutBody />
             </div>
         </div>
+        <div id="footer">
+			Web Data Technologies LLP - Version - <g:meta name="app.version"/>
+		</div>
         <r:layoutResources/>
     </body>
 </html>

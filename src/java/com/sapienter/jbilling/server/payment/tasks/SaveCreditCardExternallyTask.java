@@ -161,7 +161,7 @@ public class SaveCreditCardExternallyTask extends PluggableTask implements IInte
 
             if(null != user.getCustomer()){
                 Integer groupId = ev.getGroupId();
-                LOG.debug("Group Id: " + groupId + ", plug-in expects: " + getContactType());
+                LOG.debug("Group Id: %s, plug-in expects: %s", groupId, getContactType());
 
                 if ((null == groupId && null != ev.getContactDto()) || (getContactType() == groupId)) {
                     ContactDTO contact = null;
@@ -212,7 +212,7 @@ public class SaveCreditCardExternallyTask extends PluggableTask implements IInte
     private void updateCreditCard(PaymentInformationDTO creditCard, String gatewayKey) {
         PaymentInformationBL piBl= new PaymentInformationBL();
     	if (gatewayKey != null) {
-            LOG.debug("Storing gateway key: " + gatewayKey);
+            LOG.debug("Storing gateway key: %s", gatewayKey);
             piBl.updateStringMetaField(creditCard, gatewayKey, MetaFieldType.GATEWAY_KEY);
             piBl.obscureCreditCardNumber(creditCard);
         } else {

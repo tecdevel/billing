@@ -200,7 +200,7 @@ public class OrderChangeDTO extends CustomizedEntity implements java.io.Serializ
     public void setDescription(String description) {
         if (description != null && description.length() > 1000) {
             description = description.substring(0, 1000);
-            LOG.warn("Truncated an order change description to " + description);
+            LOG.warn("Truncated an order change description to %s", description);
         }
 
         this.description = description;
@@ -304,7 +304,7 @@ public class OrderChangeDTO extends CustomizedEntity implements java.io.Serializ
     public void setErrorMessage(String errorMessage) {
         if (errorMessage != null && errorMessage.length() > 1000) {
             errorMessage = errorMessage.substring(0, 500);
-            LOG.warn("Truncated an order change error message to " + errorMessage);
+            LOG.warn("Truncated an order change error message to %s", errorMessage);
         }
         this.errorMessage = errorMessage;
     }
@@ -317,7 +317,7 @@ public class OrderChangeDTO extends CustomizedEntity implements java.io.Serializ
     public void setErrorCodes(String errorCodes) {
         if (errorCodes != null && errorCodes.length() > 1000) {
             errorCodes = errorCodes.substring(0, 500);
-            LOG.warn("Truncated an order change error code to " + errorCodes);
+            LOG.warn("Truncated an order change error code to %s", errorCodes);
         }
         this.errorCodes = errorCodes;
     }

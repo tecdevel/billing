@@ -89,7 +89,7 @@ public class BlacklistUserStatusTask extends PluggableTask
         UserDTO user = new UserDAS().find(myEvent.getUserId());
         BlacklistBL blacklistBL = new BlacklistBL();
 
-        LOG.debug("Adding blacklist records for user id: " + user.getId());
+        LOG.debug("Adding blacklist records for user id: %s", user.getId());
 
         // blacklist user id
         blacklistBL.create(user.getCompany(), BlacklistDTO.TYPE_USER_ID,
@@ -129,7 +129,7 @@ public class BlacklistUserStatusTask extends PluggableTask
         }
 
         if (contact == null) {
-            LOG.warn("User " + myEvent.getUserId() + " does not have contact information to blacklist.");
+            LOG.warn("User %s does not have contact information to blacklist.", myEvent.getUserId());
             return;
         }
 

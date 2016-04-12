@@ -199,16 +199,16 @@ public class BillingProcessSessionBean implements IBillingProcessSessionBean {
     @Transactional( propagation = Propagation.NOT_SUPPORTED )
     public void processEntity(Integer entityId, Date billingDate, Integer periodType, Integer periodValue,
                               boolean isReview) throws SessionInternalError {    
-    	LOG.debug("Entering processEntity(entityId: "+ entityId +", billingDate: "+ billingDate +", periodType: "+ periodValue +", periodValue:"+ periodValue +")");
+    	LOG.debug("Entering processEntity(entityId: %s, billingDate: %s, periodType: %s, periodValue: %s)", entityId, billingDate, periodValue, periodValue);
     	if (entityId == null || billingDate == null) {
             throw new SessionInternalError("entityId and billingDate can't be null");
         }
         
     	JobLauncher launcher = (JobLauncher) Context.getBean(Context.Name.BATCH_SYNC_JOB_LAUNCHER);
-        LOG.debug("Loaded job launcher bean # " + launcher);
+        LOG.debug("Loaded job launcher bean # %s", launcher);
         
         Job job = (Job) Context.getBean(Context.Name.BATCH_JOB_GENERATE_INVOICES);
-        LOG.debug("Loaded job bean # " + job.toString());
+        LOG.debug("Loaded job bean # %s", job.toString());
         
         JobParametersBuilder paramBuilder = new JobParametersBuilder().addString(ServerConstants.BATCH_JOB_PARAM_ENTITY_ID, entityId.toString())
     									.addDate(ServerConstants.BATCH_JOB_PARAM_BILLING_DATE, billingDate)
@@ -223,9 +223,9 @@ public class BillingProcessSessionBean implements IBillingProcessSessionBean {
         try {
 			launcher.run(job, jobParameters);
 		} catch (Exception e) {
-			LOG.error("Job # " + job.getName() + " with parameters # " + jobParameters.toString() + "colud not be launched:",e);
+			LOG.error("Job # %s with parameters # %s colud not be launched:", job.getName(), jobParameters.toString(), e);
 		}
-        LOG.debug("Job for entity id # " + entityId + " has finished successfully");
+        LOG.debug("Job for entity id # %s has finished successfully", entityId);
     }
 
 	/**
@@ -329,7 +329,7 @@ public class BillingProcessSessionBean implements IBillingProcessSessionBean {
             }
             
             if (!user.isBillable(billingDate)) {
-            	LOG.debug("Skipping non billable user " + userId);
+            	LOG.debug("Skipping non billable user %s", userId);
             	return new Integer[0];
             }
 
@@ -368,7 +368,7 @@ public class BillingProcessSessionBean implements IBillingProcessSessionBean {
             LOG.info("The user %s has been processed. %s invoice generated", userId, invoiceGenerated);
 
         } catch (Throwable e) {
-            LOG.error("Exception caught when processing the user " + userId, e);
+            LOG.error("Exception caught when processing the user %s", userId, e);
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); // rollback !
             return null; // the user was not processed
         }
@@ -461,7 +461,7 @@ public class BillingProcessSessionBean implements IBillingProcessSessionBean {
 
         running.putIfAbsent(entityId, false);
         if (!running.replace(entityId, false, true)) {
-            LOG.warn("Failed to trigger billing process at " + pToday.getTime()+ ", another process is already running.");
+            LOG.warn("Failed to trigger billing process at %s, another process is already running.", pToday.getTime());
             return false;
         }
         LOG.debug("Billing trigger for %s entity %s", pToday, entityId);
@@ -602,7 +602,7 @@ public class BillingProcessSessionBean implements IBillingProcessSessionBean {
         ageingRunning.putIfAbsent(entityId, Boolean.FALSE);
 
         if (ageingRunning.get(entityId)) {
-            LOG.warn("Failed to trigger ageing review process at " + today + ", another process is already running.");
+            LOG.warn("Failed to trigger ageing review process at %s, another process is already running.", today);
             return;
 
         } else {
@@ -610,10 +610,10 @@ public class BillingProcessSessionBean implements IBillingProcessSessionBean {
         }
         
         JobLauncher launcher = (JobLauncher) Context.getBean(Context.Name.BATCH_SYNC_JOB_LAUNCHER);
-        LOG.debug("Loaded job launcher bean # " + launcher);
+        LOG.debug("Loaded job launcher bean # %s", launcher);
         
         Job job = (Job) Context.getBean(Context.Name.BATCH_JOB_AGEING_PROCESS);
-        LOG.debug("Loaded job bean # " + job.toString());
+        LOG.debug("Loaded job bean # %s", job.toString());
         
         JobParameters jobParameters = new JobParametersBuilder().addString(ServerConstants.BATCH_JOB_PARAM_ENTITY_ID, entityId.toString())
     									.addDate(ServerConstants.BATCH_JOB_PARAM_AGEING_DATE, today)
@@ -623,15 +623,15 @@ public class BillingProcessSessionBean implements IBillingProcessSessionBean {
         try {
 			launcher.run(job, jobParameters);
 		} catch (Exception e) {
-			LOG.error("Job # " + job.getName() + " with parameters # " + jobParameters.toString() + "colud not be launched:",e);	
+			LOG.error("Job # %s with parameters # %s colud not be launched:", job.getName(), jobParameters.toString(), e);	
 		}
         
         ageingRunning.put(entityId, Boolean.FALSE);
-        LOG.debug("Job for entity id # " + entityId + " has finished successfully");
+        LOG.debug("Job for entity id # %s has finished successfully", entityId);
     }
 
     public List<InvoiceDTO> reviewUserStatus(Integer entityId, Integer userId, Date today) {
-            LOG.debug("Trying to review user " + userId + " for date " + today);
+            LOG.debug("Trying to review user %s for date %s", userId, today);
             AgeingBL age = new AgeingBL();
             return age.reviewUserForAgeing(entityId, userId, today);
     }

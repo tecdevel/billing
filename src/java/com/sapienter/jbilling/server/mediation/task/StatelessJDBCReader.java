@@ -16,8 +16,10 @@
 
 package com.sapienter.jbilling.server.mediation.task;
 
+import com.sapienter.jbilling.common.FormatLogger;
 import com.sapienter.jbilling.common.SessionInternalError;
 import com.sapienter.jbilling.server.mediation.Record;
+
 import org.apache.log4j.Logger;
 
 import java.util.Iterator;
@@ -38,7 +40,7 @@ import java.util.List;
  * @since 27-09-2010
  */
 public class StatelessJDBCReader extends AbstractJDBCReader {
-    private static final Logger LOG = Logger.getLogger(StatelessJDBCReader.class);
+	private static final FormatLogger LOG = new FormatLogger(StatelessJDBCReader.class);
 
     private Integer lastId = 0;
 
@@ -96,7 +98,7 @@ public class StatelessJDBCReader extends AbstractJDBCReader {
             }
         }
 
-        LOG.debug("SQL query: '" + query + "'");        
+        LOG.debug("SQL query: '%s'", query);        
         return query.toString();
     }
 

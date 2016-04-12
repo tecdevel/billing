@@ -186,7 +186,7 @@ public class OrderLineDAS extends AbstractDAS<OrderLineDTO> {
     public List<OrderLineDTO> findOnetimeByParentUserItem(Integer parentUserId, Integer itemId, Integer months) {
         UserDTO parent = new UserBL(parentUserId).getEntity();
         if (parent == null || parent.getCustomer() == null) {
-            LOG.warn("Parent user " + parentUserId + " does not exist or is not a customer!");
+            LOG.warn("Parent user %s does not exist or is not a customer!", parentUserId);
             return Collections.emptyList();
         }
 

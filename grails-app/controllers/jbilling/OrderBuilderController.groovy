@@ -204,7 +204,7 @@ class OrderBuilderController {
                 }
 
                 // available order periods, statuses and order types
-                log.debug("Company Id*****: "+company?.id)
+                log.debug("Company Id*****: ${company?.id}")
                 def itemTypes = productService.getItemTypes(user.company.id, null)
 
                 def orderStatuses = OrderStatusDTO.list().findAll { 
@@ -1629,7 +1629,7 @@ class OrderBuilderController {
                     }
 
                 } catch (SessionInternalError e) {
-                    log.error "Error is: " + e
+                    log.error "Error is: ${e}"
 					if (!viewUtils.resolveException(conversation, session.locale, e)) {
                         conversation.errorMessages = [conversation.error]
                     }

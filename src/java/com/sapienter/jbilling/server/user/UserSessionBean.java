@@ -736,7 +736,7 @@ public class UserSessionBean implements IUserSessionBean, ApplicationContextAwar
                 userBL.setAccountExpired(status, user.getAccountDisabledDate());
                 return true;
             } else {
-                LOG.debug("Error occurred while updating user : " + userBL.getEntity().getId());
+                LOG.debug("Error occurred while updating user : %s", userBL.getEntity().getId());
                 return false;
             }
         } catch (Exception e) {

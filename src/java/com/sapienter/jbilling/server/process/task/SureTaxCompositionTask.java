@@ -188,11 +188,9 @@ public class SureTaxCompositionTask extends PluggableTask implements
 									+ errorMessages.toString());
 				}
 			} else {
-				LOG.debug("Response Code: " + response.responseCode
-						+ ", Header Message:" + response.headerMessage
-						+ ", Client Tracking: " + response.clientTracking
-						+ ", Total tax:" + response.totalTax + ", Trans Id: "
-						+ response.transId);
+				LOG.debug("Response Code: %s, Header Message: %s, Client Tracking: %s, Total tax: %s, Trans Id: %s", response.responseCode,
+						   response.headerMessage, response.clientTracking,
+						   response.totalTax, response.transId);
 				OrderDTO order = ((InvoiceLineDTO) invoice.getResultLines().get(0))
 						.getOrder();
 
@@ -256,8 +254,8 @@ public class SureTaxCompositionTask extends PluggableTask implements
 			if (invoiceLine.getInvoiceLineType().getId() != ServerConstants.INVOICE_LINE_TYPE_TAX
 					.intValue()) {
 
-				LOG.debug("Populating itemlist for invoice line: "
-						+ invoiceLine);
+				LOG.debug("Populating itemlist for invoice line: %s",
+						 invoiceLine);
 				
 				itemList.add(getLineItem(invoiceLine.getItem().getId(),
 						invoiceLine, uniqueTrackingCode, userId));
@@ -339,8 +337,8 @@ public class SureTaxCompositionTask extends PluggableTask implements
 			lineItem.setPlus4("");
 		}
 
-		LOG.debug("Meta fields: p2PPlus4:" + p2PPlus4 + ", p2PZipcode:"
-				+ p2PZipcode + ", plus4:" + plus4);
+		LOG.debug("Meta fields: p2PPlus4: %s, p2PZipcode: %s, plus4:%s", p2PPlus4,
+				  p2PZipcode, plus4);
 
 		MetaFieldValue<String> regulatoryCode = null;
 		regulatoryCode = item.getMetaField(regulatoryCodeFieldname);
@@ -368,11 +366,11 @@ public class SureTaxCompositionTask extends PluggableTask implements
 		// First get the tax exemption code from the customer
 		MetaFieldValue<String> taxExemptionCode = invoiceToUser.getCustomer()
 				.getMetaField(taxExemptionCodeFieldname);
-		LOG.debug("Tax exemption code from customer: " + taxExemptionCode);
+		LOG.debug("Tax exemption code from customer: %s", taxExemptionCode);
 		if (!(taxExemptionCode != null && taxExemptionCode.getValue() != null && !taxExemptionCode
 				.getValue().isEmpty())) {
 			taxExemptionCode = item.getMetaField(taxExemptionCodeFieldname);
-			LOG.debug("Tax exemption code from product: " + taxExemptionCode);
+			LOG.debug("Tax exemption code from product: %s", taxExemptionCode);
 		}
 		if (taxExemptionCode == null) {
 			LOG.debug("Setting tax exemption code to be 00");
@@ -380,9 +378,8 @@ public class SureTaxCompositionTask extends PluggableTask implements
 		} else {
 			taxExemptionCodeList.add(taxExemptionCode.getValue());
 		}
-		LOG.debug("Meta fields: regulatoryCode:" + regulatoryCode
-				+ ", salesTypeCode:" + salesTypeCode + ", taxExemptionCode:"
-				+ taxExemptionCode);
+		LOG.debug("Meta fields: regulatoryCode: %s, salesTypeCode: %s, taxExemptionCode: %s", regulatoryCode,
+				   salesTypeCode, taxExemptionCode);
 		lineItem.setTaxExemptionCodeList(taxExemptionCodeList);
 		lineItem.setTaxIncludedCode("0");
 
@@ -456,7 +453,7 @@ public class SureTaxCompositionTask extends PluggableTask implements
 		BigDecimal invoiceAmountSum = invoice.getTotal();
 
 		// Remove CARRIED BALANCE from tax calculation to avoid double taxation
-		LOG.debug("Carried balance is " + invoice.getCarriedBalance());
+		LOG.debug("Carried balance is %s", invoice.getCarriedBalance());
 		if (null != invoice.getCarriedBalance()) {
 			invoiceAmountSum = invoiceAmountSum.subtract(invoice
 					.getCarriedBalance());

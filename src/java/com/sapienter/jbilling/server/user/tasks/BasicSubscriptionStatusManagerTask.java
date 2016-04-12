@@ -58,11 +58,11 @@ public class BasicSubscriptionStatusManagerTask extends PluggableTask implements
         this.entityId = entityId;
         
         if (!isPaymentApplicable(true)) {
-            LOG.debug("This payment can't be processed " + payment);
+            LOG.debug("This payment can't be processed %s", payment);
             return;
         }
         
-        LOG.debug("A payment failed " + payment);
+        LOG.debug("A payment failed %s", payment);
         
         UserBL user = getUser(null);
         Integer status = user.getEntity().getSubscriberStatus().getId();
@@ -71,14 +71,14 @@ public class BasicSubscriptionStatusManagerTask extends PluggableTask implements
             if (status.equals(UserDTOEx.SUBSCRIBER_PENDING_EXPIRATION)) {
                 user.updateSubscriptionStatus(UserDTOEx.SUBSCRIBER_EXPIRED, null);
             } else {
-                LOG.warn("Last retry, but user not in pending expariation. Status = " + status);
+                LOG.warn("Last retry, but user not in pending expariation. Status = %s", status);
             }
         } else {
             // not paying is not good
             if (status.equals(UserDTOEx.SUBSCRIBER_ACTIVE)) {
                 user.updateSubscriptionStatus(UserDTOEx.SUBSCRIBER_PENDING_EXPIRATION, null);
             } else if (!status.equals(UserDTOEx.SUBSCRIBER_PENDING_EXPIRATION)) {
-                LOG.warn("Not clear what to do with a customer in status " + status);
+                LOG.warn("Not clear what to do with a customer in status %s", status);
             }
         }
     }
@@ -111,7 +111,7 @@ public class BasicSubscriptionStatusManagerTask extends PluggableTask implements
                 user.updateSubscriptionStatus(
                         UserDTOEx.SUBSCRIBER_PENDING_UNSUBSCRIPTION, null);
             } else {
-                LOG.info("Should go to pending unsubscription, but is in " + 
+                LOG.info("Should go to pending unsubscription, but is in %s", 
                         user.getEntity().getSubscriberStatus().getDescription(1));
             }
         } else if (newActiveUntil == null) { // it's going back to on-going (subscribed)
@@ -121,7 +121,7 @@ public class BasicSubscriptionStatusManagerTask extends PluggableTask implements
                 user.updateSubscriptionStatus(
                         UserDTOEx.SUBSCRIBER_ACTIVE, null);
             } else {
-                LOG.info("Should go to active, but is in " + 
+                LOG.info("Should go to active, but is in %s", 
                         user.getEntity().getSubscriberStatus().getDescription(1));
             }
         }
@@ -183,8 +183,7 @@ public class BasicSubscriptionStatusManagerTask extends PluggableTask implements
                 EventLogger.MODULE_USER_MAINTENANCE,
                 EventLogger.SUBSCRIPTION_STATUS_NO_CHANGE,
                 payment.getId(), typeStr, null);
-            LOG.debug("Payment did not change subscription status to active." +
-                    "Invoice with item category " + typeStr + " not found");
+            LOG.debug("Payment did not change subscription status to active. Invoice with item category %s not found", typeStr);
         }
         
         return retValue;

@@ -200,7 +200,7 @@ public class PaymentPaypalExternalTask extends PaymentTaskWithTimeout implements
     }
 
     private PaymentAuthorizationDTO buildPaymentAuthorization(PaypalResult paypalResult) {
-        LOG.debug("Payment authorization result of " + getProcessorName() + " gateway parsing....");
+        LOG.debug("Payment authorization result of %s gateway parsing....", getProcessorName());
 
         PaymentAuthorizationDTO paymentAuthDTO = new PaymentAuthorizationDTO();
         paymentAuthDTO.setProcessor(getProcessorName());
@@ -395,7 +395,7 @@ public class PaymentPaypalExternalTask extends PaymentTaskWithTimeout implements
     }
 
     public boolean process(PaymentDTOEx payment) throws PluggableTaskException {
-        LOG.debug("Payment processing for " + getProcessorName() + " gateway");
+        LOG.debug("Payment processing for %s gateway", getProcessorName());
 
         if (payment.getPayoutId() != null) {
             return true;
@@ -414,7 +414,7 @@ public class PaymentPaypalExternalTask extends PaymentTaskWithTimeout implements
     }
 
     public boolean preAuth(PaymentDTOEx payment) throws PluggableTaskException {
-        LOG.debug("Pre-authorization processing for " + getProcessorName() + " gateway");
+        LOG.debug("Pre-authorization processing for %s gateway", getProcessorName());
         prepareExternalPayment(payment);
         return doProcess(payment, PaymentAction.AUTHORIZATION, true /* updateKey */);
     }
@@ -422,11 +422,11 @@ public class PaymentPaypalExternalTask extends PaymentTaskWithTimeout implements
     public boolean confirmPreAuth(PaymentAuthorizationDTO auth, PaymentDTOEx payment)
             throws PluggableTaskException {
 
-        LOG.debug("Confirming pre-authorization for " + getProcessorName() + " gateway");
+        LOG.debug("Confirming pre-authorization for %s gateway" + getProcessorName());
         if (!getProcessorName().equals(auth.getProcessor())) {
             /*  let the processor be called and fail, so the caller can do something
                 about it: probably re-call this payment task as a new "process()" run */
-            LOG.warn("The processor of the pre-auth is not " + getProcessorName() + ", is " + auth.getProcessor());
+            LOG.warn("The processor of the pre-auth is not %s, is %s", getProcessorName(), auth.getProcessor());
         }
 
         PaymentInformationDTO card = payment.getInstrument();
@@ -435,7 +435,7 @@ public class PaymentPaypalExternalTask extends PaymentTaskWithTimeout implements
         }
 
         if (!isApplicable(payment)) {
-            LOG.error("This payment can not be captured: " + payment);
+            LOG.error("This payment can not be captured: %s", payment);
             return NOT_APPLICABLE.shouldCallOtherProcessors();
         }
 
@@ -445,7 +445,7 @@ public class PaymentPaypalExternalTask extends PaymentTaskWithTimeout implements
     }
 
     public String storeCreditCard(ContactDTO contact, PaymentInformationDTO creditCard) {
-        LOG.debug("Storing creadit card info within " + getProcessorName() + " gateway");
+        LOG.debug("Storing creadit card info within %s gateway", getProcessorName());
         UserDTO user;
         if (contact != null) {
             UserBL bl = new UserBL(contact.getUserId());

@@ -104,8 +104,7 @@ public class OrderCancellationTask extends PluggableTask implements IInternalEve
             // or the new one is null don't process
             if (myEvent.getNewActiveUntil() == null
             	    || (myEvent.getNewActiveUntil().after(previousActiveUntil))) {
-			           LOG.debug("New active until is not earlier than old one. Skipping cancellation fees. "
-                    + "Order id" + myEvent.getOrderId());
+			           LOG.debug("New active until is not earlier than old one. Skipping cancellation fees. Order id %s", myEvent.getOrderId());
 		        return;
 			}
             setOldActiveUntil(previousActiveUntil);
@@ -116,7 +115,7 @@ public class OrderCancellationTask extends PluggableTask implements IInternalEve
             throw new SessionInternalError("Can't process anything but a new active until event");
         }
 
-        LOG.debug("Processing event " + event + " for cancellation fee");
+        LOG.debug("Processing event %s for cancellation fee", event);
 
         if (event != null && eventType == EventType.NEW_ACTIVE_UNTIL_EVENT) {
             NewActiveUntilEvent myEvent = (NewActiveUntilEvent) event;
@@ -144,7 +143,7 @@ public class OrderCancellationTask extends PluggableTask implements IInternalEve
     	    throw new SessionInternalError(message);
         }
 
-        LOG.debug("Parameters set to cancel =  fee = " + fee_item_id);
+        LOG.debug("Parameters set to cancel =  fee = %s", fee_item_id);
     }
 
 	/**
@@ -233,7 +232,7 @@ public class OrderCancellationTask extends PluggableTask implements IInternalEve
         }
 
         Integer feeOrderId = orderBL.create(entityId, null, feeOrder);
-        LOG.debug("New fee order created: " + feeOrderId + " for cancel of " + order.getId());
+        LOG.debug("New fee order created: %s for cancel of %s", feeOrderId, order.getId());
     }
 
     public Date getNewActiveUntil() {

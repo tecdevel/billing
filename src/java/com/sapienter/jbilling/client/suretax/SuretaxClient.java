@@ -46,8 +46,8 @@ public class SuretaxClient {
 
 			ObjectMapper mapper = new ObjectMapper();
 			String jsonRequestString = mapper.writeValueAsString(request);
-			log.debug("Sending suretax json request string: "
-					+ jsonRequestString);
+			log.debug("Sending suretax json request string: %s",
+					  jsonRequestString);
 
 			post.addParameter("request", jsonRequestString);
 
@@ -55,9 +55,8 @@ public class SuretaxClient {
 			String response = post.getResponseBodyAsString();
 			SAXReader saxReader = new SAXReader();
 			Document doc = saxReader.read(new StringReader(response));
-			log.debug("Suretax response code:" + respCode
-					+ ", Suretax response json string:"
-					+ doc.getRootElement().getText());
+			log.debug("Suretax response code: %s, Suretax response json string: %s ", respCode, 
+					  doc.getRootElement().getText());
 			SuretaxResponse stResponse = mapper.readValue(doc.getRootElement()
 					.getText(), SuretaxResponse.class);
 			stResponse.setJsonString(doc.getRootElement().getText());
@@ -77,17 +76,16 @@ public class SuretaxClient {
 
 			ObjectMapper mapper = new ObjectMapper();
 			String jsonRequestString = mapper.writeValueAsString(request);
-			log.debug("Sending suretax json request string: "
-					+ jsonRequestString);
+			log.debug("Sending suretax json request string: %s",
+					  jsonRequestString);
 			post.addParameter("requestCancel", jsonRequestString);
 
 			int respCode = client.executeMethod(post);
 			String response = post.getResponseBodyAsString();
 			SAXReader saxReader = new SAXReader();
 			Document doc = saxReader.read(new StringReader(response));
-			log.debug("Suretax response code:" + respCode
-					+ ", Suretax response json string:"
-					+ doc.getRootElement().getText());
+			log.debug("Suretax response code: %s, Suretax response json string: %s", respCode,
+					  doc.getRootElement().getText());
 			SuretaxCancelResponse stcResponse = mapper.readValue(doc
 					.getRootElement().getText(), SuretaxCancelResponse.class);
 			return stcResponse;

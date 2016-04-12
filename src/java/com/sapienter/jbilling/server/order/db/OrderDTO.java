@@ -439,7 +439,7 @@ public class OrderDTO extends CustomizedEntity implements Serializable, Exportab
             this.notes = notes;
         } else {
             this.notes = notes.substring(0, 200);
-            LOG.warn("Trimming notes to 200 lenght: from " + notes + " to " + this.notes);
+            LOG.warn("Trimming notes to 200 lenght: from %s to %s", notes, this.notes);
         }
     }
 

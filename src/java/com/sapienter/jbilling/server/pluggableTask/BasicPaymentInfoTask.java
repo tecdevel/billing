@@ -65,7 +65,7 @@ public class BasicPaymentInfoTask
         try {
         	UserBL userBL = new UserBL(userId);
         	for(PaymentInformationDTO paymentInformation : userBL.getEntity().getPaymentInstruments()) {
-        		LOG.debug("Payment instrument " + paymentInformation.getId());
+        		LOG.debug("Payment instrument %s", paymentInformation.getId());
         		// If its a payment/credit card
         		
         		if(paymentInfoBL.isCreditCard(paymentInformation)) {
@@ -81,7 +81,7 @@ public class BasicPaymentInfoTask
         }
         
         if (retValue.getPaymentInstruments().size() == 0) {
-            LOG.debug("Could not find payment instrument for user " + userId);
+            LOG.debug("Could not find payment instrument for user %s", userId);
             return null;
         }
         
@@ -105,7 +105,7 @@ public class BasicPaymentInfoTask
             throw new SessionInternalError("Payment Card information not found for customer :" + paymentInstrument.getUser().getId(),
                     new String[] { "PaymentWS,creditCard,validation.payment.card.data.not.found," +paymentInstrument.getUser().getId()});
         }
-    	LOG.debug("Expiry date is: " + ccExpiryDate);
+    	LOG.debug("Expiry date is: %s", ccExpiryDate);
     	if(piBl.validateCreditCard(ccExpiryDate, cardNumber)) {
     		LOG.debug("Card is valid");
     		PaymentInformationDTO paymentInformation = paymentInstrument.getDTO();

@@ -174,7 +174,7 @@ class AccountTypeController {
 		
         def orderPeriods = OrderPeriodDTO.createCriteria().list() {
             eq('company', CompanyDTO.get(session['company_id'])) }
-		log.debug "Order Period is: " + orderPeriods
+		log.debug "Order Period is: ${orderPeriods}"
         def crumbName = params.id ? 'update' : 'create'
         def crumbDescription = params.id ? accountType?.getDescription(session['language_id']) : null
         breadcrumbService.addBreadcrumb(controllerName, actionName, crumbName, params.int('id'), crumbDescription?.content)
@@ -328,7 +328,7 @@ class AccountTypeController {
     def deleteAIT (){
 
         def accountInformationTypeId = params.int('id')
-        log.debug 'AIT delete called on ' + accountInformationTypeId
+        log.debug "AIT delete called on ${accountInformationTypeId}"
 
         try {
             webServicesSession.deleteAccountInformationType(params.id?.toInteger());

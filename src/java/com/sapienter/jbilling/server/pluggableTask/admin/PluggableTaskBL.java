@@ -77,7 +77,7 @@ public class PluggableTaskBL<T> {
     
     public int create(Integer executorId, PluggableTaskDTO dto) {
         validate(dto);
-        LOG.debug("Creating a new pluggable task row " + dto);
+        LOG.debug("Creating a new pluggable task row %s", dto);
         pluggableTask = das.save(dto);
         eLogger.audit(executorId, null, ServerConstants.TABLE_PLUGGABLE_TASK,
                 pluggableTask.getId(), EventLogger.MODULE_TASK_MAINTENANCE,
@@ -149,7 +149,7 @@ public class PluggableTaskBL<T> {
             dasParameter.delete(param);
         }
 
-        LOG.debug("updating " + dto);
+        LOG.debug("updating %s", dto);
         pluggableTask = das.save(dto);
         
         eLogger.audit(executorId, null
@@ -185,9 +185,9 @@ public class PluggableTaskBL<T> {
     		boolean inUse = false;
         	String message = "";
 	    	String interfaceName = pluggableTaskDto.getType().getCategory().getInterfaceName();
-	    	LOG.debug("interfaceName: " + interfaceName);
+	    	LOG.debug("interfaceName: %s", interfaceName);
 
-	    	LOG.debug("inUse Flag: " + inUse);
+	    	LOG.debug("inUse Flag: %s", inUse);
 			if (inUse) {
 				throw new SessionInternalError("Plugin is in use and cannot be deleted.", 
 						new String[]{message + pluggableTaskDto.getType().getClassName()});
@@ -328,11 +328,11 @@ public class PluggableTaskBL<T> {
         List<PluggableTaskParameterDTO> dateParameters = new ArrayList<PluggableTaskParameterDTO>();
         try {
             for (PluggableTaskParameterDTO parameter:task.getParameters()) {
-                LOG.debug("Parameter passed is "+parameter.toString());
+                LOG.debug("Parameter passed is %s",parameter.toString());
                 // some hard-coding here :(
                 if ((parameter.getName().equals(ServerConstants.PARAM_START_TIME) || parameter.getName().equals(ServerConstants.PARAM_END_TIME)) &&
                         !(Util.canParseDate(parameter.getStrValue(), DateTimeFormat.forPattern(ServerConstants.DATE_TIME_FORMAT))) ) {
-                    LOG.debug("This is a date field which cannot be parsed "+parameter.getValue());
+                    LOG.debug("This is a date field which cannot be parsed %s",parameter.getValue());
                     dateParameters.add(parameter);
                 }
             }

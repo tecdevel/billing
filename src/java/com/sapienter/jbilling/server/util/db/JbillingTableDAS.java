@@ -46,7 +46,7 @@ public class JbillingTableDAS extends AbstractDAS<JbillingTable> {
     public JbillingTable findByName(String name) {
         JbillingTable table = (JbillingTable) cache.getFromCache("JbillingTable" + name, cacheModel);
         if (table == null) {
-            LOG.debug("Looking for table + " + name);
+            LOG.debug("Looking for table + %s", name);
             table = findByCriteriaSingle(Restrictions.eq("name", name));
             if (table == null) {
                 throw new SessionInternalError("Can not find table " + name);

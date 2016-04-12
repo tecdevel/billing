@@ -101,7 +101,7 @@ public abstract class AbstractValidatePurchaseTask extends PluggableTask impleme
 
         // fail the purchase if available quantity is less than, or equal to zero
         if (result.getQuantityAsDecimal().compareTo(BigDecimal.ZERO) <= 0) {
-            LOG.debug("Available quantity " + result.getQuantityAsDecimal() + " is less than zero.");
+            LOG.debug("Available quantity %s is less than zero.", result.getQuantityAsDecimal());
             result.setAuthorized(false);
             result.setQuantity(BigDecimal.ZERO);
             result.addMessage("Insufficient quantity available for purchase.");

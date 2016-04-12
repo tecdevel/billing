@@ -38,19 +38,19 @@ public class TestMediationTask extends AbstractResolverMediationTask {
         PricingField userField = find(fields, "userfield"); //asterisk.xml
 
         if (null != userField) {
-            LOG.debug("Found username: " + userField.getStrValue());
+            LOG.debug("Found username: %s", userField.getStrValue());
             UserBL user = new UserBL(userField.getStrValue(), getEntityId());
             if (null != user.getEntity()) {
                 result.setUserId(user.getEntity().getUserId());
                 result.setCurrencyId(user.getEntity().getCurrencyId());
             }
-            LOG.debug("Resolved User " + result.getUserId() + ", Currency " + result.getCurrencyId());
+            LOG.debug("Resolved User %s, Currency %s", result.getUserId(), result.getCurrencyId());
         }
 
         // resolve event date
         PricingField eventDateField = find(fields, "start"); //asterisk.xml
         if (null != eventDateField) result.setEventDate(eventDateField.getDateValue());
-        LOG.debug("Updated Event Date " + result.getEventDate());
+        LOG.debug("Updated Event Date %s", result.getEventDate());
     }
 
     @Override
@@ -60,7 +60,7 @@ public class TestMediationTask extends AbstractResolverMediationTask {
         if (null == quantityField || quantityField.getIntValue().intValue() < 0) {
             result.setDone(true);
             result.addError("ERR-DURATION");
-            LOG.debug("Invalid Duration " + result.getRecordKey());
+            LOG.debug("Invalid Duration %s", result.getRecordKey());
             return false;
         }
 
@@ -68,7 +68,7 @@ public class TestMediationTask extends AbstractResolverMediationTask {
         PricingField dispositionField = find(fields, "disposition");
         if (null == dispositionField || !"ANSWERED".equals(dispositionField.getStrValue())) {
             result.setDone(true);
-            LOG.debug("Not a billable record " + result.getRecordKey());
+            LOG.debug("Not a billable record %s", result.getRecordKey());
             return false;
         }
 
@@ -85,12 +85,12 @@ public class TestMediationTask extends AbstractResolverMediationTask {
 
                 result.setCurrentOrder(currentOrder);
 
-                LOG.debug("Actionable Result " + result.getId() + ", pending action...");
+                LOG.debug("Actionable Result %s, pending action...", result.getId());
                 return true;
             }
         }
 
-        LOG.debug("Mediation result " + result.getId() + " cannot be processed!");
+        LOG.debug("Mediation result %s cannot be processed!", result.getId());
         return false;
     }
 
@@ -100,7 +100,7 @@ public class TestMediationTask extends AbstractResolverMediationTask {
         PricingField duration = find(fields, "duration");
         PricingField destination = find(fields, "dst");
 
-        LOG.debug("Destination = " + destination.getStrValue() + ", Long Distance Call " + duration.getStrValue() + " minutes");
+        LOG.debug("Destination = %s, Long Distance Call %s minutes", destination.getStrValue() , duration.getStrValue());
 
         Integer itemId = LD_CALL_ITEM;
         if (!StringUtils.isBlank(parameters.get(PARAMETER_DEFAULT_ITEM.getName()))) {

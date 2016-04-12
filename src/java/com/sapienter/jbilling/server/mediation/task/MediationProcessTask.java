@@ -16,11 +16,13 @@
 
 package com.sapienter.jbilling.server.mediation.task;
 
+import com.sapienter.jbilling.common.FormatLogger;
 import com.sapienter.jbilling.common.Util;
 import com.sapienter.jbilling.server.mediation.IMediationSessionBean;
 import com.sapienter.jbilling.server.pluggableTask.admin.PluggableTaskException;
 import com.sapienter.jbilling.server.process.task.AbstractBackwardSimpleScheduledTask;
 import com.sapienter.jbilling.server.util.Context;
+
 import org.apache.log4j.Logger;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -44,7 +46,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @since 25-05-2010
  */
 public class MediationProcessTask extends AbstractBackwardSimpleScheduledTask {
-    private static final Logger LOG = Logger.getLogger(MediationProcessTask.class);
+	private static final FormatLogger LOG = new FormatLogger(MediationProcessTask.class);
 
     private static final AtomicBoolean running = new AtomicBoolean(false);
 
@@ -62,16 +64,15 @@ public class MediationProcessTask extends AbstractBackwardSimpleScheduledTask {
 
             try {
                 if (Util.getSysPropBooleanTrue(PROPERTY_RUN_MEDIATION)) {
-                    LOG.info("Starting mediation at " + new Date());
+                    LOG.info("Starting mediation at %s", new Date());
                     mediation.trigger(getEntityId());
-                    LOG.info("Ended mediation at " + new Date());
+                    LOG.info("Ended mediation at %s", new Date());
                 }
             } finally {
                 running.set(false);
             }
         } else {
-            LOG.warn("Failed to trigger mediation process at " + context.getFireTime()
-                    + ", another process is already running.");
+            LOG.warn("Failed to trigger mediation process at %s, another process is already running.", context.getFireTime());
         }
     }
 

@@ -59,7 +59,7 @@ public class MediationSessionBean implements IMediationSessionBean {
      * @see MediationSessionBean#triggerMediationByConfiguration(Integer, Integer)
      */
     public void trigger(Integer entityId) {
-        LOG.debug("Running mediation trigger for entity " + entityId);
+        LOG.debug("Running mediation trigger for entity %s", entityId);
 
         /*MEDIATION_RUNNING.putIfAbsent(entityId, false);
         if (!MEDIATION_RUNNING.replace(entityId, false, true)) {
@@ -81,7 +81,7 @@ public class MediationSessionBean implements IMediationSessionBean {
                 Integer retVal= local.triggerMediationByConfiguration(cfg.getId(), entityId);
                 LOG.debug("Mediation trigger for configuration %s, returned %s", cfg.getId(), retVal);
             } catch (Exception ex) {
-                LOG.error("Exception occurred triggering mediation configuration " + cfg.getId(), ex);
+                LOG.error("Exception occurred triggering mediation configuration %s", cfg.getId(), ex);
                 errorMessages.add(ex.getMessage());
             }
         }
@@ -96,7 +96,7 @@ public class MediationSessionBean implements IMediationSessionBean {
         }
 
         watch.stop();
-        LOG.debug("Mediation process finished running. Duration (ms):" + watch.getTotalTimeMillis());
+        LOG.debug("Mediation process finished running. Duration (ms): %s", watch.getTotalTimeMillis());
     }
 
     /**
@@ -154,7 +154,7 @@ public class MediationSessionBean implements IMediationSessionBean {
             instantiation time which leaves a window for another overlapping process to be created.
          */
         if (mediationDAS.isConfigurationProcessing(cfg.getId())) {
-            LOG.debug("Entity " + entityId + " already has an existing mediation process for configuration " + configId + ", skipping run");
+            LOG.debug("Entity %s already has an existing mediation process for configuration %s, skipping run", entityId, configId);
             return null;
         }
 
@@ -214,7 +214,7 @@ public class MediationSessionBean implements IMediationSessionBean {
                  */
                 try {
                     for (List<Record> thisGroup : reader) {
-                        LOG.debug("Now processing " + thisGroup.size() + " records.");
+                        LOG.debug("Now processing %s records.", thisGroup.size());
                         local.normalizeRecordGroup(processTask, executorId, process, thisGroup, entityId, cfg);
                     }
                 } catch (TaskException e) {
@@ -227,7 +227,7 @@ public class MediationSessionBean implements IMediationSessionBean {
             // process should be "ended' anyway
             // mark process end date
             local.updateProcessRecord(process, new Date());
-            LOG.debug("Configuration '" + cfg.getName() + "' finished at " + process.getEndDatetime());
+            LOG.debug("Configuration '%s' finished at %s", cfg.getName(), process.getEndDatetime());
         }
 
         // throw a SessionInternalError of errors were returned from the reader plug-in
@@ -412,10 +412,10 @@ public class MediationSessionBean implements IMediationSessionBean {
 
         // validate that this group has not been already processed
         if (recordDas.processed(record.getKey())) {
-            LOG.debug("Detected duplicated of record: " + record.getKey());
+            LOG.debug("Detected duplicated of record: %s", record.getKey());
             return true;
         }
-        LOG.debug("Detected record as a new event: " + record.getKey());
+        LOG.debug("Detected record as a new event: %s", record.getKey());
 
         // assign to record DONE_AND_BILLABLE status as default before processing
         // after actual processing it will be updated
@@ -572,7 +572,7 @@ public class MediationSessionBean implements IMediationSessionBean {
             recordDto.setRecordStatus(status);
             recordDas.save(recordDto);
         } else {
-            LOG.debug("Mediation record with key=" + key + " not found");
+            LOG.debug("Mediation record with key= %s not found", key);
         }
     }
 
@@ -616,7 +616,7 @@ public class MediationSessionBean implements IMediationSessionBean {
         if (record == null) return;
         StopWatch watch = new StopWatch("saving errors watch");
         watch.start();
-        LOG.debug("Saving mediation result errors: " + errors.size());
+        LOG.debug("Saving mediation result errors: %d", errors.size());
 
         try {
             PluggableTaskManager<IMediationErrorHandler> tm = new PluggableTaskManager<IMediationErrorHandler>(entityId,
@@ -643,6 +643,6 @@ public class MediationSessionBean implements IMediationSessionBean {
         }
 
         watch.stop();
-        LOG.debug("Saving mediation result errors done. Duration (mls):" + watch.getTotalTimeMillis());
+        LOG.debug("Saving mediation result errors done. Duration (mls): %s", watch.getTotalTimeMillis());
     }
 }

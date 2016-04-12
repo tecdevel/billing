@@ -198,7 +198,7 @@ class ResetPasswordController {
 			  forward controller:'resetPassword', action: 'changePassword'
 		  } 
 		catch(Exception ex) {
-			log.error("Exception occurred during reset password." + ex)
+			log.error("Exception occurred during reset password. ${ex}")
             flash.error= message(code: 'forgotPassword.failure')
             forward controller:'login', action: 'auth'
         }

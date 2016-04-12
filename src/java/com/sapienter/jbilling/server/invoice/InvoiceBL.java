@@ -659,7 +659,7 @@ public class InvoiceBL extends ResultList implements Serializable, InvoiceSQL {
             int invoiceId = cachedResults.getInt(1);
             if (isInvoiceBalanceEnoughToAge(invoiceDAS.find(invoiceId), user.getEntity().getId())) {
             	retValue= Boolean.TRUE;
-            	LOG.debug("user with invoice:" + cachedResults.getInt(1));
+            	LOG.debug("user with invoice: %s", cachedResults.getInt(1));
             	break;
             }
         }
@@ -1156,13 +1156,13 @@ public class InvoiceBL extends ResultList implements Serializable, InvoiceSQL {
             minBalanceToIgnore = 
             	PreferenceBL.getPreferenceValueAsDecimalOrZero(entityId, ServerConstants.PREFERENCE_MINIMUM_BALANCE_TO_IGNORE_AGEING);
             
-            LOG.debug("Mininmum balance to ignore ageing preference set to " + minBalanceToIgnore);
+            LOG.debug("Mininmum balance to ignore ageing preference set to %s", minBalanceToIgnore);
         } catch (EmptyResultDataAccessException e) {
             LOG.debug("Preference minimum balance to ignore ageing not set.");
         }
     
-        LOG.debug("Checking balance " + invoice.getBalance()
-                + " against " + minBalanceToIgnore+ " for invoiceId : " + invoice.getId());
+        LOG.debug("Checking balance %s against %s for invoiceId : %s", invoice.getBalance(),
+                   minBalanceToIgnore, invoice.getId());
         
         //Return 'true' if balance above min to ignore preference value or zeor if preference not set 
         return (invoice.getBalance().compareTo(minBalanceToIgnore) > 0);

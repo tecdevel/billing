@@ -61,8 +61,8 @@ public class OrderPeriodAnticipateTask extends BasicOrderPeriodTask {
                 // now add the months that this order is getting anticipated
                 cal.add(GregorianCalendar.MONTH,
                         order.getAnticipatePeriods().intValue());
-                LOG.debug("Ant periods:" + order.getAnticipatePeriods() + " " +
-                        "view limit: " + viewLimit + " extended " + cal.getTime());
+                LOG.debug("Ant periods: %s view limit: %s extended %s", order.getAnticipatePeriods(),
+                          viewLimit, cal.getTime());
                 viewLimit = cal.getTime();
             } catch (Exception e) {
                 throw new TaskException(e);

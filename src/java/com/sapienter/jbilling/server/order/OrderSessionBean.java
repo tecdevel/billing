@@ -173,7 +173,7 @@ public class OrderSessionBean implements IOrderSessionBean {
     public OrderDTO addItem(Integer itemID, BigDecimal quantity, OrderDTO order, Integer languageId, Integer userId,
                             Integer entityId) throws SessionInternalError, ItemDecimalsException {
 
-        LOG.debug("Adding item " + itemID + " q:" + quantity);
+        LOG.debug("Adding item %s q: %s", itemID, quantity);
 
         OrderBL bl = new OrderBL(order);
         bl.addItem(itemID, quantity, languageId, userId, entityId, order.getCurrencyId(), new Date());

@@ -67,9 +67,8 @@ public class OrderFilterAnticipatedTask extends BasicOrderFilterTask {
                         "entity has the preference off");
             } else if (order.getAnticipatePeriods() != null && 
                     order.getAnticipatePeriods().intValue() > 0) {
-                LOG.debug("Using anticipated order. Org billingUntil = " +
-                        billingUntil + " ant periods " + 
-                        order.getAnticipatePeriods());
+                LOG.debug("Using anticipated order. Org billingUntil = %s ant periods %s",
+                        billingUntil, order.getAnticipatePeriods());
                 // calculate an extended end of billing process
                 UserBL userBL = new UserBL(order.getUser());
                 billingUntil = userBL.getBillingUntilDate(

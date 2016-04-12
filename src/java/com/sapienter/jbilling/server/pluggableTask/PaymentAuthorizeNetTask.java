@@ -151,8 +151,7 @@ public class PaymentAuthorizeNetTask extends PluggableTask
                     paymentInfo.getCurrency().getId());
             String currencyCode = currencyBL.getEntity().getCode();
             
-            LOG.debug("making call with " + login + " " + transaction + 
-                    " " + expiry);
+            LOG.debug("making call with %s %s %s", login, transaction, expiry);
             
             NameValuePair[] data;
             if (method == 1) {
@@ -209,7 +208,7 @@ public class PaymentAuthorizeNetTask extends PluggableTask
                     dataToLog[0]=new NameValuePair();
                 }
 
-                LOG.debug("returning after avs " + dataToLog);
+                LOG.debug("returning after avs %s", dataToLog);
             }
             
             AuthorizeNetResponseDTO response = makeCall(data);
@@ -254,7 +253,7 @@ public class PaymentAuthorizeNetTask extends PluggableTask
             paymentInfo.setPaymentResult(new PaymentResultDAS().find(new Integer(rand.nextInt(3) + 1)));
             retValue = false;
         }
-        LOG.debug("returning "  + retValue);
+        LOG.debug("returning %s", retValue);
         return retValue;
     }
 
@@ -449,7 +448,7 @@ public class PaymentAuthorizeNetTask extends PluggableTask
         client.executeMethod(post);
         responseBody = post.getResponseBodyAsString();
 
-        LOG.debug("Got response:" + responseBody);
+        LOG.debug("Got response: %s", responseBody);
         //write out the response body
         AuthorizeNetResponseDTO dto = new AuthorizeNetResponseDTO(
                 responseBody);

@@ -16,6 +16,7 @@
 package com.sapienter.jbilling.server.mediation.task;
 
 import com.sapienter.jbilling.common.CommonConstants;
+import com.sapienter.jbilling.common.FormatLogger;
 import com.sapienter.jbilling.server.order.db.OrderDTO;
 import com.sapienter.jbilling.server.order.db.OrderLineDTO;
 import com.sapienter.jbilling.server.rule.Result;
@@ -34,7 +35,7 @@ import org.apache.log4j.Logger;
  */
 public class MediationResult extends Result {
 
-    private static final Logger LOG = Logger.getLogger(MediationResult.class);
+	private static final FormatLogger LOG = new FormatLogger(MediationResult.class);
 
     public static final int STEP_1_START = 1000;
     public static final int STEP_2_AFTER_USER = 2000;
@@ -191,7 +192,7 @@ public class MediationResult extends Result {
     }
 
     public void setStep(int step) {
-        LOG.debug("Now from step " + this.step + " to step " + step + " id " + getId() + " record " + getRecordKey());
+        LOG.debug("Now from step %s to step %s id %s record %s", this.step, step, getId(), getRecordKey());
         this.step = step;
     }
 }

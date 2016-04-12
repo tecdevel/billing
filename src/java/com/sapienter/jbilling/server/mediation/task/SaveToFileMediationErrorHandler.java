@@ -16,6 +16,7 @@
 
 package com.sapienter.jbilling.server.mediation.task;
 
+import com.sapienter.jbilling.common.FormatLogger;
 import com.sapienter.jbilling.common.Util;
 import com.sapienter.jbilling.server.item.PricingField;
 import com.sapienter.jbilling.server.mediation.Record;
@@ -23,6 +24,7 @@ import com.sapienter.jbilling.server.mediation.db.MediationConfiguration;
 import com.sapienter.jbilling.server.pluggableTask.PluggableTask;
 import com.sapienter.jbilling.server.pluggableTask.TaskException;
 import com.sapienter.jbilling.server.pluggableTask.admin.ParameterDescription;
+
 import org.apache.log4j.Logger;
 
 import java.io.File;
@@ -36,7 +38,7 @@ import java.util.List;
 public class SaveToFileMediationErrorHandler extends PluggableTask
         implements IMediationErrorHandler {
 
-    private static final Logger LOG = Logger.getLogger(SaveToFileMediationErrorHandler.class);
+	private static final FormatLogger LOG = new FormatLogger(SaveToFileMediationErrorHandler.class);
 
     // plug-in parameters
     protected static final ParameterDescription PARAM_DIRECTORY_NAME = 

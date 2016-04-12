@@ -136,7 +136,7 @@ public class UsageBL {
 
             if (customer == null) {
                 usagePeriod = new UsagePeriod();
-                LOG.warn("User " + userId + " does not have a customer - all usage will be 0!");
+                LOG.warn("User %s does not have a customer - all usage will be 0!", userId);
                 return;
             }
 
@@ -144,7 +144,7 @@ public class UsageBL {
 
             if (mainSubscription == null) {
                 usagePeriod = new UsagePeriod();
-                LOG.warn("User " + userId + " does not have main subscription - all usage will be 0!");
+                LOG.warn("User %s does not have main subscription - all usage will be 0!", userId);
                 return;
             }
 
@@ -162,7 +162,7 @@ public class UsageBL {
                 usagePeriod = new UsagePeriod();
             }
 
-            LOG.debug("Caching with key '" + getCacheKey() + "', usage period: " + usagePeriod);
+            LOG.debug("Caching with key '%s', usage period: %s", getCacheKey(), usagePeriod);
             
             cache.putInCache(getCacheKey(), cacheModel, usagePeriod);
 
@@ -205,7 +205,7 @@ public class UsageBL {
      * @param line order line to add
      */
     public static final void addLine(Usage usage,OrderLineDTO line) {
-        LOG.debug("Adding usage from line: " + line);
+        LOG.debug("Adding usage from line: %s", line);
         usage.addAmount(line.getAmount());
         usage.addQuantity(line.getQuantity());
         usage.addCurrentAmount(line.getAmount());
@@ -218,7 +218,7 @@ public class UsageBL {
      * @param line order line to subtract
      */
     public static final void subtractLine(Usage usage,OrderLineDTO line) {
-        LOG.debug("Subtracting usage from line: " + line);
+        LOG.debug("Subtracting usage from line: %s", line);
         usage.subractAmount(line.getAmount());
         usage.subtractQuantity(line.getQuantity());
         usage.subtractCurrentAmount(line.getAmount());
@@ -487,7 +487,7 @@ public class UsageBL {
                 usage = new Usage(userId, itemId, null, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, null, null);
             }
         }
-        LOG.debug("::::: UsageBL.getItemUsage usage: " + usage);
+        LOG.debug("::::: UsageBL.getItemUsage usage: %s", usage);
         addWorkingOrder(usage);
         return usage;
     }

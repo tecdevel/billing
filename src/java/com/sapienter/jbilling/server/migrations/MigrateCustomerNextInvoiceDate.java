@@ -13,12 +13,14 @@ import liquibase.statement.SqlStatement;
 
 import org.joda.time.DateTime;
 
+import com.sapienter.jbilling.common.FormatLogger;
+
 /**
  * Created by Fernando G. Morales on 4/1/15.
  */
 public class MigrateCustomerNextInvoiceDate extends AbstractCustomSqlChange {
-
-    public static Logger log = LogFactory.getLogger("MigrateCustomerNextInvoiceDate");
+	
+	private static final FormatLogger log = new FormatLogger(MigrateCustomerNextInvoiceDate.class);
 
     @Override
     public String getConfirmationMessage() {
@@ -37,16 +39,16 @@ public class MigrateCustomerNextInvoiceDate extends AbstractCustomSqlChange {
             if(result!=null && result.isBeforeFirst()) {
                 while(result.next()) {
                     userID = result.getInt("user_id");
-                    log.info("User ID: " + userID);
+                    log.info("User ID: %s", userID);
                     Date date = result.getDate("create_datetime");
-                    log.info("Next Invoice Date value before update: " + date);
+                    log.info("Next Invoice Date value before update: %s", date);
                     result.updateDate("next_inovice_date", calculateNextInvoiceDate(date));
-                    log.info("Next Invoice Date value after update: " + date);
+                    log.info("Next Invoice Date value after update: %s", date);
                     result.updateRow();
                 }
             }
         } catch(SQLException e) {
-            log.info("Cannot update customer id = " + userID);
+            log.info("Cannot update customer id = %s", userID);
         }
         return new SqlStatement[0];
     }

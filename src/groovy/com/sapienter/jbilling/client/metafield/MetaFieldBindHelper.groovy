@@ -236,7 +236,7 @@ class MetaFieldBindHelper {
             validationRule.setErrorMessages(errorMsgs)
         }
 
-        log.debug "Validation Rule after bind: "+validationRule
+        log.debug "Validation Rule after bind: ${validationRule}"
         return validationRule;
     }
 

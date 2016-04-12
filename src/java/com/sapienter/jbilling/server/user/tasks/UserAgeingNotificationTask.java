@@ -59,7 +59,7 @@ public class UserAgeingNotificationTask extends PluggableTask implements IIntern
 
                 Integer ageingNotificationId = getNotificationIdForUserStatus(userStatusId, userId);
                 if (ageingNotificationId == null) {
-                    LOG.warn("User notification message mapping not found for the user status: "+ userStatusId);
+                    LOG.warn("User notification message mapping not found for the user status: %s", userStatusId);
                     return;
                 }
                 // get the correct ageing message
@@ -75,9 +75,8 @@ public class UserAgeingNotificationTask extends PluggableTask implements IIntern
                 notification.notify(userId, message);
 
             } catch (NotificationNotFoundException e) {
-                LOG.warn("Failed to send ageing notification. Entity " + ageingNotificationEvent.getEntityId()
-                        + " does not have an ageing message configured for user status id '"
-                        + ageingNotificationEvent.getUserStatusId() + "'.");
+                LOG.warn("Failed to send ageing notification. Entity %s does not have an ageing message configured for user status id '%s'.", ageingNotificationEvent.getEntityId(),
+                          ageingNotificationEvent.getUserStatusId());
             }
         }
 
@@ -104,7 +103,7 @@ public class UserAgeingNotificationTask extends PluggableTask implements IIntern
             try {
                 return Integer.valueOf(ageingNotificationStr);
             } catch (NumberFormatException e) {
-                LOG.warn("Cannot parse attribute value '" + ageingNotificationStr + "' as an integer.");
+                LOG.warn("Cannot parse attribute value '%s' as an integer.", ageingNotificationStr);
             }
         }
 

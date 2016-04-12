@@ -113,7 +113,7 @@ class EntityDefaults {
         notInvoiceOS.setDescription("Suspended", language.id)
         def suspAgeingOS = new OrderStatusDTO(orderStatusFlag: OrderStatusFlag.SUSPENDED_AGEING, entity:company).save()
         suspAgeingOS.setDescription("Suspended ageing(auto)", language.id)
-        log.debug("company.id ********: "+company?.id)
+        log.debug("company.id ********: ${company?.id}")
 
         // add company currency to the entity currency map
         // it's annoying that we need to build this association manually, it would be better mapped through CompanyDTO

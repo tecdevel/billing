@@ -109,7 +109,7 @@ public class Trigger implements Job {
                 interval = Integer.parseInt(frequency);
             } catch (NumberFormatException e) {
                 LOG.debug(e);
-                LOG.info("Error:" + e.getMessage() + " Schedule does not start.");
+                LOG.info("Error: %s Schedule does not start.", e.getMessage());
 
                 // Leave
                 return;
@@ -128,7 +128,7 @@ public class Trigger implements Job {
             }
             catch (IllegalArgumentException e) { // This block catches both NumberFormatException and IllegalArgumentException in case of invalid parsing
                 LOG.debug(e);
-                LOG.info("Error:" + e.getMessage() + " Schedule does not start.");
+                LOG.info("Error: %s  Schedule does not start.", e.getMessage());
                 // Leave
                 return;
             }
@@ -192,7 +192,7 @@ public class Trigger implements Job {
                     // finally the orders about to expire notification
                     LOG.info("Starting order notification at %s", Calendar.getInstance().getTime());
                     remoteOrder.reviewNotifications(today);
-                    LOG.info("Ended order notification at " + Calendar.getInstance().getTime());
+                    LOG.info("Ended order notification at %s", Calendar.getInstance().getTime());
                 }
                 if (Util.getSysPropBooleanTrue("process.run_invoice_reminder")) {
                     // the invoice reminders

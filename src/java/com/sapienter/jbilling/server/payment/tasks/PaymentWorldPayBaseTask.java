@@ -161,7 +161,7 @@ public abstract class PaymentWorldPayBaseTask extends PaymentTaskWithTimeout {
         private final PaymentAuthorizationDTO paymentAuthDTO;
 
         public WorldPayAuthorization(String gatewayResponse) {
-            LOG.debug("Payment authorization result of " + getProcessorName() + " gateway parsing....");
+            LOG.debug("Payment authorization result of %s gateway parsing....", getProcessorName());
 
             WorldPayResponseParser responseParser = new WorldPayResponseParser(gatewayResponse);
             paymentAuthDTO = new PaymentAuthorizationDTO();
@@ -170,26 +170,26 @@ public abstract class PaymentWorldPayBaseTask extends PaymentTaskWithTimeout {
             String approvalCode = responseParser.getValue(WorldPayResponse.APPROVAL_CODE);
             if (approvalCode != null) {
                 paymentAuthDTO.setApprovalCode(approvalCode);
-                LOG.debug("approvalCode [" + paymentAuthDTO.getApprovalCode() + "]");
+                LOG.debug("approvalCode [%s]", paymentAuthDTO.getApprovalCode());
             }
 
             String transactionStatus = responseParser.getValue(WorldPayResponse.TRANSACTION_STATUS);
             if (transactionStatus != null) {
                 paymentAuthDTO.setCode2(transactionStatus);
-                LOG.debug("transactionStatus [" + paymentAuthDTO.getCode2() + "]");
+                LOG.debug("transactionStatus [%s]", paymentAuthDTO.getCode2());
             }
 
             String orderID = responseParser.getValue(WorldPayResponse.ORDER_ID);
             if (orderID != null) {
                 paymentAuthDTO.setTransactionId(orderID);
                 paymentAuthDTO.setCode1(orderID);
-                LOG.debug("transactionID/OrderID [" + paymentAuthDTO.getTransactionId() + "]");
+                LOG.debug("transactionID/OrderID [%s]", paymentAuthDTO.getTransactionId());
             }
 
             String errorMsg = responseParser.getValue(WorldPayResponse.ERROR_MSG);
             if (errorMsg != null) {
                 paymentAuthDTO.setResponseMessage(errorMsg);
-                LOG.debug("errorMessage [" + paymentAuthDTO.getResponseMessage() + "]");
+                LOG.debug("errorMessage [%s]", paymentAuthDTO.getResponseMessage());
             }
         }
 
@@ -441,7 +441,7 @@ public abstract class PaymentWorldPayBaseTask extends PaymentTaskWithTimeout {
         }
 
         try {
-            LOG.debug("Processing " + transaction + " for credit card");
+            LOG.debug("Processing %s for credit card", transaction);
             WorldPayAuthorization wrapper = new WorldPayAuthorization(post(request));
             payment.setPaymentResult(new PaymentResultDAS().find(wrapper.getJBResultId()));
 
@@ -468,19 +468,19 @@ public abstract class PaymentWorldPayBaseTask extends PaymentTaskWithTimeout {
      * @throws IOException thrown by {@link HttpClient#executeMethod(org.apache.commons.httpclient.HttpMethod)}
      */
     protected String post(NVPList request) throws IOException {
-        LOG.debug("Making POST request to " + getProcessorName() + " gateway ...");
+        LOG.debug("Making POST request to %s gateway ...", getProcessorName());
 
         HttpClient client = new HttpClient();
         client.setConnectionTimeout(getTimeoutSeconds() * 1000); // todo: remove deprecated connection timeout
         
         PostMethod post = new PostMethod(getGatewayUrl());             
         post.setRequestEntity(new StringRequestEntity(request.toString()));        
-        LOG.debug("request body string: " + request.toString());
+        LOG.debug("request body string: %s", request.toString());
 
         // execute the method
         client.executeMethod(post);
         String responseBody = post.getResponseBodyAsString();
-        LOG.debug("Got response:" + responseBody);
+        LOG.debug("Got response: %s", responseBody);
 
         // clean up the connection resources
         post.releaseConnection();

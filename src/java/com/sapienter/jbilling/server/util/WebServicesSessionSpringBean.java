@@ -455,8 +455,7 @@ public class WebServicesSessionSpringBean implements IWebServicesSessionBean {
 			}
 			return retValue;
 		} catch (Exception e) { // needed because the sql exception :(
-			LOG.error("Exception in web service: getting latest invoice"
-					+ " for user " + userId, e);
+			LOG.error("Exception in web service: getting latest invoice for user %d", userId, e);
 			throw new SessionInternalError("Error getting latest invoice");
 		}
 	}
@@ -488,8 +487,7 @@ public class WebServicesSessionSpringBean implements IWebServicesSessionBean {
 			return invoiceBl.getInvoicesByCreateDateArray(entityId, dSince,
 					dUntil);
 		} catch (Exception e) { // needed for the SQLException :(
-			LOG.error("Exception in web service: getting invoices by date"
-					+ since + until, e);
+			LOG.error("Exception in web service: getting invoices by date %s %s", since, until, e);
 			throw new SessionInternalError("Error getting last invoices");
 		}
 	}
@@ -1936,8 +1934,7 @@ public class WebServicesSessionSpringBean implements IWebServicesSessionBean {
 				getCallerCompanyId(), addonCategoryName);
 
 		if (null == addonCategory) {
-			LOG.debug("Addon category with description " + addonCategoryName
-					+ " does not exist");
+			LOG.debug("Addon category with description %s does not exist", addonCategoryName);
 			return null;
 		}
 
@@ -2813,7 +2810,7 @@ public class WebServicesSessionSpringBean implements IWebServicesSessionBean {
         }
 
         AccountTypeDTO accountTypeDTO = AccountTypeBL.getDTO(accountType, entityId);
-        LOG.debug("Payments: " + accountTypeDTO.getPaymentMethodTypes());
+        LOG.debug("Payments: %s", accountTypeDTO.getPaymentMethodTypes());
         new AccountTypeBL().update(accountTypeDTO);
 
         return true;
@@ -3180,9 +3177,9 @@ public class WebServicesSessionSpringBean implements IWebServicesSessionBean {
 			}
 		}
 
-		LOG.debug("before dto conversion: " + payment.getPaymentInstruments());
+		LOG.debug("before dto conversion: %s", payment.getPaymentInstruments());
 		PaymentDTOEx dto = new PaymentDTOEx(payment);
-		LOG.debug("after dto conversion: " + dto.getPaymentInstruments());
+		LOG.debug("after dto conversion: %s", dto.getPaymentInstruments());
 		// payment without Credit Card or ACH, fetch the users primary payment
 		// instrument for use
 		if (payment.getPaymentInstruments().size() < 1) {
@@ -3432,10 +3429,10 @@ public class WebServicesSessionSpringBean implements IWebServicesSessionBean {
 			return null;
 		}
 		// PaymentDTOEx paymentDTOEx = new PaymentDTOEx(instrument);
-		LOG.debug("Instruments are: "
-				+ instrument.getPaymentInstruments().size());
-		LOG.debug("Instrument payment method is: "
-				+ instrument.getPaymentInstruments().iterator().next()
+		LOG.debug("Instruments are: %s",
+				 instrument.getPaymentInstruments().size());
+		LOG.debug("Instrument payment method is: %s",
+				 instrument.getPaymentInstruments().iterator().next()
 						.getPaymentMethod().getId());
 		instrument.setUserId(userId);
 		return PaymentBL.getWS(instrument);
@@ -4294,7 +4291,7 @@ public class WebServicesSessionSpringBean implements IWebServicesSessionBean {
 		// prevent cycles in initial hierarchy if exists
 		alreadyValidated.add(order);
 
-		LOG.debug("Validating order: " + order);
+		LOG.debug("Validating order: %s", order);
 		if (order == null) {
 			throw new SessionInternalError("Null parameter");
 		}
@@ -4792,8 +4789,7 @@ public class WebServicesSessionSpringBean implements IWebServicesSessionBean {
 			}
 			return retValue;
 		} catch (Exception e) { // forced by SQLException
-			LOG.error("Exception in web service: getting latest invoice"
-					+ " for user " + userId, e);
+			LOG.error("Exception in web service: getting latest invoice for user %d", userId, e);
 			throw new SessionInternalError("Error getting latest invoice");
 		}
 	}
@@ -5544,13 +5540,10 @@ public class WebServicesSessionSpringBean implements IWebServicesSessionBean {
 				.getPreferenceType().getId())
 				&& ServerConstants.MAX_VALUE_FOR_PREFERENCE_EXPIRE_INACTIVE_ACCOUNTS_IN_DAYS
 						.compareTo(Integer.parseInt(preference.getValue())) < 0) {
-			LOG.debug("Preference type : "
-					+ preference.getPreferenceType().getId()
-					+ " value obtained = "
-					+ preference.getValue()
-					+ " is greater then max value allowed ("
-					+ ServerConstants.MAX_VALUE_FOR_PREFERENCE_EXPIRE_INACTIVE_ACCOUNTS_IN_DAYS
-					+ ")");
+			LOG.debug("Preference type : %s value obtained = %s is greater then max value allowed (%s)",
+					  preference.getPreferenceType().getId(),
+					  preference.getValue(),
+					  ServerConstants.MAX_VALUE_FOR_PREFERENCE_EXPIRE_INACTIVE_ACCOUNTS_IN_DAYS);
 			String errorMessages[] = new String[1];
 			errorMessages[0] = "PreferenceWS,value,preferences.update.max.value.error,"
 					+ ServerConstants.MAX_VALUE_FOR_PREFERENCE_EXPIRE_INACTIVE_ACCOUNTS_IN_DAYS;
@@ -5681,7 +5674,7 @@ public class WebServicesSessionSpringBean implements IWebServicesSessionBean {
 						currencyId, entityId);
 
 				if (inUseCount > 0) {
-					LOG.debug("Currency " + currency.getCode() + " is in use.");
+					LOG.debug("Currency %s is in use.", currency.getCode());
 					inActiveInUseCurrencies.add(currency);
 				} else {
 					updateCurrency(currency);
@@ -5899,7 +5892,7 @@ public class WebServicesSessionSpringBean implements IWebServicesSessionBean {
 	 * instance of {@link IScheduledTask}
 	 */
 	public void rescheduleScheduledPlugin(Integer pluginId) {
-		LOG.debug("Rescheduling... " + pluginId);
+		LOG.debug("Rescheduling... %d", pluginId);
 		try {
 			IScheduledTask scheduledTask = getScheduledTask(pluginId);
 
@@ -5926,7 +5919,7 @@ public class WebServicesSessionSpringBean implements IWebServicesSessionBean {
 	 * This method unschedules an existing scheduled task before it is deleted
 	 */
 	public void unscheduleScheduledPlugin(Integer pluginId) {
-		LOG.debug("Unscheduling... " + pluginId);
+		LOG.debug("Unscheduling... %d", pluginId);
 		try {
 			IScheduledTask scheduledTask = getScheduledTask(pluginId);
 
@@ -7113,8 +7106,7 @@ public class WebServicesSessionSpringBean implements IWebServicesSessionBean {
 				das.delete(dto);
 				removed = true;
 			} catch (Exception e) {
-				LOG.error("Could not delete payment instrument. Exception is: "
-						+ e);
+				LOG.error("Could not delete payment instrument. Exception is: ", e);
 			}
 		}
 		return removed;
@@ -7846,7 +7838,7 @@ public class WebServicesSessionSpringBean implements IWebServicesSessionBean {
 		// validate enumeration values
 		Set<String> valuesSet = new HashSet<String>();
 		for (EnumerationValueWS value : enumeration.getValues()) {
-			LOG.debug("value = " + value);
+			LOG.debug("value = %s", value);
 
 			// empty value
 			String val = value.getValue();
@@ -7894,7 +7886,7 @@ public class WebServicesSessionSpringBean implements IWebServicesSessionBean {
 		}
 		// }
 		// }
-		LOG.debug("Assets :" + assets.size());
+		LOG.debug("Assets :%s", assets.size());
 		return assets;
 	}
 

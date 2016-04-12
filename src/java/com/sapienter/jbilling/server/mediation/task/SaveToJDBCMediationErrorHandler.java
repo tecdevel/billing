@@ -31,6 +31,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.sapienter.jbilling.common.FormatLogger;
 import com.sapienter.jbilling.server.item.PricingField;
 import com.sapienter.jbilling.server.mediation.Record;
 import com.sapienter.jbilling.server.mediation.db.MediationConfiguration;
@@ -65,8 +66,8 @@ import com.sapienter.jbilling.server.pluggableTask.admin.ParameterDescription;
  */
 public class SaveToJDBCMediationErrorHandler extends PluggableTask
         implements IMediationErrorHandler {
-
-    private static final Logger log = Logger.getLogger(SaveToJDBCMediationErrorHandler.class);
+	
+	private static final FormatLogger log = new FormatLogger(SaveToJDBCMediationErrorHandler.class);
 
     // plug-in parameters
     // mandatory parameter, url with host, port, database, etc

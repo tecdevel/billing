@@ -86,7 +86,7 @@ public class PaymentEmailAuthorizeNetTask extends PaymentAuthorizeNetTask {
                 params[4] = "Not available";
                 params[5] = "Not available";
             }
-            log.debug("Bkp 6 " + params[0] + " " + params[1] + " " + params[2] + " " + params[3] + " " + params[4] + " " + params[5] + " ");
+            log.debug("Bkp 6 %s %s %s %s %s %s", params[0], params[1], params[2], params[3], params[4], params[5]);
             NotificationBL.sendSapienterEmail(address, 
                     user.getEntity().getEntity().getId(), message, null, 
                     params);

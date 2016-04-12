@@ -45,7 +45,7 @@ public enum MatchType {
      */
     EXACT {
         public BigDecimal findPrice(JdbcTemplate jdbcTemplate, String query, String searchValue) {
-            LOG.debug("Searching for exact match '" + searchValue + "'");
+            LOG.debug("Searching for exact match '%s'", searchValue);
             SqlRowSet rs = jdbcTemplate.queryForRowSet(query, searchValue);
 
             if (rs.next())
@@ -66,7 +66,7 @@ public enum MatchType {
             searchValue = getCharacters(searchValue, length);
 
             while (length >= 0) {
-                LOG.debug("Searching for prefix '" + searchValue + "'");
+                LOG.debug("Searching for prefix '%s'", searchValue);
                 SqlRowSet rs = jdbcTemplate.queryForRowSet(query, searchValue);
 
                 if (rs.next()) {

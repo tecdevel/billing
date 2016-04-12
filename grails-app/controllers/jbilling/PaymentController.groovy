@@ -129,7 +129,7 @@ class PaymentController {
 		def user_id = session['user_id'] as Integer
 		
 		def partnerDto = PartnerDTO.findByBaseUser (UserDTO.get(user_id))
-		log.debug "### partner:" + partnerDto  
+		log.debug "### partner: ${partnerDto}"  
 		
 		def customersForUser = new ArrayList()
 		if( partnerDto ){
@@ -137,7 +137,7 @@ class PaymentController {
 					eq('partner.id', partnerDto.id )
 			}   
 		}  
-        log.debug "### customersForUser: " + customersForUser 
+        log.debug "### customersForUser: ${customersForUser}" 
 		
         return PaymentDTO.createCriteria().list(
                 max:    params.max,
@@ -1057,7 +1057,7 @@ class PaymentController {
         def paymentMethods = accountType?.paymentMethodTypes
 
         PaymentInformationWS removed = user.paymentInstruments.remove(currentIndex)
-        log.debug("user instrument is: " + user.paymentInstruments)
+        log.debug("user instrument is: ${user.paymentInstruments}")
 
         render template: '/payment/paymentMethods', model: [paymentMethods : paymentMethods , paymentInstruments : user.paymentInstruments , accountTypeId : accountType?.id]
     }

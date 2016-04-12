@@ -83,7 +83,7 @@ class PluginController {
 
         params.max = Integer.MAX_VALUE // There is no pagination in the old look
         def categories = getPluginCategories(params)
-        log.info "Categories found= " + categories?.totalCount
+        log.info "Categories found= ${categories?.totalCount}"
         render (view:"list", model:[categories:categories])
 	}
 
@@ -164,11 +164,11 @@ class PluginController {
     def plugins () {
         Integer languageId = session.language_id;
         Integer entityId = session.company_id;
-        log.info "entityId=" + entityId
-        log.info "selected " + params["id"]
+        log.info "entityId= ${entityId}"
+        log.info "selected ${params["id"]}"
         if (params["id"]) {
             Integer categoryId = Integer.valueOf(params["id"]);
-            log.info "Category Id selected=" + categoryId
+            log.info "Category Id selected= ${categoryId}"
             
             breadcrumbService.addBreadcrumb("plugin", "plugins", null, categoryId);
 
@@ -188,7 +188,7 @@ class PluginController {
             }
 
             def lstByCateg = getPlugins(params, params.getInt('id'))
-            log.info "number of plug-ins=" + lstByCateg.size();
+            log.info "number of plug-ins= ${lstByCateg.size()}";
             // show the list of the plug-ins
             if (params.template == 'show') {
                 render template: "pluginsTemplate", model:[plugins:lstByCateg]
@@ -329,7 +329,7 @@ class PluginController {
         // save
         Locale locale = session.locale;
         try {
-            log.info "now saving " + newTask + " by " + session.user_id;
+            log.info "now saving ${newTask} by ${session.user_id}";
             Integer pluginId;
             if (newTask.getId() == null || newTask.getId() == 0) {
                 pluginId = webServicesSession.createPlugin(newTask);

@@ -206,7 +206,7 @@ public class CustomerDTO extends GroupCustomizedEntity
         setRechargeThreshold(user.getRechargeThresholdAsDecimal());
         setMonthlyLimit(user.getMonthlyLimitAsDecimal());
 
-        LOG.debug("Customer created with auto-recharge: " + getAutoRecharge() + " incoming var, " + user.getAutoRecharge());
+        LOG.debug("Customer created with auto-recharge: %s incoming var, %s", getAutoRecharge(), user.getAutoRecharge());
     }
 
     @Id
@@ -617,7 +617,7 @@ public class CustomerDTO extends GroupCustomizedEntity
 
     @Transient
     public Integer getTotalSubAccounts() {
-        LOG.debug("sub acounts = " + getChildren().size());
+        LOG.debug("sub acounts = %s", getChildren().size());
         return (getChildren().size() == 0) ? null : new Integer(getChildren().size());
     }
 

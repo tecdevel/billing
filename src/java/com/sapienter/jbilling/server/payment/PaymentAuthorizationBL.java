@@ -133,7 +133,7 @@ public class PaymentAuthorizationBL {
         } catch (Exception e) {
             LOG.warn("Exceptions finding a pre authorization", e);
         }
-        LOG.debug("Looking for preauth for " + userId + " result " + auth);
+        LOG.debug("Looking for preauth for %s result %s", userId, auth);
         return auth;
     }
 

@@ -222,8 +222,8 @@ public class OrderLineBL {
             newLine.addAssets(myLine.getAssets());
             newOrder.getLines().add(newLine);
             newLine.setPurchaseOrder(newOrder);
-            LOG.debug("OrderLineBL line: " + line);
-            LOG.debug("OrderLineBl newLine: " + newLine);
+            LOG.debug("OrderLineBL line: %s", line);
+            LOG.debug("OrderLineBl newLine: %s", newLine);
             // save the order (with the new line). Otherwise
             // the diff line will have a '0' for the order id and the
             // saving of the mediation record lines gets really complicated
@@ -239,9 +239,9 @@ public class OrderLineBL {
             line.setAmount(line.getAmount().add(myLine.getAmount()));
 
             line.addAssets(myLine.getAssets());
-            LOG.debug("OrderLineBL line: " + line);
+            LOG.debug("OrderLineBL line: %s", line);
             myLine.getAssets().clear();
-            LOG.debug("OrderLineBL myLine: "+ myLine);
+            LOG.debug("OrderLineBL myLine: %s", myLine);
         }
 
     }

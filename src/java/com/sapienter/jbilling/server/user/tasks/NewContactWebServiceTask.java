@@ -52,10 +52,10 @@ public class NewContactWebServiceTask extends PluggableTask implements IInternal
 
         // get the current weather for the user
         ContactDTO contact = contactEvent.getContactDto();
-        LOG.debug("Getting weather for " + contact.getCity() + ", " + contact.getCountryCode());
+        LOG.debug("Getting weather for %s, %s", contact.getCity(), contact.getCountryCode());
 
         String weather = getWeatherService().getWeather(contact.getCity(), contact.getCountryCode());
-        LOG.debug("Weather = " + weather);
+        LOG.debug("Weather = %s", weather);
 
     }
 

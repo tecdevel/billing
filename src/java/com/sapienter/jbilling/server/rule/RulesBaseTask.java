@@ -78,15 +78,15 @@ public abstract class RulesBaseTask extends PluggableTask {
     protected void executeRules() throws TaskException {
         // show what's in first
         for (Object o: rulesMemoryContext) {
-            LOG.debug("in memory context=" + o);
+            LOG.debug("in memory context= %s", o);
         }
 
         // JBRULES-2253: NoClassDefFoundError with the ASM optimizer when optimizing MVEL consequences.
         // Use the reflective optimizer as a workaround - this may reduce rules performance.
         // @see http://mvel.codehaus.org/Optimizers
         OptimizerFactory.setDefaultOptimizer("reflective");
-        LOG.debug("Using MVEL thread accessor optimizer: " + OptimizerFactory.getThreadAccessorOptimizer());
-        LOG.debug("Using MVEL accessor compiler: " + OptimizerFactory.getDefaultAccessorCompiler());
+        LOG.debug("Using MVEL thread accessor optimizer: %s", OptimizerFactory.getThreadAccessorOptimizer());
+        LOG.debug("Using MVEL accessor compiler: %s", OptimizerFactory.getDefaultAccessorCompiler());
 
         KnowledgeBase knowledgeBase;
         StatelessKnowledgeSession statelessSession;
@@ -136,7 +136,7 @@ public abstract class RulesBaseTask extends PluggableTask {
         handlers = new Hashtable<Object, FactHandle>();
         for (Object o : context) {
             if (o != null) {
-                LOG.debug("inserting object " + o);
+                LOG.debug("inserting object %s", o);
                 handlers.put(o, session.insert(o));
             } else {
                 LOG.warn("Attempted to insert a NULL object into the working memeory");
@@ -153,7 +153,7 @@ public abstract class RulesBaseTask extends PluggableTask {
     protected void removeObject(Object o) {
         FactHandle h = handlers.get(o);
         if (h != null) {
-            LOG.debug("removing object " + o + " hash " + o.hashCode());
+            LOG.debug("removing object %s hash %s", o, o.hashCode());
             session.retract(h);
             handlers.remove(o);
         }
@@ -178,7 +178,7 @@ public abstract class RulesBaseTask extends PluggableTask {
         String prefix;
         for (String key : parameters.keySet()) {
             String value = (String) parameters.get(key);
-            LOG.debug("processing parameter " + key + " value " + value);
+            LOG.debug("processing parameter %s value %s", key, value);
             System.out.println("value *******************************" +value );
             if (StringUtils.isNotEmpty(value)) {
                 if (key.equals("file")) {
@@ -190,7 +190,7 @@ public abstract class RulesBaseTask extends PluggableTask {
                             // prepend the default directory if file path is relative
                             prefix = defaultDir + File.separator;
                         }
-                        LOG.debug("adding parameter " + file);
+                        LOG.debug("adding parameter %s", file);
                         appendResource(str, "file:" + prefix + file, "PKG");
                     }
 
@@ -203,7 +203,7 @@ public abstract class RulesBaseTask extends PluggableTask {
                             // prepend the default directory if directory path is relative
                             prefix = defaultDir + File.separator;
                         }
-                        LOG.debug("adding parameter " + dir);
+                        LOG.debug("adding parameter %s", dir);
                         appendResource(str, "file:" + prefix + dir, "PKG");
                     }
 
@@ -211,19 +211,19 @@ public abstract class RulesBaseTask extends PluggableTask {
                     String[] urls = com.sapienter.jbilling.server.util.Util
                             .csvSplitLine(value, ' ');
                     for (String url : urls) {
-                        LOG.debug("adding parameter " + url);
+                        LOG.debug("adding parameter %s", url);
                         appendResource(str, url, "PKG");
                     }
 
                 } else {
                     //for other types of resources
-                    LOG.warn("Resource for parameter " + key + "->" + value + " not supported");
+                    LOG.warn("Resource for parameter %s -> %s not supported", key, value);
                 }
             }
         }
         if (parameters.isEmpty()) {
             appendResource(str, "file:" + defaultDir, "PKG");
-            LOG.debug("No task parameters, using directory default:" + defaultDir);
+            LOG.debug("No task parameters, using directory default: %s", defaultDir);
         }
 
         str.append("</add>");

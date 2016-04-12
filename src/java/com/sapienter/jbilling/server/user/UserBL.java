@@ -602,7 +602,7 @@ public class UserBL extends ResultList {
         MetaFieldValue value = piBl.getMetaField(saved, MetaFieldType.CC_TYPE);
         String creditCardNumber = piBl.getStringMetaFieldByType(saved, MetaFieldType.PAYMENT_CARD_NUMBER);
         if (value != null && value.getField() != null) {
-            LOG.debug("Updating credit card type for instrument: " + saved.getId());
+            LOG.debug("Updating credit card type for instrument: %s", saved.getId());
             saved.setMetaField(value.getField(), piBl.getPaymentMethod(creditCardNumber));
         }
     }
@@ -811,7 +811,7 @@ public class UserBL extends ResultList {
                 }
 
                 for (MetaFieldValue value : entry.getValue()) {
-                    LOG.debug("Setting meta field: " + value);
+                    LOG.debug("Setting meta field: %s", value);
                     for (Date date : timelineDates) {
                         MetaFieldValue rigged = generateValue(value);
                         user.getCustomer().addCustomerAccountInfoTypeMetaField(rigged, accountInfoType, date);
@@ -994,7 +994,7 @@ public class UserBL extends ResultList {
                      Context.Name.NOTIFICATION_SESSION);
              notificationSess.notify(userId, message);
          } catch (NotificationNotFoundException e){
-             LOG.error("Exception while sending notification : " + e.getMessage());
+             LOG.error("Exception while sending notification : %s", e.getMessage());
              throw new SessionInternalError("Notification not found for sending lost password");
          }
      }
@@ -1019,7 +1019,7 @@ public class UserBL extends ResultList {
                             Context.Name.NOTIFICATION_SESSION);
             notificationSess.notify(userId, message);
         } catch (NotificationNotFoundException e){
-            LOG.error("Exception while sending notification : " + e.getMessage());
+            LOG.error("Exception while sending notification : %s", e.getMessage());
             throw new SessionInternalError("Notification not found for sending lost password");
         }
     }
@@ -1094,7 +1094,7 @@ public class UserBL extends ResultList {
 
         List<Integer> childList = das.findChildList(user.getId());
         if (CollectionUtils.isNotEmpty(childList)) {
-            LOG.debug("User Id " + user.getId() + " cannot be deleted. Child users exists.");
+            LOG.debug("User Id %s cannot be deleted. Child users exists.", user.getId());
             String errorMessages[] = new String[1];
             errorMessages[0] = "UserWS,childIds,validation.error.parent.user.cannot.be.deleted," + childList;
             throw new SessionInternalError("Cannot delete Parent User. Child ID(s) " + childList +" exists.", errorMessages);
@@ -2048,7 +2048,7 @@ public class UserBL extends ResultList {
             for (Map.Entry<Integer, Date> entry : effectiveDatesMap.entrySet()) {
                 aitMetaFields.addAll(accountInfoTypeFieldsMap.get(entry.getKey()).get(entry.getValue()));
             }
-            LOG.debug("Total ait meta fields found: " + aitMetaFields.size());
+            LOG.debug("Total ait meta fields found: %s", aitMetaFields.size());
             MetaFieldValueWS[] aitMetaFieldsArray = aitMetaFields.toArray(new MetaFieldValueWS[aitMetaFields.size()]);
             MetaFieldValueWS[] combined = new MetaFieldValueWS[userWS.getMetaFields().length
                     + aitMetaFieldsArray.length];
@@ -2666,7 +2666,7 @@ public class UserBL extends ResultList {
         else {
             user.setAccountDisabledDate(null);
         }
-        LOG.debug("Account Expired set for user " + user.getId() + " to expired = " + accountExpired);
+        LOG.debug("Account Expired set for user %s to expired = %s", user.getId(), accountExpired);
     }
 
     /***
@@ -2688,7 +2688,7 @@ public class UserBL extends ResultList {
             return false;
         }
 
-        LOG.debug("Number of days Set for Inactive User Activity are " + daysToDeActivateAccount);
+        LOG.debug("Number of days Set for Inactive User Activity are %s", daysToDeActivateAccount);
 
         // Account Expiry feature disabled
         if (daysToDeActivateAccount.equals(new Integer(0))) {

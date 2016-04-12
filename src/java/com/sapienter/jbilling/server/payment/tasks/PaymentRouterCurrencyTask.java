@@ -56,11 +56,11 @@ public class PaymentRouterCurrencyTask extends AbstractPaymentRouterTask {
                     "code: " + currencyCode);
         }
         if (selectedTaskId == null) {
-            LOG.warn("Could not find processor for " + parameters.get(currencyCode));
+            LOG.warn("Could not find processor for %s", parameters.get(currencyCode));
             return null;
         }
 
-        LOG.debug("Delegating to task id " + selectedTaskId);
+        LOG.debug("Delegating to task id %s", selectedTaskId);
         PaymentTask selectedTask = instantiateTask(selectedTaskId);
 
         return selectedTask;

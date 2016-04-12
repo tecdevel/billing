@@ -58,7 +58,7 @@ public class PluggableTaskManager<T> {
             classes.addAll(((PluggableTaskDAS) Context.getBean(Context.Name.PLUGGABLE_TASK_DAS)).findByEntityCategory(
                     entityId, taskCategory));
             it = classes.iterator();
-            LOG.debug("total classes = " + classes.size());
+            LOG.debug("total classes = %s", classes.size());
 
         } catch (Exception e) {
             throw new PluggableTaskException(e);
@@ -85,7 +85,7 @@ public class PluggableTaskManager<T> {
             String className = aRule.getType().getClassName();
             String interfaceName = aRule.getType().getCategory().getInterfaceName();
             
-            LOG.debug("Applying task " + className);
+            LOG.debug("Applying task %s", className);
 
             return getInstance(className, interfaceName, aRule);
         }
@@ -145,7 +145,7 @@ public class PluggableTaskManager<T> {
                 throw new PluggableTaskException("Plug-in '" + className + "' does not implement '" + interfaceName + "'");
             }
 
-            LOG.debug("Creating a new instance of " + className);
+            LOG.debug("Creating a new instance of %s", className);
             return task.newInstance();
 
         } catch (Exception e) {

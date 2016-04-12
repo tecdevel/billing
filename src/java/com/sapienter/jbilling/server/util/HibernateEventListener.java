@@ -23,7 +23,7 @@ public class HibernateEventListener implements PreUpdateEventListener {
 
     @Override
     public boolean onPreUpdate(PreUpdateEvent ev) {
-        LOG.info("Session ["+ ev.getSession().hashCode() +"] Instance of:" + ev.getEntity().getClass().getSimpleName() + " is found dirty, currentState:" + Arrays.toString(ev.getState()) + ", previousState:" + Arrays.toString(ev.getOldState()));
+        LOG.info("Session [%s] Instance of: %s is found dirty, currentState: %s, previousState:%s", ev.getSession().hashCode(), ev.getEntity().getClass().getSimpleName(), Arrays.toString(ev.getState()), Arrays.toString(ev.getOldState()));
         return false;
     }
 }

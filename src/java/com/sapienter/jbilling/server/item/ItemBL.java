@@ -311,8 +311,8 @@ public class ItemBL {
     }
 
     private void updateCurrencies(ItemDTO dto) {
-        LOG.debug("updating prices. prices " + (dto.getPrices() != null) +
-                " price = " + dto.getPrice());
+        LOG.debug("updating prices. prices %s price = %s", (dto.getPrices() != null),
+                   dto.getPrice());
         ItemPriceDAS itemPriceDas = new ItemPriceDAS();
         // may be there's just one simple price
         if (dto.getPrices() == null) {

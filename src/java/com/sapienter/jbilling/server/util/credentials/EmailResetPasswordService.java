@@ -96,7 +96,7 @@ public class EmailResetPasswordService implements PasswordService {
                 new UserBL().sendLostPassword(user.getCompany().getId(), user.getId(), 1, generateLink( resetCode.getToken()));
 
         } catch (SessionInternalError e) {
-            LOG.error("Exception while sending notification : " + e.getMessage());
+            LOG.error("Exception while sending notification : %s", e.getMessage());
             throw new SessionInternalError("forgotPassword.notification.not.found");
         } catch (NotificationNotFoundException e) {
             e.printStackTrace();

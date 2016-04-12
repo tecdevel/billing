@@ -114,7 +114,7 @@ public class WSSecurityAdvice implements MethodBeforeAdvice {
         if (!getSpringSecurityService().isLoggedIn())
             throw new SecurityException("Web-service call has not been authenticated.");
 
-        LOG.debug("Validating web-service method '" + method.getName() + "()'");
+        LOG.debug("Validating web-service method '%s()'", method.getName());
 
         // try validating the method call itself
         WSSecured securedMethod = getMappedSecuredWS(method, args);
@@ -165,8 +165,7 @@ public class WSSecurityAdvice implements MethodBeforeAdvice {
      * @return mapped object, or null if object is of an unknown type
      */
     protected WSSecured getMappedSecuredWS(final Object o) {
-        LOG.debug("Non WSSecured object " + o.getClass().getSimpleName()
-                  + ", attempting to map a secure class for validation.");
+        LOG.debug("Non WSSecured object %s, attempting to map a secure class for validation.", o.getClass().getSimpleName());
 
         return getTransactionTemplate().execute(new TransactionCallback<WSSecured>() {
             public WSSecured doInTransaction(TransactionStatus status) {
@@ -192,7 +191,7 @@ public class WSSecurityAdvice implements MethodBeforeAdvice {
                                       : getMappedSecuredWS(o);
 
             if (secured != null) {
-                LOG.debug("Validating secure object " + secured.getClass().getSimpleName());
+                LOG.debug("Validating secure object %s", secured.getClass().getSimpleName());
 
                 getTransactionTemplate().execute(new TransactionCallbackWithoutResult() {
                     protected void doInTransactionWithoutResult(TransactionStatus status) {

@@ -104,7 +104,7 @@ public class PartnerBL extends ResultList {
         dto.setDuePayout(BigDecimal.ZERO);
         partner = partnerDAS.save(dto);
 
-        LOG.debug("created partner id " + partner.getId());
+        LOG.debug("created partner id %s", partner.getId());
 
         return partner.getId();
     }
@@ -145,7 +145,7 @@ public class PartnerBL extends ResultList {
         result.close();
         stmt.close();
         conn.close();
-        LOG.debug("Finding last payout ofr partner " + partnerId + " result = " + retValue);
+        LOG.debug("Finding last payout ofr partner %s result = %s", partnerId, retValue);
         return retValue;
     }
 
@@ -300,7 +300,7 @@ public class PartnerBL extends ResultList {
 
         List<Integer> childList= partnerDAS.findChildList(partner.getId());
         if (CollectionUtils.isNotEmpty(childList)) {
-            LOG.debug("Partner Id " + partner.getId() + " cannot be deleted. Child agents exists.");
+            LOG.debug("Partner Id %s cannot be deleted. Child agents exists.", partner.getId());
             String errorMessages[] = new String[1];
             errorMessages[0] = "PartnerWS,childIds,partner.error.parent.cannot.be.deleted," + childList;
             throw new SessionInternalError("Cannot delete Parent Partner. Child ID(s) " + childList +" exists.", errorMessages);

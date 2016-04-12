@@ -78,7 +78,7 @@ public class BasicAgeingTask extends PluggableTask implements IAgeingTask {
      * @return all users eligible for ageing
      */
     public ScrollableResults findUsersToAge(Integer entityId, Date ageingDate) {
-        LOG.debug("Reviewing users for entity " + entityId + " ...");
+        LOG.debug("Reviewing users for entity %s ...", entityId);
         return new UserDAS().findUserIdsWithUnpaidInvoicesForAgeing(entityId);
     }
 
@@ -91,13 +91,13 @@ public class BasicAgeingTask extends PluggableTask implements IAgeingTask {
      * @param executorId executor id
      */
     public List<InvoiceDTO> reviewUser(Integer entityId, Set<AgeingEntityStepDTO> steps, Integer userId, Date today, Integer executorId) {
-        LOG.debug("Reviewing user for ageing " + userId + " ...");
+        LOG.debug("Reviewing user for ageing %s ...", userId);
 
         UserDAS userDas = new UserDAS();
         UserDTO user = userDas.find(userId);
 
         InvoiceDAS invoiceDas = new InvoiceDAS();
-        LOG.debug("Reviewing invoices for user " + user.getId());
+        LOG.debug("Reviewing invoices for user %s", user.getId());
 
         List<InvoiceDTO> userOverdueInvoices = new ArrayList<InvoiceDTO>();
         for (InvoiceDTO invoice : invoiceDas.findProccesableByUser(user)) {
@@ -123,11 +123,11 @@ public class BasicAgeingTask extends PluggableTask implements IAgeingTask {
      */
     public AgeingEntityStepDTO ageUser(Set<AgeingEntityStepDTO> steps, UserDTO user, InvoiceDTO unpaidInvoice, Date today, Integer executorId) {
         if (!InvoiceBL.isInvoiceBalanceEnoughToAge(unpaidInvoice, user.getEntity().getId())) {
-            LOG.debug("Wants to age user: " + user.getId() + " but invoice balance is not enough to age: " + unpaidInvoice.getId());
+            LOG.debug("Wants to age user: %s but invoice balance is not enough to age: %s", user.getId(), unpaidInvoice.getId());
             return null;
         }
     	
-        LOG.debug("Ageing user " + user.getId() + " for unpaid invoice: " + unpaidInvoice.getId());
+        LOG.debug("Ageing user %s for unpaid invoice: %s", user.getId(), unpaidInvoice.getId());
         UserStatusDTO nextStatus = null;
         AgeingEntityStepDTO ageingStep = null;
 
@@ -142,7 +142,7 @@ public class BasicAgeingTask extends PluggableTask implements IAgeingTask {
                 if (!isUserAlreadyPassAgeingStep(user.getStatus(), step, ageingSteps)) {
                     ageingStep = step;
                     nextStatus = step.getUserStatus();
-                    LOG.debug("User: " + user.getId() + " needs to be aged to '" + getStatusDescription(nextStatus) + "'");
+                    LOG.debug("User: %s needs to be aged to '%s'", user.getId(), getStatusDescription(nextStatus));
 
                     //only 1 step per day
                     break;
@@ -156,7 +156,7 @@ public class BasicAgeingTask extends PluggableTask implements IAgeingTask {
             setUserStatus(user, nextStatus, today, null);
 
         } else {
-            LOG.debug("Next status of user " + user.getId() + "  is null, no further ageing steps are available.");
+            LOG.debug("Next status of user %s  is null, no further ageing steps are available.", user.getId());
             eLogger.warning(user.getEntity().getId(),
                             user.getUserId(),
                             user.getUserId(),
@@ -282,7 +282,7 @@ public class BasicAgeingTask extends PluggableTask implements IAgeingTask {
         // status changed from active to suspended
         // suspend customer orders
         if (nextAgeingStep != null && nextAgeingStep.getSuspend() == 1) {
-            LOG.debug("Suspending orders for user " + user.getUserId());
+            LOG.debug("Suspending orders for user %s", user.getUserId());
 
             OrderBL orderBL = new OrderBL();
             ScrollableResults orders = new OrderDAS().findByUser_Status(user.getId(), OrderStatusFlag.INVOICE);
@@ -299,7 +299,7 @@ public class BasicAgeingTask extends PluggableTask implements IAgeingTask {
             // re-active suspended customer orders
             if (nextAgeingStep == null && status.getId() == UserDTOEx.STATUS_ACTIVE
                     && oldStatus.getAgeingEntityStep() != null && oldStatus.getAgeingEntityStep().getSuspend() == 1) {
-                LOG.debug("Activating orders for user " + user.getUserId());
+                LOG.debug("Activating orders for user %s", user.getUserId());
                 // user out of ageing, activate suspended orders
                 OrderBL orderBL = new OrderBL();
                 ScrollableResults orders = new OrderDAS().findByUser_Status(user.getId(), OrderStatusFlag.SUSPENDED_AGEING);
@@ -349,7 +349,7 @@ public class BasicAgeingTask extends PluggableTask implements IAgeingTask {
                 client.executeMethod(post);
 
             } catch (Exception e) {
-                LOG.error("Exception occurred posting ageing HTTP callback for URL: " + url, e);
+                LOG.error("Exception occurred posting ageing HTTP callback for URL: %s", url, e);
                 return false;
             }
         }
@@ -361,7 +361,7 @@ public class BasicAgeingTask extends PluggableTask implements IAgeingTask {
         AgeingEntityStepDTO nextStep = newStatus.getAgeingEntityStep();
 
         if (nextStep == null || nextStep.getSendNotification() == 1) {
-            LOG.debug("Sending notification to user " + user.getUserId() + " during ageing/reactivating");
+            LOG.debug("Sending notification to user %s during ageing/reactivating", user.getUserId());
             // process the ageing notification event to find and send the notification message for the ageing step
             try {
                 EventManager.process(new AgeingNotificationEvent(user.getEntity().getId(),
@@ -370,7 +370,7 @@ public class BasicAgeingTask extends PluggableTask implements IAgeingTask {
                         user.getId()));
 
             } catch (Exception exception) {
-                LOG.warn("Cannot send notification on ageing: " + user.getId());
+                LOG.warn("Cannot send notification on ageing: %s", user.getId());
             }
         }
 

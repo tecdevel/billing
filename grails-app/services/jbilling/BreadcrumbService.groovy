@@ -154,7 +154,7 @@ class BreadcrumbService implements InitializingBean, Serializable {
                         //so we will delete the extra elements
                         def firstInvalidId = remove.getAt(0).id
                         def deleteCount = deleteExtra(userId, firstInvalidId)
-                        log.debug("Deleted: " + deleteCount + " breadcrumbs for user id: " + userId);
+                        log.debug("Deleted: ${deleteCount} breadcrumbs for user id: ${userId}");
                     }
                     //removes the elements from original list as well
                     remove.clear()

@@ -224,7 +224,7 @@ public class BasicEmailNotificationTask extends PluggableTask
 
             if (!atLeastOne) {
                 // not a huge deal, but no way I can send anything
-                LOG.info("User without email address " +
+                LOG.info("User without email address %s",
                         user.getUserId());
                 return false;
             } else {
@@ -257,7 +257,7 @@ public class BasicEmailNotificationTask extends PluggableTask
             try {
                 msg.setReplyTo(replyTo);
             } catch (Exception e5) {
-                LOG.error("Exception when setting the replyTo address: " +
+                LOG.error("Exception when setting the replyTo address: %s",
                         replyTo, e5);
             }
         }
@@ -289,7 +289,7 @@ public class BasicEmailNotificationTask extends PluggableTask
                 File file = new File(message.getAttachmentFile());
 
                 msg.addAttachment(file.getName(), new FileSystemResource(file));
-                LOG.debug("added attachment " + file.getName());
+                LOG.debug("added attachment %s", file.getName());
             }
         } catch (MessagingException e2) {
             throw new TaskException("Exception setting up the subject and/or" +
@@ -310,14 +310,14 @@ public class BasicEmailNotificationTask extends PluggableTask
                 allEmails = allEmails + " " + address.toString();
             }
             LOG.debug(
-                    "Sending email to " + allEmails + " bcc " + bcc + " server=" + server +
-                    " port=" + port + " username=" + username );
+                    "Sending email to %s bcc %s server=%s port=%s username=%s", allEmails, bcc, server,
+                     port, username );
             sender.send(mimeMsg);
             //if there was an attachment, remove the file
             if (message.getAttachmentFile() != null) {
                 File file = new File(message.getAttachmentFile());
                 if (!file.delete()) {
-                    LOG.debug("Could not delete attachment file " +
+                    LOG.debug("Could not delete attachment file %s",
                             file.getName());
                 }
             }

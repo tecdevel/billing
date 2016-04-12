@@ -223,8 +223,7 @@ public class NotificationBL extends ResultList implements NotificationSQL {
             // reality, all users that will get an invoice have to be
             // customers
             deliveryMethod = ServerConstants.D_METHOD_EMAIL;
-            LOG.warn("A user that is not a customer is getting an invoice."
-                    + " User id = " + invoice.getBaseUser().getUserId());
+            LOG.warn("A user that is not a customer is getting an invoice. User id = %s", invoice.getBaseUser().getUserId());
         } else {
             deliveryMethod = invoice.getBaseUser().getCustomer()
                     .getInvoiceDeliveryMethod().getId();
@@ -289,7 +288,7 @@ public class NotificationBL extends ResultList implements NotificationSQL {
                                         int paymentResult) throws SessionInternalError,
             NotificationNotFoundException {
         LOG.debug("In Overloaded method::");
-        LOG.debug("Payment message for payment: " + dto.getId());
+        LOG.debug("Payment message for payment: %s", dto.getId());
         UserBL user = null;
         Integer languageId = null;
         MessageDTO message = initializeMessage(entityId, dto.getUserId());
@@ -327,13 +326,13 @@ public class NotificationBL extends ResultList implements NotificationSQL {
             message.addParameter("invoice", invoice.getEntity());
         }
         message.addParameter("payment", dto);
-        LOG.debug("Include Attachment: " + message.getIncludeAttachment());
+        LOG.debug("Include Attachment: %s", message.getIncludeAttachment());
         if ( message.getIncludeAttachment() != null && Integer.valueOf(1).equals(message.getIncludeAttachment()) ) {
         	ContactDTOEx contactDTOEx= (ContactDTOEx) message.getParameters().get("contact");
         	if ( null == contactDTOEx ) contactDTOEx = new ContactDTOEx();
         	
             message.setAttachmentFile(createPaymentAttachment(dto, user, message.getAttachmentDesign(), message.getAttachmentType(), contactDTOEx));
-            LOG.debug("Set attachment " + message.getAttachmentFile());
+            LOG.debug("Set attachment %s", message.getAttachmentFile());
         }
 
         return message;
@@ -343,7 +342,7 @@ public class NotificationBL extends ResultList implements NotificationSQL {
     public MessageDTO getPaymentMessage(Integer entityId, PaymentDTOEx dto,
                                         boolean result) throws SessionInternalError,
             NotificationNotFoundException {
-        LOG.debug("Payment message for payment: " + dto.getPayoutId());
+        LOG.debug("Payment message for payment: %s", dto.getPayoutId());
         UserBL user = null;
         Integer languageId = null;
         MessageDTO message = initializeMessage(entityId, dto.getUserId());
@@ -365,7 +364,7 @@ public class NotificationBL extends ResultList implements NotificationSQL {
         // find the description for the payment method
         PaymentBL payment = new PaymentBL(dto.getId());
         // instead of getting payment method get it from payment instrument. As each instrument now has its own payment method.
-        LOG.debug("Payment instrument's payment method: " + dto.getInstrument().getPaymentMethod());
+        LOG.debug("Payment instrument's payment method: %s", dto.getInstrument().getPaymentMethod());
         message.addParameter("method", payment.getMethodDescription(dto
                 .getInstrument().getPaymentMethod(), languageId));
         message.addParameter("total", Util.formatMoney(dto.getAmount(), dto
@@ -398,14 +397,14 @@ public class NotificationBL extends ResultList implements NotificationSQL {
             message.addParameter("invoice", invoice.getEntity());
         }
         message.addParameter("payment", dto);
-        LOG.debug("Include Attachment: " + message.getIncludeAttachment());
+        LOG.debug("Include Attachment: %s", message.getIncludeAttachment());
         if ( message.getIncludeAttachment() != null && Integer.valueOf(1).equals(message.getIncludeAttachment()) ) {
         	
         	ContactDTOEx contactDTOEx= (ContactDTOEx) message.getParameters().get("contact");
         	if ( null == contactDTOEx ) contactDTOEx = new ContactDTOEx();
         	
             message.setAttachmentFile(createPaymentAttachment(dto, user, message.getAttachmentDesign(), message.getAttachmentType(), contactDTOEx));
-            LOG.debug("Set attachment " + message.getAttachmentFile());
+            LOG.debug("Set attachment %s", message.getAttachmentFile());
         }
 
         return message;
@@ -537,7 +536,7 @@ public class NotificationBL extends ResultList implements NotificationSQL {
                         if (preferenceAttachInvoiceToNotifications == 1) {
                         	invoice.set(invoiceId);
                         	message.setAttachmentFile(generatePaperInvoiceAsFile(invoice.getEntity()));
-                        	LOG.debug("attaching invoice " + message.getAttachmentFile());
+                        	LOG.debug("attaching invoice %s", message.getAttachmentFile());
                         }
                     } catch (EmptyResultDataAccessException e1) {
                         // no problem, I'll get the defaults
@@ -1293,8 +1292,7 @@ public class NotificationBL extends ResultList implements NotificationSQL {
         address = contactBL.getEntity().getEmail();
         if (address == null) {
             // can't send something to the ether
-            LOG.warn("Trying to send email to entity " + entityId
-                    + " but no address was found");
+            LOG.warn("Trying to send email to entity %s but no address was found", entityId);
             return;
         }
         sendSapienterEmail(address, entityId, messageKey, attachmentFileName,
@@ -1376,9 +1374,9 @@ public class NotificationBL extends ResultList implements NotificationSQL {
         // the date
         msg.setSentDate(Calendar.getInstance().getTime());
 
-        LOG.debug("Message: " + msg);
-        LOG.debug("MessageText: " + message);
-        LOG.debug("Address: " + address);
+        LOG.debug("Message: %s", msg);
+        LOG.debug("MessageText: %s", message);
+        LOG.debug("Address: %s", address);
 
         Transport transport = session.getTransport("smtp");
         transport.connect(com.sapienter.jbilling.common.Util
@@ -1477,7 +1475,7 @@ public class NotificationBL extends ResultList implements NotificationSQL {
                 }
             }
 
-            LOG.debug("Retvalue >>>> "+retValue.toString());
+            LOG.debug("Retvalue >>>> %s",retValue.toString());
             
         } catch (Exception e) {
             throw new SessionInternalError(e);
@@ -1626,7 +1624,7 @@ public class NotificationBL extends ResultList implements NotificationSQL {
 	            parameters.put("customerCountry", printable(to.getCountryCode()));
 	            parameters.put("customerName", "FAO :" + printable(to.getFirstName(), to.getLastName()));
 	
-	            LOG.debug("Customer Address IS: " + parameters.get("customerAddress"));
+	            LOG.debug("Customer Address IS: %s", parameters.get("customerAddress"));
 	
 	            parameters.put("organizationName", to.getOrganizationName());
             }

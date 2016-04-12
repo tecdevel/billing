@@ -12,10 +12,10 @@ import java.util.Map
 import java.util.SortedMap
 import java.util.List
 import java.util.Date
-import org.apache.log4j.Logger
+import com.sapienter.jbilling.common.FormatLogger
 
 # global
-global org.apache.log4j.Logger LOG
+global com.sapienter.jbilling.common.FormatLogger LOG
 
 # These rules are designed to be used when pricing mediated items. The idea is to use
 # the mediation PricingFields as attributes to find an appropriate pricing model. Any
@@ -64,6 +64,6 @@ then
         }
 
         model.applyTo($mediation.getCurrentOrder(), $result.getQuantity(), $result, null, usage, true, new Date());
-        LOG.debug("Applying price model: " + model);
+        LOG.debug("Applying price model: %s", model);
     }
 end

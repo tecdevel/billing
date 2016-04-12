@@ -71,7 +71,7 @@ public class AlternativePaymentInfoTask extends BasicPaymentInfoTask {
             throw new TaskException(e);
         }
         if (retValue == null) {
-            LOG.debug("Could not find payment instrument for user " + userId);
+            LOG.debug("Could not find payment instrument for user %s", userId);
         }
         return null;
     }

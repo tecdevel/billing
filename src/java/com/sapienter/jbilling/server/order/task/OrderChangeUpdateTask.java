@@ -83,7 +83,7 @@ public class OrderChangeUpdateTask extends AbstractCronTask {
 		            } 
 	        }
         } else {
-        	log.warn("Failed to trigger OrderChangeUpdate process at " + context.getFireTime()
+        	log.warn("Failed to trigger OrderChangeUpdate process at %s", context.getFireTime()
                     + ", another process is already running.");
         }
     }

@@ -75,7 +75,7 @@ public class DTOFactory {
     public static UserDTOEx getUserDTO(String username, Integer entityId)
             throws NamingException, SessionInternalError {
 
-        LOG.debug("getting the user " + username);
+        LOG.debug("getting the user %s", username);
 
         UserDTO user = new UserDAS().findByUserName(username, entityId);
         if (user == null)
@@ -86,7 +86,7 @@ public class DTOFactory {
     public static UserDTOEx getUserDTOEx(Integer userId)
             throws NamingException, SessionInternalError {
 
-        LOG.debug("getting the user " + userId);
+        LOG.debug("getting the user %s", userId);
 
         UserDTO user = new UserDAS().find(userId);
         return getUserDTOEx(user);
@@ -192,7 +192,7 @@ public class DTOFactory {
                 dto.setAccountDisabledDate(user.getAccountDisabledDate());
             }
         } catch (Exception e) {
-            LOG.error("Exception occurred " + e.getMessage());
+            LOG.error("Exception occurred %s", e.getMessage());
         }
 
         return dto;

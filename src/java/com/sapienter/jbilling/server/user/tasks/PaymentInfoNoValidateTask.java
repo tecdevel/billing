@@ -67,7 +67,7 @@ public class PaymentInfoNoValidateTask
             UserBL userBL = new UserBL(userId);
             
             for(PaymentInformationDTO paymentInformation : userBL.getEntity().getPaymentInstruments()) {
-        		LOG.debug("Payment instrument " + paymentInformation.getId());
+        		LOG.debug("Payment instrument %s", paymentInformation.getId());
         		// If its a payment/credit card
         		if(paymentInformation.getPaymentMethodType().getPaymentMethodTemplate().getTemplateName().equalsIgnoreCase(CommonConstants.PAYMENT_CARD)) {
         			processCreditCard(retValue, paymentInformation, paymentBL);
@@ -79,7 +79,7 @@ public class PaymentInfoNoValidateTask
             throw new TaskException(e);
         }
         if (retValue.getPaymentInstruments().isEmpty()) {
-            LOG.debug("Could not find payment instrument for user " + userId);
+            LOG.debug("Could not find payment instrument for user %s", userId);
             retValue = null;
         }
         return retValue;
@@ -97,7 +97,7 @@ public class PaymentInfoNoValidateTask
     	// TODO: some fields like gateway key that were being process in old implementation have been removed at all
     	String cardNumber = piBl.getStringMetaFieldByType(paymentInstrument, MetaFieldType.PAYMENT_CARD_NUMBER);
     	Date ccExpiryDate = DateTimeFormat.forPattern("mm/yy").parseDateTime(piBl.getStringMetaFieldByType(paymentInstrument, MetaFieldType.DATE)).toDate();
-    	LOG.debug("Expiry date is: " + ccExpiryDate);
+    	LOG.debug("Expiry date is: %s", ccExpiryDate);
     	if(piBl.validateCreditCard(ccExpiryDate, cardNumber)) {
     		LOG.debug("Card is valid");
     		PaymentInformationDTO paymentInformation = paymentInstrument.getDTO();

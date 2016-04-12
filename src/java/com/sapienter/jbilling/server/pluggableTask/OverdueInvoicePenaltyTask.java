@@ -105,8 +105,7 @@ public class OverdueInvoicePenaltyTask extends PluggableTask implements IInterna
             AboutToGenerateInvoices invEvent = (AboutToGenerateInvoices) event;
 
             LOG.debug("Processing event: "
-                    + "user id: "
-                    + invEvent.getUserId());
+                    + "user id: %s", invEvent.getUserId());
 
             // find all unpaid, overdue invoices or invoices paid after due date, for this user and add the penalty item excluding
             // carried invoices as the remaining balance will already have been applied to the new invoice.
@@ -114,8 +113,8 @@ public class OverdueInvoicePenaltyTask extends PluggableTask implements IInterna
             Collection<InvoiceDTO> unpaidInvoices=invoiceDAS.findProccesableByUser(UserBL.getUserEntity(invEvent.getUserId())); 
             List<Integer> latePaid = new InvoiceDAS().findLatePaidInvoicesForUser(invEvent.getUserId());
 
-            LOG.debug("Found un-paid invoices " + unpaidInvoices);
-            LOG.debug("Found invoice ids " + latePaid);
+            LOG.debug("Found un-paid invoices %s", unpaidInvoices);
+            LOG.debug("Found invoice ids %s", latePaid);
             
             // quit if the user has no overdue invoices.
             if (unpaidInvoices.isEmpty() && latePaid.isEmpty()) {
@@ -130,7 +129,7 @@ public class OverdueInvoicePenaltyTask extends PluggableTask implements IInterna
             ItemBL item;
             try {
                 item = new ItemBL(getPenaltyItemId());
-                LOG.debug("Penalty item " + getPenaltyItemId());
+                LOG.debug("Penalty item %s", getPenaltyItemId());
             } catch (SessionInternalError e) {
                 throw new PluggableTaskException("Cannot find configured penalty item: " + getPenaltyItemId(), e);
             } catch (Exception e) {
@@ -141,14 +140,14 @@ public class OverdueInvoicePenaltyTask extends PluggableTask implements IInterna
             	// Calculate the penalty fee. If the fee is zero (check the item cost) then
                 // no penalty should be applied to this invoice.
                 BigDecimal fee = calculatePenaltyFee(invoice, item);
-                LOG.debug("Calculated penalty item fee: " + fee.toString());
+                LOG.debug("Calculated penalty item fee: %s", fee.toString());
 
                 if (fee.compareTo(BigDecimal.ZERO) <= 0)
                     return;
 
                 // create the order
                 Integer orderId= createPenaltyOrder(invoice, item, fee);
-                LOG.debug("Created penalty Order " + orderId);
+                LOG.debug("Created penalty Order %s", orderId);
             }
         }
         
@@ -172,12 +171,12 @@ public class OverdueInvoicePenaltyTask extends PluggableTask implements IInterna
         summary.setOrderBillingType(type);
         //penalty applicable since the date Invoice got created.
         summary.setActiveSince(invoice.getDueDate()); 
-        LOG.debug("Order active since " + summary.getActiveSince());
+        LOG.debug("Order active since %s", summary.getActiveSince());
         summary.setCurrency(invoice.getCurrency());
 
         //if invoice is paid after due date, this order must have an active until date
         if (ServerConstants.INVOICE_STATUS_PAID.equals(invoice.getInvoiceStatus().getId())) {
-        	LOG.debug("Invoice " + invoice.getId() + " has been paid.");
+        	LOG.debug("Invoice %s has been paid.", invoice.getId());
         	summary.setActiveUntil(invoice.getPaymentMap().iterator().next().getCreateDatetime());
         }
         

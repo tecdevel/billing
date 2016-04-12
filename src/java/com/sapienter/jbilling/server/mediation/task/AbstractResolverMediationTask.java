@@ -16,6 +16,7 @@
 
 package com.sapienter.jbilling.server.mediation.task;
 
+import com.sapienter.jbilling.common.FormatLogger;
 import com.sapienter.jbilling.server.item.ItemBL;
 import com.sapienter.jbilling.server.item.PricingField;
 import com.sapienter.jbilling.server.mediation.Record;
@@ -26,6 +27,7 @@ import com.sapienter.jbilling.server.order.db.OrderDTO;
 import com.sapienter.jbilling.server.order.db.OrderLineDTO;
 import com.sapienter.jbilling.server.pluggableTask.PluggableTask;
 import com.sapienter.jbilling.server.pluggableTask.TaskException;
+
 import org.apache.log4j.Logger;
 
 import java.math.BigDecimal;
@@ -39,12 +41,12 @@ import java.util.List;
  */
 public abstract class AbstractResolverMediationTask extends PluggableTask implements IMediationProcess {
 
-    private static final Logger LOG = Logger.getLogger(AbstractResolverMediationTask.class);
+	private static final FormatLogger LOG = new FormatLogger(AbstractResolverMediationTask.class);
 
     public void process(List<Record> records, List<MediationResult> results, String configurationName)
             throws TaskException {
 
-        LOG.debug("Running mediation resolver for configuration '" + configurationName + "'");
+        LOG.debug("Running mediation resolver for configuration '%s'", configurationName);
 
         if (results == null) {
             throw new TaskException("Results list cannot be null.");
@@ -54,7 +56,7 @@ public abstract class AbstractResolverMediationTask extends PluggableTask implem
             throw new TaskException("Results list must be empty, or have the same size as the records list.");
         }
 
-        LOG.debug("Processing " + results.size() + " result(s).");
+        LOG.debug("Processing %s result(s).", results.size());
 
         int index = results.isEmpty() ? -1 : 0;
         for (Record record : records) {
@@ -67,7 +69,7 @@ public abstract class AbstractResolverMediationTask extends PluggableTask implem
                result = new MediationResult(configurationName, true);
             }
 
-            LOG.debug("Processing mediation result " + result.getId());
+            LOG.debug("Processing mediation result %s", result.getId());
 
             // resolve mediation pricing fields
             result.setRecordKey(record.getKey());
@@ -75,7 +77,7 @@ public abstract class AbstractResolverMediationTask extends PluggableTask implem
             if (record.getErrors().isEmpty()) {
             	resolve(result, record.getFields());
             } else {
-            	LOG.debug("This Record " + record.getKey() + " has a format error in length or field values.");
+            	LOG.debug("This Record %s has a format error in length or field values.", record.getKey());
             	result.setDone(true);
             	result.addError("ERR: " + record.getErrors().get(0));
             }
@@ -151,7 +153,7 @@ public abstract class AbstractResolverMediationTask extends PluggableTask implem
     protected void calculatePrices(MediationResult result, List<PricingField> fields) {
         for (OrderLineDTO line : result.getLines()) {
             if (line.getPrice() == null) {
-                LOG.debug("Calculating price for line " + line);
+                LOG.debug("Calculating price for line %s", line);
 
                 ItemBL itemService = new ItemBL(line.getItemId());
                 itemService.setPricingFields(fields);

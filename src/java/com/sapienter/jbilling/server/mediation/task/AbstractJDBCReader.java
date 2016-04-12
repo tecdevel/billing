@@ -17,6 +17,7 @@
 package com.sapienter.jbilling.server.mediation.task;
 
 import com.sapienter.jbilling.common.CommonConstants;
+import com.sapienter.jbilling.common.FormatLogger;
 import com.sapienter.jbilling.common.SessionInternalError;
 import com.sapienter.jbilling.common.Util;
 import com.sapienter.jbilling.server.item.PricingField;
@@ -149,15 +150,15 @@ public abstract class AbstractJDBCReader extends AbstractReader {
             connection = DataSourceUtils.getConnection(dataSource);
 
             this.tableName = JDBCUtils.correctTableName(connection, getParameter(PARAM_TABLE_NAME.getName(), TABLE_NAME_DEFAULT));
-            LOG.debug("Table name: '" + getTableName() + "'");
+            LOG.debug("Table name: '%s'", getTableName());
 
             String[] keyColumns = getParameter(PARAM_KEY_COLUMN_NAME.getName(), KEY_COLUMN_NAME_DEFAULT).split(",");
             this.keyColumns = JDBCUtils.correctColumnNames(connection, this.tableName, keyColumns);
-            LOG.debug("Key column names: " + getKeyColumns());
+            LOG.debug("Key column names: %s", getKeyColumns());
 
             String timestampColumnName = getParameter(PARAM_TIMESTAMP_COLUMN_NAME.getName(), TIMESTAMP_COLUMN_DEFAULT);
             this.timestampColumnName = JDBCUtils.correctColumnName(connection, this.tableName, timestampColumnName);
-            LOG.debug("Timestamp marker column name: '" + getTimestampColumnName() + "'");
+            LOG.debug("Timestamp marker column name: '%s'", getTimestampColumnName());
 
         } catch (SQLException e) {
             throw new SessionInternalError("Could not validate table or column names against the database.", e);
@@ -171,7 +172,7 @@ public abstract class AbstractJDBCReader extends AbstractReader {
 
         // determine marking method for this reader
         this.markMethod = getTimestampColumnName() != null ? MarkMethod.TIMESTAMP : MarkMethod.LAST_ID;
-        LOG.debug("Using marking method " + getMarkMethod());
+        LOG.debug("Using marking method %s", getMarkMethod());
 
         // force lowercase PricingField names ?
         this.useLowercaseNames = getParameter(PARAM_LOWERCASE_COLUMN_NAME.getName(), LOWERCASE_COLUMN_NAME_DEFAULT);
@@ -270,7 +271,7 @@ public abstract class AbstractJDBCReader extends AbstractReader {
         }
 
         lastId = preference.getInt();
-        LOG.debug("Fetched 'last read ID' preference: " + lastId);
+        LOG.debug("Fetched 'last read ID' preference: %s", lastId);
         return lastId;
     }
 
@@ -278,7 +279,7 @@ public abstract class AbstractJDBCReader extends AbstractReader {
      * Updates the mediation "last read ID" preference with the current lastId field value.
      */
     protected void flushLastId() {
-        LOG.debug("Updating 'last read ID' preference to: " + getLastId());
+        LOG.debug("Updating 'last read ID' preference to: %s", getLastId());
         PreferenceBL preferenceBL = new PreferenceBL();
         preferenceBL.createUpdateForEntity(getEntityId(),
                                            CommonConstants.PREFERENCE_MEDIATION_JDBC_READER_LAST_ID,

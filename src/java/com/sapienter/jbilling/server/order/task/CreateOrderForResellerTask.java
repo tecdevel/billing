@@ -37,7 +37,7 @@ public class CreateOrderForResellerTask extends PluggableTask implements IIntern
     
 	@Override
 	public void process(Event event) throws PluggableTaskException {
-		LOG.debug("Entering CreateOrderForResellerTask - event: " + event.toString());
+		LOG.debug("Entering CreateOrderForResellerTask - event: %s", event.toString());
 		
 		//This handle is only for OrderAddedOnInvoiceEvent
 		OrderAddedOnInvoiceEvent invoiceEvent = (OrderAddedOnInvoiceEvent) event;
@@ -58,7 +58,7 @@ public class CreateOrderForResellerTask extends PluggableTask implements IIntern
 		//set base user to reseller customer
 		UserDTO reseller = company.getReseller();
 		Integer entityId = reseller.getCompany().getId();
-		LOG.debug("Entity Id is : " + entityId);
+		LOG.debug("Entity Id is : %s", entityId);
 		OrderDTO eventOrder = invoiceEvent.getOrder();
 
 		OrderDTO resellerOrder = new OrderDTO(eventOrder);
@@ -75,7 +75,7 @@ public class CreateOrderForResellerTask extends PluggableTask implements IIntern
 		resellerOrder.setBaseUserByUserId(reseller);
 		resellerOrder.setCurrency(new CurrencyDAS().find(reseller.getCurrencyId()));
 		resellerOrder.setResellerOrder(invoiceEvent.getOrderId());
-		LOG.debug("Active Since: " + resellerOrder.getActiveSince());		
+		LOG.debug("Active Since: %s", resellerOrder.getActiveSince());		
 		LOG.debug("RESELLER order lines %s", resellerOrder.getLines());
 		
 		createLines(eventOrder.getLines(), reseller.getUserId(), entityId, resellerOrder);
@@ -89,9 +89,9 @@ public class CreateOrderForResellerTask extends PluggableTask implements IIntern
 		orderBL.set(resellerOrder);
 
 		try {
-			LOG.debug("Processing Lines with - resellerOrder: " + resellerOrder + " , reseller; " + reseller + 
-					" ,User Id: " + resellerOrder.getUserId() + " ,resellerCurrencyId: " + reseller.getCurrencyId() + 
-					" ,Pricing Fields: " + resellerOrder.getPricingFields());
+			LOG.debug("Processing Lines with - resellerOrder: %s , reseller; %s ,User Id: %s ,resellerCurrencyId: %s ,Pricing Fields: %s", resellerOrder, reseller, 
+					   resellerOrder.getUserId(), reseller.getCurrencyId(), 
+					   resellerOrder.getPricingFields());
             orderBL.recalculate(entityId);
         } catch (ItemDecimalsException e) {
             throw new SessionInternalError("Error when doing credit", RefundOnCancelTask.class, e);
@@ -128,7 +128,7 @@ public class CreateOrderForResellerTask extends PluggableTask implements IIntern
 		//OrderDTO purchaseOrder = orderLines.iterator().next().getPurchaseOrder();
 		
 		for (OrderLineDTO orderLine : orderLines) {
-			LOG.debug("Processing Order Line: " + orderLine);
+			LOG.debug("Processing Order Line: %s", orderLine);
 
 			OrderLineDTO newLine= new OrderLineDTO(orderLine);
             newLine.getAssets().clear();

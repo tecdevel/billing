@@ -296,7 +296,7 @@ class MetaFieldsController {
             long useCnt= new MetaFieldDAS().getTotalFieldCount(metaField.id)
             log.debug "Meta field values: $useCnt exist"
             if ( useCnt> 0){
-                log.debug('Can not delete metafield '+metaField.getId()+', it is in use.')
+                log.debug("Can not delete metafield ${metaField.getId()}, it is in use.")
                 flash.error = 'Can not delete metafield '+metaField.getId()+', it is in use.'
             } else {
                 new MetaFieldBL().deleteIfNotParticipant(params.int('id'))

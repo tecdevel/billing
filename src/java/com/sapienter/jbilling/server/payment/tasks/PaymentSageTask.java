@@ -213,7 +213,7 @@ public class PaymentSageTask extends PaymentTaskWithTimeout implements
      *         false.
      */
     public boolean process(PaymentDTOEx payment) throws PluggableTaskException {
-        LOG.debug("Payment processing for " + PROCESSOR + " gateway");
+        LOG.debug("Payment processing for %s gateway", PROCESSOR);
         Transaction transaction = Transaction.Payment;
         if (BigDecimal.ZERO.compareTo(payment.getAmount()) > 0) {
             transaction = Transaction.Credit;
@@ -222,8 +222,7 @@ public class PaymentSageTask extends PaymentTaskWithTimeout implements
         }
         boolean result = doProcess(payment, transaction, null)
                 .shouldCallOtherProcessors();
-        LOG.debug("Processing result is " + payment.getPaymentResult().getId()
-                + ", return value of process is " + result);
+        LOG.debug("Processing result is %s, return value of process is %s", payment.getPaymentResult().getId(), result);
         return result;
     }
 
@@ -235,7 +234,7 @@ public class PaymentSageTask extends PaymentTaskWithTimeout implements
      * @return see prosess method description
      */
     public boolean preAuth(PaymentDTOEx payment) throws PluggableTaskException {
-        LOG.debug("PreAuth processing for " + PROCESSOR + " gateway");
+        LOG.debug("PreAuth processing for %s gateway", PROCESSOR);
         return doProcess(payment, Transaction.AuthOnly, null)
                 .shouldCallOtherProcessors();
     }
@@ -252,10 +251,9 @@ public class PaymentSageTask extends PaymentTaskWithTimeout implements
     public boolean confirmPreAuth(PaymentAuthorizationDTO auth,
             PaymentDTOEx payment) throws PluggableTaskException {
     	PaymentInformationBL piBl = new PaymentInformationBL();
-        LOG.debug("ConfirmPreAuth processing for " + PROCESSOR + " gateway");
+        LOG.debug("ConfirmPreAuth processing for %s gateway", PROCESSOR);
         if (!PROCESSOR.equals(auth.getProcessor())) {
-            LOG.warn("The procesor of the pre-auth is not paypal, is "
-                    + auth.getProcessor());
+            LOG.warn("The procesor of the pre-auth is not paypal, is %s", auth.getProcessor());
             // let the processor be called and failed, so the caller
             // can do something about it: probably call this one again but for
             // 'process'
@@ -273,7 +271,7 @@ public class PaymentSageTask extends PaymentTaskWithTimeout implements
                             + payment.getId());
         }
         if (!isApplicable(payment)) {
-            LOG.error("This payment can not be captured" + payment);
+            LOG.error("This payment can not be captured %s", payment);
             return true;
         }
         return doProcess(payment, Transaction.Force, auth)
@@ -311,8 +309,8 @@ public class PaymentSageTask extends PaymentTaskWithTimeout implements
         }
         try {
             boolean isAch = isAch(payment);
-            LOG.debug("Processing " + transaction + " for "
-                    + (isAch ? "ACH" : "credit card"));
+            LOG.debug("Processing %s for %s", transaction,
+                      (isAch ? "ACH" : "credit card"));
             SageAuthorization wrapper = new SageAuthorization(makeCall(request,
                     isAch), isAch);
             payment.setPaymentResult(new PaymentResultDAS().find(wrapper.getJBResultId()));
@@ -365,7 +363,7 @@ public class PaymentSageTask extends PaymentTaskWithTimeout implements
      * @return response from gateway
      */
     private String makeCall(NVPList request, boolean isAch) throws IOException {
-        LOG.debug("Request to " + PROCESSOR + " gateway sending...");
+        LOG.debug("Request to %s gateway sending...", PROCESSOR);
         // create a singular HttpClient object
         HttpClient client = new HttpClient();
         client.setConnectionTimeout(getTimeoutSeconds() * 1000);
@@ -374,7 +372,7 @@ public class PaymentSageTask extends PaymentTaskWithTimeout implements
         // execute the method
         client.executeMethod(post);
         String responseBody = post.getResponseBodyAsString();
-        LOG.debug("Got response:" + responseBody);
+        LOG.debug("Got response: %s", responseBody);
         // clean up the connection resources
         post.releaseConnection();
         post.recycle();
@@ -492,8 +490,7 @@ public class PaymentSageTask extends PaymentTaskWithTimeout implements
         private final PaymentAuthorizationDTO paymentAuthDTO;
 
         public SageAuthorization(String gatewayResponse, boolean isAch) {
-            LOG.debug("Payment authorization result of " + PROCESSOR
-                    + " gateway parsing....");
+            LOG.debug("Payment authorization result of %s gateway parsing....", PROCESSOR);
             SageResponseParser responseParser = new SageResponseParser(
                     gatewayResponse, isAch);
             paymentAuthDTO = new PaymentAuthorizationDTO();
@@ -505,23 +502,22 @@ public class PaymentSageTask extends PaymentTaskWithTimeout implements
                             + "]");
             paymentAuthDTO.setResponseMessage(responseParser
                     .getValue(responseParser.responseMessage));
-            LOG.debug("responseMessage [" + paymentAuthDTO.getResponseMessage()
-                    + "]");
+            LOG.debug("responseMessage [%s]", paymentAuthDTO.getResponseMessage());
             paymentAuthDTO.setCode1(responseParser
                     .getValue(responseParser.approvalIndicator));
-            LOG.debug("approvalIndicator [" + paymentAuthDTO.getCode1() + "]");
+            LOG.debug("approvalIndicator [%s]", paymentAuthDTO.getCode1());
             paymentAuthDTO.setCode2(responseParser
                     .getValue(responseParser.cvvIndicator));
-            LOG.debug("cvvIndicator [" + paymentAuthDTO.getCode2() + "]");
+            LOG.debug("cvvIndicator [%s]", paymentAuthDTO.getCode2());
             paymentAuthDTO.setAvs(responseParser
                     .getValue(responseParser.avsIndicator));
-            LOG.debug("avsIndicator [" + paymentAuthDTO.getAvs() + "]");
+            LOG.debug("avsIndicator [%s]", paymentAuthDTO.getAvs());
             paymentAuthDTO.setCode3(responseParser
                     .getValue(responseParser.riskIndicator));
-            LOG.debug("riskIndicator [" + paymentAuthDTO.getCode3() + "]");
+            LOG.debug("riskIndicator [%s]", paymentAuthDTO.getCode3());
             paymentAuthDTO.setTransactionId(responseParser
                     .getValue(responseParser.reference));
-            LOG.debug("reference [" + paymentAuthDTO.getTransactionId() + "]");
+            LOG.debug("reference [%s]", paymentAuthDTO.getTransactionId());
         }
 
         public PaymentAuthorizationDTO getDTO() {

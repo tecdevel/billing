@@ -53,8 +53,7 @@ public class CalculateCommissionTask extends AbstractCronTask {
 		        // get a session for the remote interfaces
 			userSessionBean.calculatePartnerCommissions(getEntityId());
 		 } else {
-					LOG.warn("Failed to trigger CalculateCommission process at " + context.getFireTime()
-		                    + ", another process is already running.");
+					LOG.warn("Failed to trigger CalculateCommission process at %s, another process is already running.", context.getFireTime());
 			} 
       }
 }

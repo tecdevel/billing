@@ -105,7 +105,7 @@ public class EnumerationBL {
             MetaField metaField = new MetaFieldDAS().find(metaFieldId);
             metaField.setName(newEnumName);
             new MetaFieldDAS().save(metaField);
-            LOG.debug("Metafield "+metaField.getId()+" updated.");
+            LOG.debug("Metafield %s updated.", metaField.getId());
         }
     }
 

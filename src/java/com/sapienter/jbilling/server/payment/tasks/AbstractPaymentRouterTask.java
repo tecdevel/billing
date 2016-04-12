@@ -68,12 +68,11 @@ public abstract class AbstractPaymentRouterTask extends PluggableTask
 
     public boolean process(PaymentDTOEx paymentInfo)
             throws PluggableTaskException {
-        LOG.debug("Routing for " + paymentInfo);
+        LOG.debug("Routing for %s", paymentInfo);
         PaymentTask delegate = selectDelegate(paymentInfo);
         if (delegate == null) {
             // give them a chance
-            LOG.error("ATTENTION! Could not find a process to delegate for " +
-                    "user : " + paymentInfo.getUserId());
+            LOG.error("ATTENTION! Could not find a process to delegate for user : %s", paymentInfo.getUserId());
             return true;
         }
 
@@ -89,8 +88,7 @@ public abstract class AbstractPaymentRouterTask extends PluggableTask
         PaymentTask delegate = selectDelegate(paymentInfo);
         if (delegate == null) {
             // give them a chance
-            LOG.error("ATTENTION! Could not find a process to delegate for " +
-                    "user : " + paymentInfo.getUserId());
+            LOG.error("ATTENTION! Could not find a process to delegate for user : %s", paymentInfo.getUserId());
             return true;
         }
         delegate.preAuth(paymentInfo);
@@ -103,9 +101,8 @@ public abstract class AbstractPaymentRouterTask extends PluggableTask
             PaymentDTOEx paymentInfo) throws PluggableTaskException {
         PaymentTask delegate = selectDelegate(paymentInfo);
         if (delegate == null){
-            LOG.error("ATTENTION! Delegate is recently changed for user : " + 
-                    paymentInfo.getUserId() + " with not captured transaction: " +
-                    auth.getTransactionId());
+            LOG.error("ATTENTION! Delegate is recently changed for user : %s with not captured transaction: %s", 
+                    paymentInfo.getUserId(), auth.getTransactionId());
             return true;
         }
         delegate.confirmPreAuth(auth, paymentInfo);

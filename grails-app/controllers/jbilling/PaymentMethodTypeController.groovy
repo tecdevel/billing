@@ -406,7 +406,7 @@ class PaymentMethodTypeController {
 		try{
 			MetaFieldBindHelper.bindMetaFieldName(metaField, params, false, index.toString())
 		} catch (Exception e){
-			log.debug("Error at binding meta field  : "+e)
+			log.debug("Error at binding meta field  : ${e}")
 			return false;
 		}
 

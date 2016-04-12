@@ -234,8 +234,7 @@ public class PaperInvoiceBatchBL {
                     Util.getSysProp("base_dir") + "invoices/" + entityId + 
                     "-" + batch.getId() + "-batch.pdf", null);
         } catch (Exception e) {
-            LOG.error("Could no send the email with the paper invoices " +
-                    "for entity " + entityId, e);
+            LOG.error("Could no send the email with the paper invoices for entity %d", entityId, e);
         }
     }
 

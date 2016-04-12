@@ -34,8 +34,8 @@ public class SuretaxDeleteInvoiceTask extends PluggableTask implements
 	@Override
 	public void process(Event event) throws PluggableTaskException {
 		InvoiceDTO deletingInvoice = ((BeforeInvoiceDeleteEvent) event).getInvoice();
-		LOG.debug("Processing BeforeInvoiceDeleteEvent for invoice number:"
-				+ deletingInvoice.getNumber());
+		LOG.debug("Processing BeforeInvoiceDeleteEvent for invoice number: %s",
+				  deletingInvoice.getNumber());
 
 		Integer transId = (Integer) deletingInvoice.getMetaField(
 				SureTaxCompositionTask.SURETAX_TRANS_ID_META_FIELD_NAME)

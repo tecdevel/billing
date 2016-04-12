@@ -34,7 +34,7 @@ public class ExampleValidatePurchaseTask extends AbstractValidatePurchaseTask {
         ItemDTO lemonade = findItem(items, LEMONADE_ITEM_ID);
         if (lemonade != null && context.isSubscribed(LEMONADE_MONTHLY_PASS_ITEM_ID)) {
             BigDecimal existing = context.getItemUsage(LEMONADE_ITEM_ID).getQuantity();
-            LOG.debug("Validating lemonade purchase, existing quantity " + existing + ", 3 max");
+            LOG.debug("Validating lemonade purchase, existing quantity %s, 3 max", existing);
 
             if (existing.compareTo(MAX_LEMONADE) >= 0) {
                 result.setQuantity(BigDecimal.ZERO);
@@ -49,7 +49,7 @@ public class ExampleValidatePurchaseTask extends AbstractValidatePurchaseTask {
         ItemDTO coffee = findItem(items, COFFEE_ITEM_ID);
         if (coffee != null) {
             BigDecimal existing = context.getItemUsage(COFFEE_ITEM_ID).getQuantity();
-            LOG.debug("Validating coffee purchase, existing quantity " + existing + ", 20 max");
+            LOG.debug("Validating coffee purchase, existing quantity %s, 20 max", existing);
 
             if (existing.compareTo(MAX_COFFEE) >= 0) {
                 result.setQuantity(BigDecimal.ZERO);

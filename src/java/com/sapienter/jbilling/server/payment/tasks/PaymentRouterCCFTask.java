@@ -76,11 +76,11 @@ public class PaymentRouterCCFTask extends AbstractPaymentRouterTask {
                     + processorName + " for userId: " + userId);
         }
         if (selectedTaskId == null) {
-            LOG.warn("Could not find processor for " + parameters.get(processorName));
+            LOG.warn("Could not find processor for %s", parameters.get(processorName));
             return null;
         }
 
-        LOG.debug("Delegating to task id " + selectedTaskId);
+        LOG.debug("Delegating to task id %s", selectedTaskId);
         PaymentTask selectedTask = instantiateTask(selectedTaskId);
 
         return selectedTask;
@@ -115,9 +115,8 @@ public class PaymentRouterCCFTask extends AbstractPaymentRouterTask {
                 }
             }
             if (customField == null){
-                LOG.warn("Can't find Custom Field with type " +
-                        parameters.get(PARAM_CUSTOM_FIELD_PAYMENT_PROCESSOR.getName()) +
-                        " user = " + userId);
+                LOG.warn("Can't find Custom Field with type %s user = %s",
+                        parameters.get(PARAM_CUSTOM_FIELD_PAYMENT_PROCESSOR.getName()), userId);
                 processorName = null;
             } else {
                 processorName = (String) customField.getValue();

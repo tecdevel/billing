@@ -60,9 +60,9 @@ public class AgeingProcessTask extends AbstractBackwardSimpleScheduledTask {
                 billing = (IBillingProcessSessionBean) Context.getBean(Context.Name.BILLING_PROCESS_SESSION);
 
         if (Util.getSysPropBooleanTrue(PROPERTY_RUN_AGEING)) {
-            LOG.info("Starting ageing for entity " + getEntityId() + " at " + new Date());
+            LOG.info("Starting ageing for entity %s at %s", getEntityId(), new Date());
             billing.reviewUsersStatus(getEntityId(), new Date());
-            LOG.info("Ended ageing at " + new Date());
+            LOG.info("Ended ageing at %s", new Date());
         }
     }
 

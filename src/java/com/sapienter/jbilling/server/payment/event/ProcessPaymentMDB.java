@@ -42,8 +42,8 @@ public class ProcessPaymentMDB implements MessageListener {
 
     public void onMessage(Message message) {
         try {
-            LOG.debug("Processing message. Processor " + message.getStringProperty("processor") + 
-                    " entity " + message.getIntProperty("entityId") + " by " + this.hashCode());
+            LOG.debug("Processing message. Processor %s entity %s by %s", message.getStringProperty("processor"), 
+                       message.getIntProperty("entityId"), this.hashCode());
             MapMessage myMessage = (MapMessage) message;
             
             // use a session bean to make sure the processing is done in one transaction
@@ -52,10 +52,10 @@ public class ProcessPaymentMDB implements MessageListener {
 
             String type = message.getStringProperty("type"); 
             if (type.equals("payment")) {
-                LOG.debug("Now processing asynch payment:" +
-                        " processId: " + myMessage.getInt("processId") +
-                        " runId:" + myMessage.getInt("runId") +
-                        " invoiceId:" + myMessage.getInt("invoiceId"));
+                LOG.debug("Now processing asynch payment:  processId: %s runId: %s invoiceId: %s",
+                          myMessage.getInt("processId"),
+                          myMessage.getInt("runId"),
+                          myMessage.getInt("invoiceId"));
                 Integer invoiceId = (myMessage.getInt("invoiceId") == -1) ? null : myMessage.getInt("invoiceId");
                 if (invoiceId != null) {
                     // lock it
@@ -69,7 +69,7 @@ public class ProcessPaymentMDB implements MessageListener {
             } else if (type.equals("ender")) {
                 process.endPayments(myMessage.getInt("runId"));
             } else {
-                LOG.error("Can not process message of type " + type);
+                LOG.error("Can not process message of type %s", type);
             }
         } catch (Exception e) {
             LOG.error("Generating payment", e);

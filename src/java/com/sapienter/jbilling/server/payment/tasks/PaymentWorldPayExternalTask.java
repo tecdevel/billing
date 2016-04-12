@@ -55,7 +55,7 @@ public class PaymentWorldPayExternalTask extends PaymentWorldPayBaseTask impleme
     String getProcessorName() { return "WorldPay"; }    
 
     public boolean process(PaymentDTOEx payment) throws PluggableTaskException {
-        LOG.debug("Payment processing for " + getProcessorName() + " gateway");
+        LOG.debug("Payment processing for %s gateway", getProcessorName());
 
         if (payment.getPayoutId() != null) return true;
 
@@ -73,7 +73,7 @@ public class PaymentWorldPayExternalTask extends PaymentWorldPayBaseTask impleme
                                   : SvcType.SALE));
 
         // process
-        LOG.debug("creating " + transaction + " payment transaction");
+        LOG.debug("creating %s payment transaction", transaction);
         Result result = doProcess(payment, transaction, null);
 
         // update the stored external gateway key
@@ -88,7 +88,7 @@ public class PaymentWorldPayExternalTask extends PaymentWorldPayBaseTask impleme
     }
 
     public boolean preAuth(PaymentDTOEx payment) throws PluggableTaskException {
-        LOG.debug("Pre-authorization processing for " + getProcessorName() + " gateway");
+        LOG.debug("Pre-authorization processing for %s gateway", getProcessorName());
         prepareExternalPayment(payment);
         return doProcess(payment, SvcType.AUTHORIZE, null).shouldCallOtherProcessors();
     }
@@ -96,12 +96,12 @@ public class PaymentWorldPayExternalTask extends PaymentWorldPayBaseTask impleme
     public boolean confirmPreAuth(PaymentAuthorizationDTO auth, PaymentDTOEx payment)
             throws PluggableTaskException {
 
-        LOG.debug("Confirming pre-authorization for " + getProcessorName() + " gateway");
+        LOG.debug("Confirming pre-authorization for %s gateway", getProcessorName());
 
         if (!getProcessorName().equals(auth.getProcessor())) {
             /*  let the processor be called and fail, so the caller can do something
                 about it: probably re-call this payment task as a new "process()" run */
-            LOG.warn("The processor of the pre-auth is not " + getProcessorName() + ", is " + auth.getProcessor());
+            LOG.warn("The processor of the pre-auth is not %s, is %s", getProcessorName(), auth.getProcessor());
         }
 
         PaymentInformationDTO card = payment.getInstrument();
@@ -110,7 +110,7 @@ public class PaymentWorldPayExternalTask extends PaymentWorldPayBaseTask impleme
         }
 
         if (!isApplicable(payment)) {
-            LOG.error("This payment can not be captured" + payment);
+            LOG.error("This payment can not be captured %s", payment);
             return true;
         }
 

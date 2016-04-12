@@ -94,9 +94,9 @@ public class TestNotificationTask extends PluggableTask implements NotificationT
             
             writer.close();
             
-            LOG.debug("Sent test notification to " + user.getUserId());
+            LOG.debug("Sent test notification to %s", user.getUserId());
         } catch (Exception e) {
-            LOG.error("Error sending test notification:" + e.getMessage(),e);
+            LOG.error("Error sending test notification: %s", e.getMessage(),e);
             throw new TaskException(e);
         }
         return true;

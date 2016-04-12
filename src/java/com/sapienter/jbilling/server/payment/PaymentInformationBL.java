@@ -253,7 +253,7 @@ public class PaymentInformationBL extends ResultList implements CreditCardSQL{
     public void notifyExipration(Date today) 
     		throws SQLException, SessionInternalError {
         
-    	LOG.debug("Sending credit card expiration notifications. Today " + today);
+    	LOG.debug("Sending credit card expiration notifications. Today %s", today);
         prepareStatement(CreditCardSQL.expiring);
         cachedResults.setDate(1, new java.sql.Date(today.getTime()));
 
@@ -277,8 +277,7 @@ public class PaymentInformationBL extends ResultList implements CreditCardSQL{
                         Context.Name.NOTIFICATION_SESSION);
                 notificationSess.notify(userId, message);
             } catch (NotificationNotFoundException e) {
-                LOG.warn("credit card message not set to user " + userId +
-                        " because the entity lacks notification text");
+                LOG.warn("credit card message not set to user %s because the entity lacks notification text", userId);
             }
         }
         conn.close();
@@ -592,7 +591,7 @@ public class PaymentInformationBL extends ResultList implements CreditCardSQL{
 		Date oldDate = getDateMetaFieldByType(paymentInstrument, MetaFieldType.DATE);
         Date newDate = getDateMetaFieldByType(changed, MetaFieldType.DATE);
 
-        LOG.debug("Verifying if the credit card is updated."+ oldTitle +  "." + newTitle + "." + oldDate + "." + newDate);
+        LOG.debug("Verifying if the credit card is updated. %s.%s.%s.%s", oldTitle, newTitle, oldDate, newDate);
 		if( String.valueOf(oldTitle).equals(String.valueOf(newTitle))
                 && String.valueOf(oldNumber).equals(String.valueOf(newNumber))
                 && oldDate.equals(newDate)) {

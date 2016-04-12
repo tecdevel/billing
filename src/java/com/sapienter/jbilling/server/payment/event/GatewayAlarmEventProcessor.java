@@ -54,13 +54,13 @@ public class GatewayAlarmEventProcessor extends EventProcessor<ProcessorAlarm> {
         
         if (alarm == null){
             // it is OK not to have an alarm configured
-            LOG.info("Alarm not present for entity " + event.getEntityId());
+            LOG.info("Alarm not present for entity %s", event.getEntityId());
             return;
         }
         
         String paymentProcessor = paymentEvent.getPaymentProcessor();
         if (paymentProcessor == null){
-            LOG.warn("Payment event without payment processor id : " + event);
+            LOG.warn("Payment event without payment processor id : %s", event);
             return;
         }
         alarm.init(paymentProcessor, event.getEntityId());

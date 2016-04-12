@@ -104,13 +104,13 @@ public class BusinessDays {
                             Date holiday = dateFormat.parseDateTime(line).toDate();
                             holidays.add(holiday);
                         } catch (IllegalArgumentException e) {
-                            LOG.warn("Invalid holiday date, or wrong date format - ignoring entry '" + line + "'");
+                            LOG.warn("Invalid holiday date, or wrong date format - ignoring entry '%s'", line);
                         }
                     }
                 }
 
             } catch (IOException e) {
-                LOG.warn("Holiday file " + file.getPath() + " could not be read.");
+                LOG.warn("Holiday file %s could not be read.", file.getPath());
 
             } finally {
                 try {

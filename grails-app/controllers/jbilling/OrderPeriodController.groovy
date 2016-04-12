@@ -281,7 +281,7 @@ class OrderPeriodController {
     }
 
 	def delete () {
-		log.debug 'delete called on ' + params.id
+		log.debug "delete called on ${params.id}"
         if (params.id) {
             def period= OrderPeriodDTO.get(params.int('id'))
             if (period) {

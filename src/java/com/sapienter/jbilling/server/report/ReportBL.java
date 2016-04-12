@@ -162,7 +162,7 @@ public class ReportBL {
      * @return exported report
      */
     public ReportExportDTO export(ReportExportFormat format) {
-        LOG.debug("Exporting report to " + format.name() + " ...");
+        LOG.debug("Exporting report to %s ...", format.name());
 
         JasperPrint print = run();
 
@@ -171,7 +171,7 @@ public class ReportBL {
             try {
                 export = format.export(print);
             } catch (JRException e) {
-                LOG.error("Exception occurred exporting jasper report to " + format.name(), e);
+                LOG.error("Exception occurred exporting jasper report to %s", format.name(), e);
             } catch (IOException e) {
                 LOG.error("Exception occurred getting exported bytes", e);
             }
@@ -223,7 +223,7 @@ public class ReportBL {
         }
         parameters.put(CHILD_ENTITIES, childs);
 
-        LOG.debug("Generating report " + report.getPath() + " ...");
+        LOG.debug("Generating report %s ...", report.getPath());
         LOG.debug(parameters.toString());
 
         // get database connection
@@ -239,7 +239,7 @@ public class ReportBL {
             print.setName(reportName);
 
         } catch (FileNotFoundException e) {
-            LOG.error("Report design file " + report.getPath() + " not found.", e);
+            LOG.error("Report design file %s not found.", report.getPath(), e);
 
         } catch (JRException e) {
             LOG.error("Exception occurred generating jasper report.", e);

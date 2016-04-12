@@ -138,8 +138,8 @@ public class ScpUploadTask extends AbstractCronTask {
         Boolean recursive = getParameter(PARAM_RECURSIVE.getName(), DEFAULT_RECURSIVE);
         String uploadMarkerFilename = getParameter(PARAM_UPLOAD_FILE.getName(), DEFAULT_UPLOAD_FILE);
 
-        LOG.debug("Scanning " + path.getPath() + (recursive ? " recursively" : "")
-                  + " for files matching " + fileRegex);
+        LOG.debug("Scanning %s %s for files matching %s", path.getPath(), (recursive ? " recursively" : ""),
+                   fileRegex);
 
         // iterate through sub-directories of the configured
         // FILE_PATH and look for files to upload
@@ -150,7 +150,7 @@ public class ScpUploadTask extends AbstractCronTask {
                 File uploadMarker = new File(file, uploadMarkerFilename);
                 if (!uploadMarker.exists()) {
                     List<File> files = collectFiles(file, fileRegex, recursive);
-                    LOG.debug("Found " + files.size() + " for upload.");
+                    LOG.debug("Found %s for upload.", files.size());
 
                     // do scp upload
                     if (!files.isEmpty()) {
@@ -220,7 +220,7 @@ public class ScpUploadTask extends AbstractCronTask {
             throws JobExecutionException {
 
         remotePath = (remotePath == null || remotePath.trim().equals("") ? "" : remotePath + File.separator);
-        LOG.debug("Uploading " + files.size() + " files to " + userName  + "@" + host + ":" + remotePath);
+        LOG.debug("Uploading %s files to %s@%s:%s", files.size(), userName, host, remotePath);
 
         List<ScpFile> scpFiles = new ArrayList<ScpFile>();
         for (File file : files) {            
@@ -244,8 +244,7 @@ public class ScpUploadTask extends AbstractCronTask {
      * @throws JobExecutionException throw if file could not be written.
      */
     public void mark(List<File> files, File uploadMarker) throws JobExecutionException {
-        LOG.debug("Marking folder " + uploadMarker.getParentFile().getPath()
-                  + " as uploaded. Writing " + uploadMarker.getName());
+        LOG.debug("Marking folder %s as uploaded. Writing %s", uploadMarker.getParentFile().getPath(), uploadMarker.getName());
 
         FileWriter writer = null;
         try {

@@ -169,7 +169,7 @@ class SelectionTagLib {
 		String value = attrs.value?.toString()
         String cssClass = attrs.cssClass?.toString()
 
-		log.info "Value of tagName=" + name + " is " + value
+		log.info "Value of tagName= ${name} is ${value}"
 		
 		List list= new ArrayList();
 		String[] sarr= null;
@@ -190,7 +190,7 @@ class SelectionTagLib {
 		String name= attrs.name;
 		String value = attrs.value?.toString()
 
-		log.info "Value of tagName=" + name + " is " + value
+		log.info "Value of tagName= ${name} is ${value}"
 		
 		List list= new ArrayList();
 		String[] sarr= null;

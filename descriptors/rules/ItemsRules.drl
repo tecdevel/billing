@@ -14,10 +14,10 @@ import com.sapienter.jbilling.server.item.tasks.PricingResult
 import java.util.ArrayList;
 import java.math.BigDecimal;
 import java.util.List;
-import org.apache.log4j.Logger;
+import com.sapienter.jbilling.common.FormatLogger;
 
 # globals
-global org.apache.log4j.Logger LOG;
+global com.sapienter.jbilling.common.FormatLogger LOG;
 
 function List getOrderLines(Integer userId, Integer itemId) {
     return new OrderLineDAS().findByUserItem(userId, itemId);
@@ -65,7 +65,7 @@ salience 10 # run before the plan rules
         List<OrderLineDTO> lines = getOrderLines($order.getUserId(), 1); #request item 1: the plan
         for (OrderLineDTO line: lines) {
             insert(line);
-            LOG.debug("inserted for user " + $order.getUserId() + " new line on request " + line);
+            LOG.debug("inserted for user %s new line on request %s", $order.getUserId(), line);
         }
 end
 
@@ -106,7 +106,7 @@ then
     $order.getLines().remove($line); # remove generic item
     OrderLineBL.addItem($order, 2801, $quantity, false); # add as included
     update( $order );
-    LOG.debug("Plan: included calls: " + $order);
+    LOG.debug("Plan: included calls: %s", $order);
 end
 
 # for this to work from the GUI, have a new rule adding the MediationResult and PricingResult into the memory context.
@@ -122,7 +122,7 @@ then
     $order.getLines().remove($line); # remove generic item
     OrderLineBL.addItem($order, 2800, $quantity.intValue(), $price.getPrice()); # add as normal
     update( $order );
-    LOG.debug("Plan: not included calls: " + $order);
+    LOG.debug("Plan: not included calls: %s", $order);
 end
 
 # for this to work from the GUI, have a new rule adding the MediationResult and PricingResult into the memory context.
@@ -137,7 +137,7 @@ then
     OrderLineBL.addItem($order, 2800, $quantity.intValue() - 1000, $price.getPrice());
     $line.setQuantity(new BigDecimal(1000)); # only the first 1000 is included
     update( $order );
-    LOG.debug("Plan:excess included calls: " + $order);
+    LOG.debug("Plan:excess included calls: %s", $order);
 end
 
 

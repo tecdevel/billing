@@ -321,8 +321,7 @@ public class Util {
                 "description", language);
 
        if (inter == null) {
-           log.debug("Description not set for period unit " + id + " language" +
-                   " " + language);
+           log.debug("Description not set for period unit %s language %s", id, language);
            return null;
        }
        String content = null;
@@ -332,8 +331,7 @@ public class Util {
     	   //This can happen if this language content is not defined. Swallow this exception and return null
     	   //Since this DTO is code enhanced by hibernate, the above null check passes through. Nevertheless leaving the previous null check intact
     	   //Fix applied for issue 6062
-    	   log.debug("Description not set for period unit " + id + " language" +
-                   " " + language);
+    	   log.debug("Description not set for period unit %s language %s", id, language);
        }
        return content;
     }

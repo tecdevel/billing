@@ -472,7 +472,7 @@ class ConfigController {
     }
 
     def deleteCurrency () {
-        log.debug 'delete currency called on ' + params.id
+        log.debug "delete currency called on ${params.id}"
         try {
             boolean retVal = webServicesSession.deleteCurrency(params.int('id'));
 

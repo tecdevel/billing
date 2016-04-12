@@ -110,7 +110,7 @@ public class CompanyUserAuthenticationFilter extends UsernamePasswordAuthenticat
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                               AuthenticationException failed) throws IOException, ServletException {
 
-        LOG.debug("User " + failed.getAuthentication().getPrincipal() + " authentication failed!");
+        LOG.debug("User %s authentication failed!", failed.getAuthentication().getPrincipal());
 
         if (securitySession != null) {
             securitySession.clearAttributes(request, response);

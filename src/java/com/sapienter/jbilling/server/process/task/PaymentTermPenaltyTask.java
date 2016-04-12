@@ -83,14 +83,14 @@ public class PaymentTermPenaltyTask extends AbstractChargeTask {
         LOG.debug("isTaxCalculationNeeded");
         //Invoice Due Date period
         TimePeriod timePeriod= invoice.getDueDatePeriod();
-        LOG.debug("Invoice Due Days Time Period= " + timePeriod);
+        LOG.debug("Invoice Due Days Time Period= %s", timePeriod);
         //convert period unit to days (Days, Weeks, Months, Years to days)
         int periodToDays= MapPeriodToCalendar.periodToDays(timePeriod.getUnitId());
         //Period unit value
         int periodValue= timePeriod.getValue();
         //product of the above two to get total number of days
         Integer totalDays= periodValue * periodToDays;
-        LOG.debug("Total Invoice Due days= " + totalDays);
+        LOG.debug("Total Invoice Due days= %s", totalDays);
         return (totalDays.compareTo(penaltyAfterDays) > 0 );
     }
 

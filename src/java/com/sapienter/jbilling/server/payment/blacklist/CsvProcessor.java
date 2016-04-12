@@ -133,8 +133,7 @@ public class CsvProcessor {
             if (replace) {
                 int number = blacklistDAS.deleteSource(entityId,
                         BlacklistDTO.SOURCE_EXTERNAL_UPLOAD);
-                LOG.debug("Deleted " + number + " externally uploaded " +
-                        "blacklist entries");
+                LOG.debug("Deleted %s externally uploaded blacklist entries", number);
             }
 
             // loop through each line, determine its type and 
@@ -195,7 +194,7 @@ public class CsvProcessor {
             } catch (IOException ioe) {}
         }
 
-        LOG.debug("Added " + entriesAdded + " blacklist entries");
+        LOG.debug("Added %s blacklist entries", entriesAdded);
         return entriesAdded;
     }
 

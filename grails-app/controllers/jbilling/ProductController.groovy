@@ -1797,7 +1797,7 @@ class ProductController {
 					catEntities.addAll(itemType.entities)
 				}
 
-				log.debug "CAT ENT:"+catEntities
+				log.debug "CAT ENT: ${catEntities}"
 				//Now ensure the entities selected is present in the list of companies for the category
 				for(Integer entId : product.entities){
 					def found=false
@@ -1862,7 +1862,7 @@ class ProductController {
             }
 
         } catch (SessionInternalError e) {
-            log.error("Error is: " + e)
+            log.error("Error is: ${e}")
             viewUtils.resolveException(flash, session.locale, e);
 
             if(product.standardPartnerPercentage){

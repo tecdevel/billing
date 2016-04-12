@@ -123,7 +123,7 @@ public class PaymentAtlasTask extends PaymentTaskWithTimeout {
                 //dataLog.remove("accountNumber");
                 dataLog.put("accountNumber", "******");
                 //TODO: check this log
-                log.debug("returning after avs " + dataLog);
+                log.debug("returning after avs %s", dataLog);
             }
 
             PaymentAuthorizationDTO response = makeCall(data, true);
@@ -155,7 +155,7 @@ public class PaymentAtlasTask extends PaymentTaskWithTimeout {
             log.error("Exception", e);
             throw new PluggableTaskException(e);
         }
-        log.debug("returning " + retValue);
+        log.debug("returning %s", retValue);
         return retValue;
     }
 
@@ -276,7 +276,7 @@ public class PaymentAtlasTask extends PaymentTaskWithTimeout {
 
         Map<String, Object> transactionResponseMap = (Map<String, Object>) resresponse[0];
 
-        log.debug("Got response:" + transactionResponseMap);
+        log.debug("Got response: %s", transactionResponseMap);
 
         boolean isCredit = "credit-response".equals(transactionResponseMap
                 .get("type"));

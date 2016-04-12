@@ -167,7 +167,7 @@ public class TableGenerator {
 
         ddl.append(");");
 
-        LOG.debug("Generated create table SQL [" + ddl + "]");
+        LOG.debug("Generated create table SQL [%s]", ddl);
         return ddl.toString();
     }
 
@@ -178,7 +178,7 @@ public class TableGenerator {
      */
     public String buildDropTableSQL() {
         String drop = "drop table if exists " + tableName + ";";
-        LOG.debug("Generated drop table SQL [" + drop + "]");
+        LOG.debug("Generated drop table SQL [%s]", drop);
 
         return drop;
     }
@@ -191,7 +191,7 @@ public class TableGenerator {
      */
     public String buildRenameTableSQL(String newTableName) {
         String alter = "alter table " + tableName + " rename to " + newTableName + ";";
-        LOG.debug("Generated rename table SQL [" + alter + "]");
+        LOG.debug("Generated rename table SQL [%s]", alter);
 
         return alter;
     }
@@ -230,7 +230,7 @@ public class TableGenerator {
 
         insert.append(values);
 
-        LOG.debug("Generated insert statement [" + insert + "]");
+        LOG.debug("Generated insert statement [%s]", insert);
         return insert.toString();
     }
 

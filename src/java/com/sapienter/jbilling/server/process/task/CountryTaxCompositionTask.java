@@ -118,8 +118,8 @@ public class CountryTaxCompositionTask extends AbstractChargeTask {
                     for(Integer ait : aits){
                         String countryCode = getStringMetaFieldValue(customerId, MetaFieldType.COUNTRY_CODE, ait, new Date());
                         if(null != countryCode && !countryCode.trim().isEmpty()){
-                            LOG.debug("Contact Country Code is " +
-                                    countryCode +". for AIT id: "+ ait);
+                            LOG.debug("Contact Country Code is %s. for AIT id: %s",
+                                    countryCode, ait);
                             result |= strTaxCountryCode.equals(countryCode);
                         }
                     }

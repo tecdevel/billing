@@ -250,7 +250,7 @@ public class AssetProcessor implements ItemProcessor<WrappedObjectLine<FieldSet>
                         try {
                             value.setValue(getMetaFieldValueFromString(metaField.getDataType(), columnValue));
                         } catch (Exception e) {
-                            LOG.warn("Error converting column '"+columnName+"' with value '"+columnValue+"'", e);
+                            LOG.warn("Error converting column '%s' with value '%s'", columnName, columnValue, e);
                             writeLineToErrorFile(wrappedDto, "Error converting column '"+columnName+"' with value '"+columnValue+"'");
                             return null;
                         }

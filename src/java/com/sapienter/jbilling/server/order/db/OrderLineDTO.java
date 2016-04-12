@@ -359,7 +359,7 @@ public class OrderLineDTO extends CustomizedEntity implements Serializable, Comp
     public void setDescription(String description) {
         if (description != null && description.length() > 1000) {
             description = description.substring(0, 1000);
-            LOG.warn("Truncated an order line description to " + description);
+            LOG.warn("Truncated an order line description to %s", description);
         }
 
         this.description = description;

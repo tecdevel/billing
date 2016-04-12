@@ -16,6 +16,7 @@
 
 package com.sapienter.jbilling.server.mediation.task;
 
+import com.sapienter.jbilling.common.FormatLogger;
 import com.sapienter.jbilling.common.SessionInternalError;
 import com.sapienter.jbilling.common.Util;
 import com.sapienter.jbilling.server.item.PricingField;
@@ -24,6 +25,7 @@ import com.sapienter.jbilling.server.mediation.FormatField;
 import com.sapienter.jbilling.server.mediation.Record;
 import com.sapienter.jbilling.server.pluggableTask.admin.ParameterDescription;
 import com.sapienter.jbilling.server.pluggableTask.admin.PluggableTaskException;
+
 import org.apache.commons.digester.Digester;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
@@ -43,7 +45,7 @@ public abstract class AbstractFileReader extends AbstractReader {
     private SimpleDateFormat dateFormat;
     private boolean removeQuote;
     private boolean autoID;
-    private static final Logger LOG = Logger.getLogger(AbstractFileReader.class);
+	private static final FormatLogger LOG = new FormatLogger(AbstractFileReader.class);
     private String formatFileName = null;
     protected Format format = null;
     private int bufferSize;
@@ -126,9 +128,8 @@ public abstract class AbstractFileReader extends AbstractReader {
             messages.add(e.getMessage());
         }
 
-        LOG.debug("Started with " + " directory: " + directory + " suffix " + suffix + " rename " +
-                rename + " date  format " + dateFormat.toPattern() + " removeQuote " + removeQuote +
-                " autoID " + autoID);
+        LOG.debug("Started with  directory: %s suffix %s rename %s date  format %s removeQuote %s autoID %s", directory, suffix,
+                rename, dateFormat.toPattern(), removeQuote, autoID);
 
         return retValue;
     }
@@ -151,7 +152,7 @@ public abstract class AbstractFileReader extends AbstractReader {
 
             format = (Format) digester.parse(new File(formatFileName));
 
-            LOG.debug("using format: " + format);
+            LOG.debug("using format: %s", format);
         }
 
         return format;

@@ -44,12 +44,12 @@ public class PluggableTaskTypeDAS extends AbstractDAS<PluggableTaskTypeDTO> {
 	        " ORDER BY b.id";
 
 	public List<PluggableTaskTypeDTO> findAllByCategory(Integer categoryId) {
-		LOG.debug("finding types for category " + categoryId);
+		LOG.debug("finding types for category %s", categoryId);
 		Query query = getSession().createQuery(findByCategorySQL);
         query.setParameter("category", categoryId);
         query.setComment("PluggableTaskTypeDAS.findAllByCategory");
         List<PluggableTaskTypeDTO> ret = query.list();
-		LOG.debug("found " + ret.size());
+		LOG.debug("found %s", ret.size());
 
         return ret;
 	}

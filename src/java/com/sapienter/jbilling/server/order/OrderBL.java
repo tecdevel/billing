@@ -138,7 +138,7 @@ public class OrderBL extends ResultList {
             editable = Boolean.valueOf(typeBean.getEditable().intValue() == 1);
         } catch (Exception e) {
             LOG.fatal(
-                    "Exception looking up the editable flag of an order line type. Type = " + type,
+                    "Exception looking up the editable flag of an order line type. Type = %s", type,
                     e);
             throw new SessionInternalError("Looking up editable flag");
         }
@@ -191,8 +191,7 @@ public class OrderBL extends ResultList {
         if (currentOrderId == null) {
             // this is almost an error, put them in a new order?
             currentOrderId = co.create(eventDate, currencyId, new UserBL().getEntityId(userId));
-            LOG.warn("Created current one-time order without a suitable main " +
-                    "subscription order:" + currentOrderId);
+            LOG.warn("Created current one-time order without a suitable main subscription order: %s", currentOrderId);
         }
 
         OrderDAS orderDas = new OrderDAS();
@@ -455,24 +454,24 @@ public class OrderBL extends ResultList {
      * @param invoice
      */
     public static void expirePenaltyOrderForInvoice(InvoiceDTO invoice) {
-        LOG.debug("Search order activeSince " + invoice.getDueDate());
+        LOG.debug("Search order activeSince %s", invoice.getDueDate());
         List<OrderDTO> orders= new OrderDAS().findPenaltyOrderForInvoice(invoice);
         if (null != orders && orders.size() > 0 ) {
-            LOG.debug("Found " + orders.size() + " orders.");
+            LOG.debug("Found %s orders.", orders.size());
             for (OrderDTO order: orders) {
                 if ( order.getActiveUntil() == null ) {
-                    LOG.debug("Line description: " + order.getLines().get(0).getDescription());
+                    LOG.debug("Line description: %s", order.getLines().get(0).getDescription());
 
                     InvoiceDTO temp= invoice;
                     while (temp != null ) {
-                        LOG.debug("Invoice number " + temp.getPublicNumber());
+                        LOG.debug("Invoice number %s", temp.getPublicNumber());
                         if ( order.getLines().get(0).getDescription()
                                     .indexOf("Overdue Penalty for Invoice Number " + temp.getPublicNumber()) > -1 ) {
-                            LOG.debug("Found penalty order with order line description as " +
+                            LOG.debug("Found penalty order with order line description as %s",
                                     order.getLines().get(0).getDescription());
                             //order is penalty, not one time, matches description
                             order.setActiveUntil(new Date());
-                            LOG.debug("Expired the penalty Order " + order.getId());
+                            LOG.debug("Expired the penalty Order %s", order.getId());
                         }
                         temp= temp.getInvoice();
                     }
@@ -584,7 +583,7 @@ public class OrderBL extends ResultList {
             }
 
         } 
-        	LOG.debug("Ret value ===" +retValue);
+        	LOG.debug("Ret value === %s", retValue);
        
         return retValue;
     }
@@ -1212,8 +1211,8 @@ public class OrderBL extends ResultList {
                                 entityId, currentOldLine.getPrice(), currentNewLine.getPrice(),
                                 currentOldLine.getAmount(), currentNewLine.getAmount(), orderId,
                                 currentOldLine.getId()));
-						LOG.debug("Order line price changed. Order line Id: "
-								+ currentOldLine.getId());
+						LOG.debug("Order line price changed. Order line Id: %s",
+								   currentOldLine.getId());
 					}
 				}
 			}
@@ -1933,7 +1932,7 @@ public class OrderBL extends ResultList {
             	order.setMetaField(user.getCompany().getId(), null, mfv.getField().getName(), mfv.getValue());
             }
 
-            LOG.debug("No existing order for user " + user.getId() + " and period " + period.getId() + ", creating new bundle order");
+            LOG.debug("No existing order for user %s and period %s, creating new bundle order", user.getId(), period.getId());
             order = createNewLinkedOrder(user, period, template);
         }
 
@@ -2113,7 +2112,7 @@ public class OrderBL extends ResultList {
      * @return
      */
     private OrderDTO constructOrderDTOForDiscount(UserDTO user, OrderDTO template, DiscountLineDTO discountLine) throws SessionInternalError {
-    	LOG.debug("Call constructOrderDTOForDiscount, discountLine " + discountLine);
+    	LOG.debug("Call constructOrderDTOForDiscount, discountLine %s", discountLine);
     	OrderDTO discountOrder = new OrderDTO();
         discountOrder.setBaseUserByUserId(user);
         discountOrder.setOrderStatus(template.getOrderStatus());
@@ -2241,7 +2240,7 @@ public class OrderBL extends ResultList {
          * Step 3: Negate the discount amount
          */
         DiscountDTO discountDto = discountLine.getDiscount();
-        LOG.debug("Call createNewDiscountOrderLine for discount " + discountDto);
+        LOG.debug("Call createNewDiscountOrderLine for discount %s", discountDto);
         BigDecimal discountAmount = discountDto.getDiscountAmount(discountableAmount).negate();
 
 
@@ -2305,7 +2304,7 @@ public class OrderBL extends ResultList {
     					  	formattedDiscountableAmount;
     	}
 
-    	LOG.debug("discount line description : " + description);
+    	LOG.debug("discount line description : %s", description);
         return description;
     }
 

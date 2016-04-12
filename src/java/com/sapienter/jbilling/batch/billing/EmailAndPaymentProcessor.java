@@ -75,7 +75,7 @@ public class EmailAndPaymentProcessor extends JobContextHandler implements Initi
         map = this.getMapFromContext(ServerConstants.JOBCONTEXT_PROCESS_USER_RESULT_KEY);
 
         billingProcessId = this.getIntegerFromContext(ServerConstants.JOBCONTEXT_BILLING_PROCESS_ID_KEY);
-        LOG.debug("billing process id from context: " + billingProcessId);
+        LOG.debug("billing process id from context: %s", billingProcessId);
 
         local = (IBillingProcessSessionBean) Context.getBean(Context.Name.BILLING_PROCESS_SESSION);
     }

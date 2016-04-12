@@ -90,7 +90,7 @@ public class OrderChangeBL {
             Collection<Integer> deletedChanges, Date onDate) {
 
         for (OrderChangeDTO change: orderChanges) {
-            LOG.debug("updateOrderChanges change: " + change);
+            LOG.debug("updateOrderChanges change: %s", change);
         }
 
         OrderChangeStatusDTO appliedStatus = orderChangeStatusDAS.findApplyStatus(entityId);

@@ -114,11 +114,11 @@ public class CsvExporter<T extends Exportable> implements Exporter<T> {
             try {
                 header = type.newInstance().getFieldNames();
             } catch (InstantiationException e) {
-                LOG.debug("Could not produce a new instance of " + type.getSimpleName() + " to build CSV header.");
+                LOG.debug("Could not produce a new instance of %s to build CSV header.", type.getSimpleName());
                 return null;
 
             } catch (IllegalAccessException e) {
-                LOG.debug("Constructor of " + type.getSimpleName() + " is not accessible to build CSV header.");
+                LOG.debug("Constructor of %s is not accessible to build CSV header.", type.getSimpleName());
                 return null;
             }
         }

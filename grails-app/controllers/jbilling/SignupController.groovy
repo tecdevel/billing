@@ -285,7 +285,7 @@ class SignupController {
         user.language = language
         user.currency = currency
         user.company = company
-        log.debug("Company @@@@@@@@@@@@@@@@: "+company)
+        log.debug("Company @@@@@@@@@@@@@@@@: ${company}")
         user.createDatetime = new Date()
 
 		createDefaultRoles(language, company)
@@ -425,8 +425,8 @@ class SignupController {
 	def mockMetaFields(user, params, company) {
 		def metaFields = [] 
 		
-		log.debug "Company ID " + company.id
-		log.debug "Account Type ID " + user.accountTypeId
+		log.debug "Company ID ${company.id}"
+		log.debug "Account Type ID ${user.accountTypeId}"
 		
 		def metaFieldsDefined= []
 		metaFieldsDefined << MetaFieldBL.getAvailableFieldsList(company.id as Integer, EntityType.CUSTOMER as EntityType[])?.findAll {

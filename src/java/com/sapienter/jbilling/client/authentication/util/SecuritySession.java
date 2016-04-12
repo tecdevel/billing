@@ -84,7 +84,7 @@ public class SecuritySession {
 
         // set locale for spring/grails
         if (localeResolver != null) {
-            LOG.debug("Setting locale for Spring contexts: " + principal.getLocale());
+            LOG.debug("Setting locale for Spring contexts: %s", principal.getLocale());
             localeResolver.setLocale(request, response, principal.getLocale());
 
         } else {

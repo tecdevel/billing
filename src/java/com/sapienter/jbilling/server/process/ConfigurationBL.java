@@ -235,7 +235,7 @@ public class ConfigurationBL {
     		for (ProcessRunDTO run: billingProcessDTO.getProcessRuns()) {
     			//if status is not failed i.e. for the same date, if the process is either running or finished
     			if (!ServerConstants.PROCESS_RUN_STATUS_FAILED.equals(run.getStatus().getId()) ) {
-    			    LOG.error("Trying to set this configuration: " + ws + " but already has this: " + run);
+    			    LOG.error("Trying to set this configuration: %s but already has this: %s", ws, run);
     				SessionInternalError exception = new SessionInternalError(
     				        "There is already a billing process for the give date." + ws.getNextRunDate());
     	            String messages[] = new String[1];
@@ -253,7 +253,7 @@ public class ConfigurationBL {
             && run.getBillingProcess().getBillingDate() != null
             && !run.getBillingProcess().getBillingDate().before(ws.getNextRunDate())) {
 
-    		LOG.error("Trying to set this configuration: " + ws + " but the it should be in the future " + run.getBillingProcess());
+    		LOG.error("Trying to set this configuration: %s but the it should be in the future %s", ws, run.getBillingProcess());
 			SessionInternalError exception = new SessionInternalError("The new next date needs to be in the future from the last successful run");
 			String messages[] = new String[1];
 			messages[0] = "BillingProcessConfigurationWS,nextRunDate,"

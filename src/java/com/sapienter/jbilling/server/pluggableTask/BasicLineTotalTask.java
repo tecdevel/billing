@@ -92,8 +92,8 @@ public class BasicLineTotalTask extends PluggableTask implements OrderProcessing
                 BigDecimal total = getTotalForPercentage(order.getLines(), percentageItem.getExcludedTypes());
                 line.setAmount(line.getPrice().divide(ONE_HUNDRED, ServerConstants.BIGDECIMAL_SCALE, ServerConstants.BIGDECIMAL_ROUND).multiply(total));
 
-                LOG.debug("percentage line total: %" + line.getPrice() + ";  "
-                          + "( " + line.getPrice() + " / 100 ) x " + total  + " = " + line.getAmount());
+                LOG.debug("percentage line total: % %s;  ( %s / 100 ) x %s = %s", line.getPrice(),
+                           line.getPrice(), total, line.getAmount());
             }
         }
 
@@ -116,8 +116,8 @@ public class BasicLineTotalTask extends PluggableTask implements OrderProcessing
                 BigDecimal total = getTotalForTax(order.getLines(), taxItem.getExcludedTypes());
                 line.setAmount(line.getPrice().divide(ONE_HUNDRED, ServerConstants.BIGDECIMAL_SCALE, BigDecimal.ROUND_HALF_EVEN).multiply(total));
 
-                LOG.debug("tax line total: %" + line.getPrice() + ";  "
-                          + "( " + line.getPrice() + " / 100 ) x " + total  + " = " + line.getAmount());
+                LOG.debug("tax line total: % %s;  ( %s / 100 ) x %s = %s", line.getPrice(),
+                           line.getPrice(), total, line.getAmount());
             }
         }
 

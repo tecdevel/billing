@@ -71,7 +71,7 @@ public class ScriptValidationRuleModel extends AbstractValidationRuleModel {
 
             errors = getErrorMessages(constraintViolations);
         } catch (Exception e){
-            LOG.debug("Invalid script exception : "+e);
+            LOG.debug("Invalid script exception : ",e);
             e.printStackTrace();
 
             errors = new ArrayList<String>(Arrays.asList("bean.ScriptValidationRuleModel.invalid.message"));

@@ -48,7 +48,7 @@ public class InternalEventProcessor {
                                                                       task.getType().getCategory().getInterfaceName(),
                                                                       task);
                 if (isProcessable(myClass, event)) {
-                    LOG.debug("Processing " + event + " with " + myClass);
+                    LOG.debug("Processing %s with %s", event, myClass);
                     myClass.process(event);
                 }
             }

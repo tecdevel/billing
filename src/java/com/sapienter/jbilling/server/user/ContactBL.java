@@ -28,14 +28,12 @@ import java.util.*;
 
 import javax.naming.NamingException;
 
+import com.sapienter.jbilling.server.metafields.MetaFieldBL;
 import com.sapienter.jbilling.server.metafields.MetaFieldType;
-import com.sapienter.jbilling.server.metafields.db.MetaFieldDAS;
 import com.sapienter.jbilling.server.user.db.CustomerDTO;
 import com.sapienter.jbilling.server.util.audit.EventLogger;
 
 import org.apache.commons.lang.StringUtils;
-import com.sapienter.jbilling.server.metafields.db.MetaFieldValue;
-import com.sapienter.jbilling.server.user.db.CustomerDAS;
 
 
 import com.sapienter.jbilling.common.FormatLogger;
@@ -229,8 +227,7 @@ public class ContactBL {
             }
             return create(dto, ServerConstants.TABLE_BASE_USER, userId, executorUserId);
         } catch (Exception e) {
-            LOG.debug("Error creating contact for " +
-                    "user " + userId);
+            LOG.debug("Error creating contact for user %s", userId);
             throw new SessionInternalError(e);
         }
     }
@@ -265,7 +262,7 @@ public class ContactBL {
         contact.setContactMap(map);
         map.setContact(contact);
         
-        LOG.debug("created " + contact);
+        LOG.debug("created %s", contact);
 
         // do an event if this is a user contact (invoices, companies, have
         // contacts too)
@@ -351,7 +348,7 @@ public class ContactBL {
         
         if (contact == null) return;
         
-        LOG.debug("Deleting contact " + contact.getId());
+        LOG.debug("Deleting contact %s", contact.getId());
         // delete the map first
         new ContactMapDAS().delete(contact.getContactMap());
 
@@ -381,6 +378,10 @@ public class ContactBL {
     public void setFromChild(Integer userId) {
         UserBL customer = new UserBL(userId);
         set(customer.getEntity().getCustomer().getParent().getBaseUser().getUserId());
+    }
+
+    public static ContactDTOEx buildFromMetaField(Integer userId, Date effectiveDate) {
+        return buildFromMetaField(userId, null, effectiveDate);
     }
 
     /**
@@ -415,33 +416,33 @@ public class ContactBL {
 
         if ( null != preferredAITID && null != customerId) {
 
-            String email = getStringMetaFieldValue(customerId, MetaFieldType.EMAIL, preferredAITID, effectiveDate);
+            String email = MetaFieldBL.getStringMetaFieldValue(customerId, MetaFieldType.EMAIL, preferredAITID, effectiveDate);
             boolean emailPresent = StringUtils.isNotEmpty(email);
 
             if ( emailPresent ) {
                 
-                contact.setEmail(getStringMetaFieldValue(customerId, MetaFieldType.EMAIL, preferredAITID, effectiveDate));
+                contact.setEmail(MetaFieldBL.getStringMetaFieldValue(customerId, MetaFieldType.EMAIL, preferredAITID, effectiveDate));
 
-                contact.setOrganizationName(getStringMetaFieldValue(customerId, MetaFieldType.ORGANIZATION, preferredAITID, effectiveDate));
-                contact.setAddress1(getStringMetaFieldValue(customerId, MetaFieldType.ADDRESS1, preferredAITID, effectiveDate));
-                contact.setAddress2(getStringMetaFieldValue(customerId, MetaFieldType.ADDRESS2, preferredAITID, effectiveDate));
-                contact.setCity(getStringMetaFieldValue(customerId, MetaFieldType.CITY, preferredAITID, effectiveDate));
-                contact.setStateProvince(getStringMetaFieldValue(customerId, MetaFieldType.STATE_PROVINCE, preferredAITID, effectiveDate));
-                contact.setPostalCode(getStringMetaFieldValue(customerId, MetaFieldType.POSTAL_CODE, preferredAITID, effectiveDate));
-                contact.setCountryCode(getStringMetaFieldValue(customerId, MetaFieldType.COUNTRY_CODE, preferredAITID, effectiveDate));
+                contact.setOrganizationName(MetaFieldBL.getStringMetaFieldValue(customerId, MetaFieldType.ORGANIZATION, preferredAITID, effectiveDate));
+                contact.setAddress1(MetaFieldBL.getStringMetaFieldValue(customerId, MetaFieldType.ADDRESS1, preferredAITID, effectiveDate));
+                contact.setAddress2(MetaFieldBL.getStringMetaFieldValue(customerId, MetaFieldType.ADDRESS2, preferredAITID, effectiveDate));
+                contact.setCity(MetaFieldBL.getStringMetaFieldValue(customerId, MetaFieldType.CITY, preferredAITID, effectiveDate));
+                contact.setStateProvince(MetaFieldBL.getStringMetaFieldValue(customerId, MetaFieldType.STATE_PROVINCE, preferredAITID, effectiveDate));
+                contact.setPostalCode(MetaFieldBL.getStringMetaFieldValue(customerId, MetaFieldType.POSTAL_CODE, preferredAITID, effectiveDate));
+                contact.setCountryCode(MetaFieldBL.getStringMetaFieldValue(customerId, MetaFieldType.COUNTRY_CODE, preferredAITID, effectiveDate));
 
-                contact.setFirstName(getStringMetaFieldValue(customerId, MetaFieldType.FIRST_NAME, preferredAITID, effectiveDate));
-                contact.setLastName(getStringMetaFieldValue(customerId, MetaFieldType.LAST_NAME, preferredAITID, effectiveDate));
-                contact.setInitial(getStringMetaFieldValue(customerId, MetaFieldType.INITIAL, preferredAITID, effectiveDate));
-                contact.setTitle(getStringMetaFieldValue(customerId, MetaFieldType.TITLE, preferredAITID, effectiveDate));
+                contact.setFirstName(MetaFieldBL.getStringMetaFieldValue(customerId, MetaFieldType.FIRST_NAME, preferredAITID, effectiveDate));
+                contact.setLastName(MetaFieldBL.getStringMetaFieldValue(customerId, MetaFieldType.LAST_NAME, preferredAITID, effectiveDate));
+                contact.setInitial(MetaFieldBL.getStringMetaFieldValue(customerId, MetaFieldType.INITIAL, preferredAITID, effectiveDate));
+                contact.setTitle(MetaFieldBL.getStringMetaFieldValue(customerId, MetaFieldType.TITLE, preferredAITID, effectiveDate));
 
-                contact.setPhoneCountryCode(getIntegerMetaFieldValue(customerId, MetaFieldType.PHONE_COUNTRY_CODE, preferredAITID, effectiveDate));
-                contact.setPhoneAreaCode(getIntegerMetaFieldValue(customerId, MetaFieldType.PHONE_AREA_CODE, preferredAITID, effectiveDate));
-                contact.setPhoneNumber(getStringMetaFieldValue(customerId, MetaFieldType.PHONE_NUMBER, preferredAITID, effectiveDate));
+                contact.setPhoneCountryCode(MetaFieldBL.getIntegerMetaFieldValue(customerId, MetaFieldType.PHONE_COUNTRY_CODE, preferredAITID, effectiveDate));
+                contact.setPhoneAreaCode(MetaFieldBL.getIntegerMetaFieldValue(customerId, MetaFieldType.PHONE_AREA_CODE, preferredAITID, effectiveDate));
+                contact.setPhoneNumber(MetaFieldBL.getStringMetaFieldValue(customerId, MetaFieldType.PHONE_NUMBER, preferredAITID, effectiveDate));
 
-                contact.setFaxCountryCode(getIntegerMetaFieldValue(customerId, MetaFieldType.FAX_COUNTRY_CODE, preferredAITID, effectiveDate));
-                contact.setFaxAreaCode(getIntegerMetaFieldValue(customerId, MetaFieldType.FAX_AREA_CODE, preferredAITID, effectiveDate));
-                contact.setFaxNumber(getStringMetaFieldValue(customerId, MetaFieldType.FAX_NUMBER, preferredAITID, effectiveDate));
+                contact.setFaxCountryCode(MetaFieldBL.getIntegerMetaFieldValue(customerId, MetaFieldType.FAX_COUNTRY_CODE, preferredAITID, effectiveDate));
+                contact.setFaxAreaCode(MetaFieldBL.getIntegerMetaFieldValue(customerId, MetaFieldType.FAX_AREA_CODE, preferredAITID, effectiveDate));
+                contact.setFaxNumber(MetaFieldBL.getStringMetaFieldValue(customerId, MetaFieldType.FAX_NUMBER, preferredAITID, effectiveDate));
 
             }
         }
@@ -449,23 +450,4 @@ public class ContactBL {
         return contact;
     }
 
-    public static ContactDTOEx buildFromMetaField(Integer userId, Date effectiveDate) {
-        return buildFromMetaField(userId, null, effectiveDate);
-    }
-
-    private static String getStringMetaFieldValue(Integer customerId, MetaFieldType type, Integer group, Date effectiveDate){
-        MetaFieldDAS metaFieldDAS = new MetaFieldDAS();
-        List<Integer> values = metaFieldDAS.getCustomerFieldValues(customerId, type, group, effectiveDate);
-        Integer valueId = null != values && values.size() > 0 ? values.get(0) : null;
-        MetaFieldValue valueField = null != valueId ? metaFieldDAS.getStringMetaFieldValue(valueId) : null;
-        return null != valueField ? (String) valueField.getValue() : null;
-    }
-
-    private static Integer getIntegerMetaFieldValue(Integer customerId, MetaFieldType type, Integer group, Date effectiveDate){
-        MetaFieldDAS metaFieldDAS = new MetaFieldDAS();
-        List<Integer> values = metaFieldDAS.getCustomerFieldValues(customerId, type, group, effectiveDate);
-        Integer valueId = null != values && values.size() > 0 ? values.get(0) : null;
-        MetaFieldValue valueField = null != valueId ? metaFieldDAS.getIntegerMetaFieldValue(valueId) : null;
-        return null != valueField ? (Integer) valueField.getValue() : null;
-    }
 }

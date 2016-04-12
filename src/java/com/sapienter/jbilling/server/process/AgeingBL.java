@@ -203,7 +203,7 @@ public class AgeingBL {
     }
 
     public void setSteps(Integer entityId, Integer languageId, AgeingDTOEx[] steps) throws NamingException {
-        LOG.debug("Setting a total of " + steps.length + " steps");
+        LOG.debug("Setting a total of %s steps", steps.length);
 
         //validate unique steps
         List<AgeingDTOEx> ageingStepsList = new ArrayList<AgeingDTOEx>(Arrays.asList(steps));
@@ -218,7 +218,7 @@ public class AgeingBL {
                 days.add(stp.getDays());
             }
             if(days.contains(step.getDays())){
-                LOG.debug("Received non-unique ageing step(s) : "+step);
+                LOG.debug("Received non-unique ageing step(s) : %s", step);
                 throw new SessionInternalError("There are non-unique ageing step(s)");
             }
         }
@@ -228,13 +228,13 @@ public class AgeingBL {
 
         for (AgeingDTOEx step : steps) {
 
-            LOG.debug("Processing step for persisting: " + step);
+            LOG.debug("Processing step for persisting: %s", step);
 
             AgeingDTOEx persistedStep = null;
             UserStatusDTO stepUserStatus = new UserStatusDAS().find(step.getStatusId());
             if (stepUserStatus != null && stepUserStatus.getAgeingEntityStep() != null) {
                 for (AgeingDTOEx stp : existedAgeingSteps) {
-                    LOG.debug("Matching received step: " + stepUserStatus.getAgeingEntityStep().getId() + " with existing step: " + stp.getId());
+                    LOG.debug("Matching received step: %s with existing step: %s", stepUserStatus.getAgeingEntityStep().getId(), stp.getId());
                     if (stepUserStatus.getAgeingEntityStep().getId() == stp.getId()) {
                         persistedStep = stp;
                         break;
@@ -246,7 +246,7 @@ public class AgeingBL {
                 existedAgeingSteps.remove(persistedStep);
                 ageing = ageingDas.find(persistedStep.getId());
                 // update
-                LOG.debug("Updating ageing step#" + ageing.getId());
+                LOG.debug("Updating ageing step# %s", ageing.getId());
                 ageing.setDays(step.getDays());
                 ageing.setDescription(step.getStatusStr(), languageId);
 
@@ -254,7 +254,7 @@ public class AgeingBL {
                 UserStatusDAS userDas = new UserStatusDAS();
                 UserStatusDTO userStatusDTO = userDas.find(ageing.getUserStatus().getId());
                 if (!userStatusDTO.getDescription(languageId).equals(ageing.getDescription(languageId))) {
-                    LOG.debug("Updating user status description to: " + ageing.getDescription(languageId));
+                    LOG.debug("Updating user status description to: %s", ageing.getDescription(languageId));
                     userStatusDTO.setDescription(ageing.getDescription(languageId), languageId);
                     userDas.save(userStatusDTO);
                 }

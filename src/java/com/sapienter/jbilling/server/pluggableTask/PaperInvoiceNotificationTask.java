@@ -157,7 +157,7 @@ public class PaperInvoiceNotificationTask
             throws SessionInternalError {
         try {
             init(user, message);
-            LOG.debug("now message1 = " + message.getContent()[0].getContent());
+            LOG.debug("now message1 = %s", message.getContent()[0].getContent());
 
                 return NotificationBL.generatePaperInvoiceAsStream(this.getDesign(user), sqlQuery, invoice, from, to,
                         message.getContent()[0].getContent(), message.getContent()[1].getContent(), entityId,

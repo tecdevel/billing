@@ -91,7 +91,7 @@ public class AutoRechargeTask extends PluggableTask implements IInternalEventsTa
             }
         }
 
-        LOG.debug("Processing " + event);
+        LOG.debug("Processing %s", event);
 
         if (!isEventProcessable(balanceEvent.getNewBalance(), user, customer)) {
             LOG.debug("Conditions not met, no recharge");
@@ -113,7 +113,7 @@ public class AutoRechargeTask extends PluggableTask implements IInternalEventsTa
             payment.setUserId(user.getId());
             payment.setPaymentDate(new Date());
 
-            LOG.debug("Making automatic payment of $" + payment.getAmount() + " for user " + payment.getUserId());
+            LOG.debug("Making automatic payment of $%s for user %s", payment.getAmount(), payment.getUserId());
 
             // can't use the managed bean, a new transaction will cause the CustomerDTO to get an
             // optimistic lock: this transaction and the new payment one both changing the same customer.dynamic_balance
@@ -137,7 +137,7 @@ public class AutoRechargeTask extends PluggableTask implements IInternalEventsTa
                 customer.setCurrentMonthlyAmount(currMthlyAmnt);
 	        }
 
-            LOG.debug("Payment created with result: " + result);
+            LOG.debug("Payment created with result: %s", result);
         } else {
             LOG.debug("No payment instrument, no recharge");
         }
@@ -164,7 +164,7 @@ public class AutoRechargeTask extends PluggableTask implements IInternalEventsTa
         	return false;
         }
 
-        LOG.debug("Threshold = " + threshold + ", New Balance=" + newBalance);
+        LOG.debug("Threshold = %s, New Balance= %s", threshold, newBalance);
 
         //check monthly limit
         if(customer.getMonthlyLimit() != null && customer.getMonthlyLimit().compareTo(BigDecimal.ZERO) > 0){
@@ -176,7 +176,7 @@ public class AutoRechargeTask extends PluggableTask implements IInternalEventsTa
                 return false;
             }
         }
-        LOG.debug("Customer Recharge Amt: " + customer.getAutoRecharge() + "Credit Limit: " + customer.getCreditLimit());
+        LOG.debug("Customer Recharge Amt: %s Credit Limit: %s", customer.getAutoRecharge(), customer.getCreditLimit());
         if (threshold.compareTo(newBalance.add(customer.getCreditLimit())) > 0) {
         } else {
             LOG.debug("threshold not reached yet.");

@@ -79,18 +79,18 @@ public class TestBlacklistFilter implements BlacklistFilter {
 
         if (blacklist.size() != 2) {
             // didn't work
-            LOG.debug("Returned blacklist size is: " + blacklist.size());
+            LOG.debug("Returned blacklist size is: %s", blacklist.size());
             return false;
         }
 
         entry = blacklist.get(1);
         if (entry.getType() != BlacklistDTO.TYPE_USER_ID) {
-            LOG.debug("Blacklist entry type is: " + entry.getType());
+            LOG.debug("Blacklist entry type is: %s", entry.getType());
             return false;
         }
 
         if (entry.getUser().getId() != 1001) {
-            LOG.debug("user id is: " + entry.getUser().getId());
+            LOG.debug("user id is: %s", entry.getUser().getId());
             return false;
         }
 

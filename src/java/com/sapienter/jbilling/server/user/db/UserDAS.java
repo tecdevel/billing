@@ -105,7 +105,7 @@ public class UserDAS extends AbstractDAS<UserDTO> {
 
     public UserDTO findRoot(String username) {
         if (username == null || username.length() == 0) {
-            LOG.error("can not find an empty root: " + username);
+            LOG.error("can not find an empty root: %s", username);
             return null;
         }
         // I need to access an association, so I can't use the parent helper class
@@ -122,7 +122,7 @@ public class UserDAS extends AbstractDAS<UserDTO> {
 
     public UserDTO findWebServicesRoot(String username) {
         if (username == null || username.length() == 0) {
-            LOG.error("can not find an empty root: " + username);
+            LOG.error("can not find an empty root: %s", username);
             return null;
         }
         // I need to access an association, so I can't use the parent helper class

@@ -172,7 +172,7 @@ public abstract class AbstractChargeTask extends PluggableTask implements Invoic
         //For a Flat Rate Charge, below calculation is not required.
         if (taxItem.getPercentage()!=null) {
             //Remove CARRIED BALANCE from tax calculation to avoid double taxation
-            LOG.debug("Percentage Price. Carried balance is " + invoice.getCarriedBalance());
+            LOG.debug("Percentage Price. Carried balance is %s", invoice.getCarriedBalance());
             if (null != invoice.getCarriedBalance()) {
                 invoiceAmountSum = invoiceAmountSum.subtract(invoice.getCarriedBalance());
             }

@@ -7,10 +7,10 @@ import com.sapienter.jbilling.server.user.UserDTOEx
 import com.sapienter.jbilling.server.item.tasks.PricingResult
 import com.sapienter.jbilling.server.item.tasks.SubscriptionResult
 import java.math.BigDecimal;
-import org.apache.log4j.Logger;
+import com.sapienter.jbilling.common.FormatLogger;
 
 #globals
-global org.apache.log4j.Logger LOG;
+global com.sapienter.jbilling.common.FormatLogger LOG;
 
 rule "long distance plan A subscriptions"
     when
@@ -18,7 +18,7 @@ rule "long distance plan A subscriptions"
         not( exists( SubscriptionResult( userId == $result.userId, itemId == 2700 ) ) )
     then
         insert( new SubscriptionResult($result, 2700) );
-        LOG.debug("Plan: added subscription for item 2700 user " + $result.getUserId());
+        LOG.debug("Plan: added subscription for item 2700 user %s", $result.getUserId());
 end
 
 rule "long distance plan B subscriptions"
@@ -27,7 +27,7 @@ rule "long distance plan B subscriptions"
         not( exists( SubscriptionResult( userId == $result.userId, itemId == 2701 ) ) )
     then
         insert( new SubscriptionResult($result, 2701) );
-        LOG.debug("Plan: added subscription for item 2702 user " + $result.getUserId());
+        LOG.debug("Plan: added subscription for item 2702 user %s", $result.getUserId());
 end
 
 rule "long distance plan 1000 minutes included subscriptions"
@@ -36,7 +36,7 @@ rule "long distance plan 1000 minutes included subscriptions"
         not( exists( SubscriptionResult( userId == $result.userId, itemId == 2702 ) ) )
     then
         insert( new SubscriptionResult($result, 2702) );
-        LOG.debug("Plan: added subscription for item 2701 user " + $result.getUserId());
+        LOG.debug("Plan: added subscription for item 2701 user %s", $result.getUserId());
 end
 
 rule "long distance plan A price"

@@ -77,7 +77,7 @@ class AuditLogController {
 
             and {
                 filters.each { filter ->
-                    log.debug("Now processing filter " + filter);
+                    log.debug("Now processing filter ${filter}");
                     if (filter.getValue() != null) {
                         // avoid adding a filter for no table selection
                         if (!(filter.getField().equals("table.name") && filter.getStringValue().trim().length() == 0)) {

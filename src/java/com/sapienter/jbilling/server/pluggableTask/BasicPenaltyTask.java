@@ -151,10 +151,9 @@ public class BasicPenaltyTask extends PluggableTask implements IInternalEventsTa
 
         NewUserStatusEvent statusEvent = (NewUserStatusEvent) event;
 
-        LOG.debug("Processing event: new status id "
-                + statusEvent.getNewStatusId()
-                + "user id: "
-                + statusEvent.getUserId());
+        LOG.debug("Processing event: new status id %s user id: %s",
+                  statusEvent.getNewStatusId(),
+                  statusEvent.getUserId());
 
         // user status id must match the configured ageing step.
         if (!statusEvent.getNewStatusId().equals(getAgeingStep()))
@@ -183,7 +182,7 @@ public class BasicPenaltyTask extends PluggableTask implements IInternalEventsTa
 
         InvoiceDTO invoice = invoiceBL.getEntity();
 
-        LOG.debug("Processing overdue invoice " + invoiceId + ". Adding penalty item " + getPenaltyItemId());
+        LOG.debug("Processing overdue invoice %s. Adding penalty item %s", invoiceId, getPenaltyItemId());
         ItemBL item;
         try {
             item = new ItemBL(getPenaltyItemId());
@@ -196,7 +195,7 @@ public class BasicPenaltyTask extends PluggableTask implements IInternalEventsTa
         // Calculate the penalty fee. If the fee is zero (check the item cost) then
         // no penalty should be applied to this invoice.
         BigDecimal fee = calculatePenaltyFee(invoice, item);
-        LOG.debug("Calculated penalty item fee: " + fee.toString());
+        LOG.debug("Calculated penalty item fee: %s", fee.toString());
 
         if (fee.compareTo(BigDecimal.ZERO) <= 0)
             return;

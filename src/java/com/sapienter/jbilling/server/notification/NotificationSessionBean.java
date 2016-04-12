@@ -302,7 +302,7 @@ public class NotificationSessionBean implements INotificationSessionBean {
     }
 
     private boolean deliverNotification(String userDescription, UserDTO user, MessageDTO message, NotificationTask task) throws TaskException {
-        LOG.debug("Sending notification to " + userDescription + " : " + user.getUserName());
+        LOG.debug("Sending notification to %s : %s", userDescription, user.getUserName());
         return task.deliver(user, message);
     }
 

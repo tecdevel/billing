@@ -6,7 +6,7 @@ import com.sapienter.jbilling.server.order.db.OrderDTO
 import com.sapienter.jbilling.server.order.db.OrderLineDTO
 
 #globals
-global org.apache.log4j.Logger LOG;
+global com.sapienter.jbilling.common.FormatLogger LOG;
 
 
 rule 'Modify order'
@@ -22,5 +22,5 @@ then
                 line.setDeleted(1);
             }
         }
-        LOG.debug("Removed item 1 from order " + order.getId());
+        LOG.debug("Removed item 1 from order %d", order.getId());
 end

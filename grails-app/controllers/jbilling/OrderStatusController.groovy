@@ -162,7 +162,7 @@ class OrderStatusController {
     }
 
     def delete (){
-        log.debug 'delete order status called on ' + params.id
+        log.debug "delete order status called on ${params.id}"
         if (params.id) {
             OrderStatusDTO orderStatus = OrderStatusDTO.findByIdAndEntity(params.int('id'), CompanyDTO.get(session['company_id'] as Integer))
 

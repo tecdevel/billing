@@ -65,9 +65,9 @@ public class PaymentMethodRouterTask extends AbstractPaymentRouterTask {
     public void initializeParamters(PluggableTaskDTO task)
             throws PluggableTaskException {
         super.initializeParamters(task);
-        LOG.debug("Delegate task for credit card payments: " + 
+        LOG.debug("Delegate task for credit card payments: %s", 
                 parameters.get(CREDIT_CARD_DELEGATE));
-        LOG.debug("Delegate task for ACH payments: " + 
+        LOG.debug("Delegate task for ACH payments: %s", 
                 parameters.get(ACH_DELEGATE));
     }
     
@@ -91,7 +91,7 @@ public class PaymentMethodRouterTask extends AbstractPaymentRouterTask {
             LOG.warn("Payment data unavailable, unable to route payment");
             return null;
         }
-        LOG.debug("Delegating to task id " + selectedTaskId);
+        LOG.debug("Delegating to task id %s", selectedTaskId);
         PaymentTask selectedTask = instantiateTask(selectedTaskId);
         return selectedTask;
     }

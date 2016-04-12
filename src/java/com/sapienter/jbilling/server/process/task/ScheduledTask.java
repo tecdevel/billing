@@ -153,10 +153,10 @@ public abstract class ScheduledTask extends PluggableTask implements IScheduledT
                     PluggableTaskDTO pluggableTaskDTO = iPluggableTaskSessionBean.getDTO(jobId, Integer.parseInt(jdMap.get("entityId").toString()));
                     PluggableTaskBL<ScheduledTask> taskLoader = new PluggableTaskBL<ScheduledTask>();
                     taskLoader.set(pluggableTaskDTO);
-                    LOG.info("Executing task from a chain with puggableTaskTypeId=" + jobId);
+                    LOG.info("Executing task from a chain with puggableTaskTypeId=%s",  jobId);
                     taskLoader.instantiateTask().execute(context);
                 }catch (NumberFormatException e) {
-                    LOG.error("Error getting the jobId from the " + JOB_LIST_KEY + " parameter.");
+                    LOG.error("Error getting the jobId from the %s parameter.", JOB_LIST_KEY);
                     e.printStackTrace();
                 }
                 catch (PluggableTaskException e) {

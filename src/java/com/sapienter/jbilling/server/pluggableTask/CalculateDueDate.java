@@ -52,8 +52,8 @@ public class CalculateDueDate extends PluggableTask implements InvoiceCompositio
         Calendar calendar = GregorianCalendar.getInstance();
         calendar.setTime(invoice.getBillingDate());
 
-        LOG.debug("Calculating due date from " + invoice.getBillingDate() + " using period "
-                + invoice.getDueDatePeriod());
+        LOG.debug("Calculating due date from %s using period %s", invoice.getBillingDate(),
+                  invoice.getDueDatePeriod());
 
         try {
             // add the period of time

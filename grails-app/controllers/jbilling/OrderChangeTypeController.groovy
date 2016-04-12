@@ -155,7 +155,7 @@ class OrderChangeTypeController {
     }
 
     def delete (){
-        log.debug 'delete called on ' + params.id
+        log.debug "delete called on ${params.id}"
         if (params.id) {
             def orderChangeType = webServicesSession.getOrderChangeTypeById(params.int('id'))
             if (orderChangeType) {

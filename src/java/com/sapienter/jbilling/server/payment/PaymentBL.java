@@ -153,7 +153,7 @@ public class PaymentBL extends ResultList implements PaymentSQL {
 
     public String getMethodDescription(PaymentMethodDTO method, Integer languageId) {
         // load directly from the DB, otherwise proxies get in the way
-    	LOG.debug("Loading description for method: " + method);
+    	LOG.debug("Loading description for method: %s", method);
         return new PaymentMethodDAS().find(method.getId()).getDescription(languageId);
     }
 
@@ -325,7 +325,7 @@ public class PaymentBL extends ResultList implements PaymentSQL {
             	PaymentInformationBL piBl = new PaymentInformationBL();
                 PaymentAuthorizationBL authBL = new PaymentAuthorizationBL();
                 PaymentAuthorizationDTO auth = null;
-                LOG.debug("Total instruments for processing are : " + info.getPaymentInstruments().size());
+                LOG.debug("Total instruments for processing are : %s", info.getPaymentInstruments().size());
                 Iterator<PaymentInformationDTO> iterator = info.getPaymentInstruments().iterator();
                 while(iterator.hasNext()) {
                 	PaymentInformationDTO instrument = iterator.next();
@@ -349,7 +349,7 @@ public class PaymentBL extends ResultList implements PaymentSQL {
                 		refreshRequiredRelations(newInstrument);
                 	}
                 	info.setInstrument(newInstrument);
-                	LOG.debug("Processing payment with instrument : " + newInstrument);
+                	LOG.debug("Processing payment with instrument : %s", newInstrument);
                 	
                 	if (auth != null) {
 	                    processorUnavailable = task.confirmPreAuth(auth, info);
@@ -409,13 +409,13 @@ public class PaymentBL extends ResultList implements PaymentSQL {
             payment.setPaymentMethod(info.getInstrument().getPaymentMethod());
             // if after all the tasks, the processor in unavailable,
             // return that
-            LOG.debug("Payment result is: " + info.getPaymentResult().getId());
+            LOG.debug("Payment result is: %s", info.getPaymentResult().getId());
             if (processorUnavailable || info.getPaymentResult().getId() == ServerConstants.RESULT_NULL) {
                 retValue = ServerConstants.RESULT_UNAVAILABLE;
             } else {
                 retValue = info.getPaymentResult().getId();
             }
-            LOG.debug("Payment result is after: " + retValue);
+            LOG.debug("Payment result is after: %s", retValue);
             payment.setPaymentResult(new PaymentResultDAS().find(retValue));
             // the balance of the payment depends on the result
             if (retValue.equals(ServerConstants.RESULT_OK) || retValue.equals(ServerConstants.RESULT_ENTERED)) {
@@ -448,7 +448,7 @@ public class PaymentBL extends ResultList implements PaymentSQL {
         }
 
         //send notification of all result types: OK, Entered, Failed
-        LOG.debug("Sending notification to customer with retValue ****** "+retValue);
+        LOG.debug("Sending notification to customer with retValue ****** %s",retValue);
         sendNotification(info, entityId);
 
         return retValue;
@@ -583,7 +583,7 @@ public class PaymentBL extends ResultList implements PaymentSQL {
         }
         
         // set payment specific instruments, payment instruments are linked through the PaymentInstrumentInfo
-        LOG.debug("Payment instruments info are: " + dto.getPaymentInstrumentsInfo());
+        LOG.debug("Payment instruments info are: %s", dto.getPaymentInstrumentsInfo());
         if(dto.getPaymentInstrumentsInfo() != null && dto.getPaymentInstrumentsInfo().size() > 0) {
 	        for(PaymentInstrumentInfoDTO paymentInstrument : dto.getPaymentInstrumentsInfo()) {
 	    		ws.getPaymentInstruments().add(PaymentInformationBL.getWS(paymentInstrument.getPaymentInformation()));

@@ -78,7 +78,7 @@ public class APIValidator implements MethodBeforeAdvice {
                     Object[] array = (Object[]) arg;
                     if (array.length > 0) {
                         objectName = getObjectName(array[0]);
-                        LOG.debug("Object name: '" + objectName + "'");
+                        LOG.debug("Object name: '%s'", objectName);
                     }
             	}
 

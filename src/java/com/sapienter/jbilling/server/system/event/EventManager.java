@@ -80,13 +80,13 @@ public final class EventManager {
     }
 
     public static final void process(Event event){
-        LOG.debug("processing event " + event);
+        LOG.debug("processing event %s", event);
         // always call the general event processor
         new InternalEventProcessor().process(event);
 
         Class processors[] = (Class[]) subscriptions.get(event.getClass());
         if (processors == null) {
-            LOG.info("No processors for class " + event.getClass());
+            LOG.info("No processors for class %s", event.getClass());
             return;
         }
         for (int f = 0; f < processors.length; f++) {
@@ -94,7 +94,7 @@ public final class EventManager {
             EventProcessor processor;
             try {
                 processor = (EventProcessor) processors[f].newInstance();
-                LOG.debug("Now processing with " + processor);
+                LOG.debug("Now processing with %s", processor);
                 processor.process(event);
             } catch (Exception e) {
                 throw new SessionInternalError("Error processing an event " + event, 

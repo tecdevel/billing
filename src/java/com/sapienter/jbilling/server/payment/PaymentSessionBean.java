@@ -227,13 +227,13 @@ public class PaymentSessionBean implements IPaymentSessionBean {
          *  transaction few other records can be created, such as notification messages.
          *********************************************************************************************/
 
-        LOG.debug("2-Transaction status before first transaction: " +
+        LOG.debug("2-Transaction status before first transaction: %s",
                 TransactionInfoUtil.getTransactionStatus(true));
         try {
 
             transactionDefinition.setName("2-processAndUpdateInvoice-create-payment-transaction-" + System.nanoTime());
             transaction = transactionManager.getTransaction(transactionDefinition);
-            LOG.debug("2-Transaction info for payment: " + TransactionInfoUtil.getTransactionStatus(true));
+            LOG.debug("2-Transaction info for payment: %s", TransactionInfoUtil.getTransactionStatus(true));
 
             InvoiceDTO invoice = new InvoiceBL(invoiceId).getEntity();
 
@@ -289,7 +289,7 @@ public class PaymentSessionBean implements IPaymentSessionBean {
             if (null != result) {
                 bl.getEntity().setPaymentResult(new PaymentResultDAS().find(result));
             }
-            LOG.debug("Processed payment with result: " + result);
+            LOG.debug("Processed payment with result: %s", result);
 
             //the commit will flush the hibernate session
             transactionManager.commit(transaction);
@@ -339,12 +339,12 @@ public class PaymentSessionBean implements IPaymentSessionBean {
                 numAttempts++;
                 try {
                     if (result != null) {
-                        LOG.debug("3-Apply payment[%s] to invoice[%s]. Before transaction start: " +
+                        LOG.debug("3-Apply payment[%s] to invoice[%s]. Before transaction start: %s",
                                 TransactionInfoUtil.getTransactionStatus(true), paymentId, invoiceId);
                         transactionDefinition.setName("3-processAndUpdateInvoice-apply-payment-to-invoice-transaction-" +
                                 System.nanoTime());
                         transaction = transactionManager.getTransaction(transactionDefinition);
-                        LOG.debug("3-Apply payment[%s] to invoice[%s]. After transaction start: " +
+                        LOG.debug("3-Apply payment[%s] to invoice[%s]. After transaction start: %s",
                                 TransactionInfoUtil.getTransactionStatus(true), paymentId, invoiceId);
 
                         PaymentBL paymentBL = new PaymentBL(paymentId);
@@ -371,10 +371,10 @@ public class PaymentSessionBean implements IPaymentSessionBean {
                             paymentBL.createMap(invoice, paid);
                         }
 
-                        LOG.debug("3-Attempting to commit transaction:" +
+                        LOG.debug("3-Attempting to commit transaction: %s",
                                 TransactionInfoUtil.getTransactionStatus(true));
                         transactionManager.commit(transaction);
-                        LOG.debug("3-Transaction committed:" +
+                        LOG.debug("3-Transaction committed: %s",
                                 TransactionInfoUtil.getTransactionStatus(true));
 
                     }
@@ -398,7 +398,7 @@ public class PaymentSessionBean implements IPaymentSessionBean {
                     Thread.sleep(100);
                 }
 
-                LOG.debug("3-Applying payment to invoice retry: " + numAttempts);
+                LOG.debug("3-Applying payment to invoice retry: %s", numAttempts);
             } while (numAttempts <= 10); //retry 10 times
 
             LOG.debug("3. Failed to apply payment[%s] to invoice[%s], propagating exception", paymentId, invoiceId);
@@ -438,7 +438,7 @@ public class PaymentSessionBean implements IPaymentSessionBean {
                 new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED);
         transactionDefinition.setName("1-processAndUpdateInvoice1-outer");
         TransactionStatus transaction = transactionManager.getTransaction(transactionDefinition);
-        LOG.debug("Transaction after: " + TransactionInfoUtil.getTransactionStatus(true));
+        LOG.debug("Transaction after: %s", TransactionInfoUtil.getTransactionStatus(true));
 
         try {
         	//for refunds, invoiceIds must be populated
@@ -611,14 +611,14 @@ public class PaymentSessionBean implements IPaymentSessionBean {
                         
                         // only level the balance if the original balance wasn't negative
                         if (newBalance.compareTo(ServerConstants.BIGDECIMAL_ONE_CENT) < 0 && balanceSign) {
-                            LOG.debug("new balance is "+newBalance+ " and BIGDECIMAL_ONE_CENT is "+ ServerConstants.BIGDECIMAL_ONE_CENT+ " and balance sign is "+balanceSign);
+                            LOG.debug("new balance is %s and BIGDECIMAL_ONE_CENT is %s and balance sign is %s", newBalance, ServerConstants.BIGDECIMAL_ONE_CENT, balanceSign);
                             LOG.debug("setting the new balance to ZERO");
                             // the payment balance was greater than the invoice's
                             newBalance = BigDecimal.ZERO;
                         }
                         
                         invoice.setBalance(newBalance);
-                        LOG.debug("Set invoice balance to: " + invoice.getBalance());
+                        LOG.debug("Set invoice balance to: %s", invoice.getBalance());
                                             
                         if (BigDecimal.ZERO.compareTo(newBalance) == 0) {
                             // update the to_process flag if the balance is 0
@@ -890,7 +890,7 @@ public class PaymentSessionBean implements IPaymentSessionBean {
             AgeingEntityStepDTO nextStep = status.getAgeingEntityStep();
             // preform payment retry
             if (nextStep != null && nextStep.getRetryPayment() == 1) {
-                LOG.debug("Retrying payment for user " + userId + " based on the user status");
+                LOG.debug("Retrying payment for user %s based on the user status", userId);
                 // post the need of a payment for all unpaid invoices for this user
                 for (InvoiceDTO invoice : overdueInvoices) {
                     ProcessPaymentEvent event = new ProcessPaymentEvent(invoice.getId(),
