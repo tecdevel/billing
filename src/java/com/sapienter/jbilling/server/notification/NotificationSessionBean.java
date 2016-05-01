@@ -178,8 +178,7 @@ public class NotificationSessionBean implements INotificationSessionBean {
     * Sends a notification to a user asynchronously by posting the notification messages to a JMS queue.
     * It also post a notification messages for the other users that needs to be notified (admin, parents, partner)
     */
-    public Boolean notify(UserDTO user, MessageDTO message)
-            throws SessionInternalError {
+    public Boolean notify(UserDTO user, MessageDTO message) throws SessionInternalError {
         try {
             // verify that the message is good
             if (message.validate() == false) {

@@ -20,15 +20,13 @@ import com.sapienter.jbilling.common.FormatLogger;
 import com.sapienter.jbilling.common.SessionInternalError;
 import com.sapienter.jbilling.server.item.PricingField;
 import com.sapienter.jbilling.server.mediation.Record;
-
-import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Standard non-volatile JDBC reader.
@@ -100,11 +98,7 @@ public class JDBCReader extends AbstractJDBCReader {
             query.append(order);
 
         } else {
-            for (Iterator<String> it = getKeyColumns().iterator(); it.hasNext();) {
-                query.append(it.next());
-                if (it.hasNext())
-                    query.append(", ");
-            }
+            query.append(getKeyColumns().stream().collect(Collectors.joining(", ")));
         }
 
         LOG.debug("SQL query: '%s'", query);

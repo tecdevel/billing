@@ -25,7 +25,6 @@ import com.sapienter.jbilling.server.mediation.Record;
 import com.sapienter.jbilling.server.pluggableTask.admin.ParameterDescription;
 import com.sapienter.jbilling.server.util.PreferenceBL;
 import com.sapienter.jbilling.server.util.sql.JDBCUtils;
-import org.apache.log4j.Logger;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -38,13 +37,9 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 
-import static com.sapienter.jbilling.server.pluggableTask.admin.ParameterDescription.Type.*;
+import static com.sapienter.jbilling.server.pluggableTask.admin.ParameterDescription.Type.STR;
 
 /**
  * AbstractJDBCReader provides a generic base for all JDBC {@link com.sapienter.jbilling.server.mediation.task.IMediationReader} classes.
@@ -55,7 +50,8 @@ import static com.sapienter.jbilling.server.pluggableTask.admin.ParameterDescrip
  * @since 27-09-2010
  */
 public abstract class AbstractJDBCReader extends AbstractReader {
-    private static final Logger LOG = Logger.getLogger(AbstractJDBCReader.class);
+
+    private static final FormatLogger LOG = new FormatLogger(AbstractJDBCReader.class);
 
     private static final String MEDIATION_DIR = Util.getSysProp("base_dir") + "mediation/";
 

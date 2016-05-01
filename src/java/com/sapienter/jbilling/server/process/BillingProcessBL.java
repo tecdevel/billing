@@ -369,26 +369,25 @@ public class BillingProcessBL extends ResultList {
         // any of the new invoices being created could hold the overdue invoices
         NewInvoiceContext holder = newInvoices.isEmpty() ? null : (NewInvoiceContext) newInvoices.elements().nextElement();
 
-        Collection dueInvoices =
-                invoiceDas.findWithBalanceByUser(user);
+        Collection<InvoiceDTO> dueInvoices = invoiceDas.findWithBalanceByUser(user);
+
         LOG.debug("Processing invoices for user %s", user.getUserId());
         // go through each of them, and update the DTO if it applies
 
-        for (Iterator it = dueInvoices.iterator(); it.hasNext();) {
-            InvoiceDTO invoice = (InvoiceDTO) it.next();
+        for (InvoiceDTO invoice: dueInvoices) {
             LOG.debug("Processing invoice %s", invoice.getId());
             // apply any invoice processing filter pluggable task
+            PluggableTaskManager<InvoiceFilterTask> taskManager;
             try {
-                PluggableTaskManager taskManager
-                    = new PluggableTaskManager(entityId, ServerConstants.PLUGGABLE_TASK_INVOICE_FILTER);
-                InvoiceFilterTask task = (InvoiceFilterTask) taskManager.getNextClass();
+                taskManager= new PluggableTaskManager(entityId, ServerConstants.PLUGGABLE_TASK_INVOICE_FILTER);
+                InvoiceFilterTask task = taskManager.getNextClass();
                 boolean isProcessable = true;
                 while (task != null) {
                     isProcessable = task.isApplicable(invoice, billingProcessDTO);
                     if (!isProcessable) {
                         break; // no need to keep doing more tests
                     }
-                    task = (InvoiceFilterTask) taskManager.getNextClass();
+                    task = taskManager.getNextClass();
                 }
 
                 // include this invoice only if it complies with all the rules
@@ -455,9 +454,7 @@ public class BillingProcessBL extends ResultList {
                 LOG.fatal("Problems excecuting task invoice filter.", e);
                 throw new SessionInternalError("Problems executing task invoice filter.");
             }
-
         }
-
 
         if (newInvoices.size() == 0) {
             // no orders or invoices for this invoice
@@ -963,33 +960,29 @@ public class BillingProcessBL extends ResultList {
         retValue.setPeriodValue(billingProcess.getPeriodValue());
         retValue.setIsReview(billingProcess.getIsReview());
 
-
         // now add the runs and grand total
         BillingProcessRunDTOEx grandTotal =
                 new BillingProcessRunDTOEx();
         int totalInvoices = 0;
         int runsCounter = 0;
         List<BillingProcessRunDTOEx> runs = new ArrayList<BillingProcessRunDTOEx>();
-        // go throuhg every run
-        for (Iterator it = billingProcess.getProcessRuns().iterator();
-                it.hasNext();) {
-            ProcessRunDTO run = (ProcessRunDTO) it.next();
+
+        // go through every run
+        for (ProcessRunDTO run : billingProcess.getProcessRuns()) {
             BillingProcessRunBL runBL = new BillingProcessRunBL(run);
             BillingProcessRunDTOEx runDto = runBL.getDTO(language);
             runs.add(runDto);
             runsCounter++;
 
-            // add statistic for InProgress run proccess in DTO
+            // add statistic for InProgress run process in DTO
             if (run.getPaymentFinished() == null) {
                 addRuntimeStatistic(run.getBillingProcess().getId(), language, runDto);
             }
 
             LOG.debug("Run: %s has %s total records.", run.getId(), run.getProcessRunTotals().size());
             // go over the totals, since there's one per currency
-            for (Iterator it2 = runDto.getTotals().iterator(); it2.hasNext();) {
-                // the total to process
-                BillingProcessRunTotalDTOEx totalDto =
-                        (BillingProcessRunTotalDTOEx) it2.next();
+            // the total to process
+            for (BillingProcessRunTotalDTOEx totalDto: runDto.getTotals() ) {
 
                 BillingProcessRunTotalDTOEx sum = getTotal(totalDto.getCurrency(), grandTotal.getTotals());
 
@@ -1150,8 +1143,7 @@ public class BillingProcessBL extends ResultList {
 
     public BillingProcessRunTotalDTOEx getTotal(CurrencyDTO currency, List<BillingProcessRunTotalDTOEx> totals) {
         BillingProcessRunTotalDTOEx retValue = null;
-        for (int f = 0; f < totals.size(); f++) {
-            BillingProcessRunTotalDTOEx total = (BillingProcessRunTotalDTOEx) totals.get(f);
+        for (BillingProcessRunTotalDTOEx total: totals) {
             if (total.getCurrency().equals(currency)) {
                 retValue = total;
                 break;

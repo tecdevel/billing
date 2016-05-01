@@ -20,10 +20,8 @@ import com.sapienter.jbilling.common.FormatLogger;
 import com.sapienter.jbilling.common.SessionInternalError;
 import com.sapienter.jbilling.server.mediation.Record;
 
-import org.apache.log4j.Logger;
-
-import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Stateless JDBC reader that does not change the state of the underlying database
@@ -91,11 +89,7 @@ public class StatelessJDBCReader extends AbstractJDBCReader {
             query.append(order);
 
         } else {
-            for (Iterator<String> it = getKeyColumns().iterator(); it.hasNext();) {
-                query.append(it.next());
-                if (it.hasNext())
-                    query.append(", ");
-            }
+            query.append(getKeyColumns().stream().collect(Collectors.joining(", ")));
         }
 
         LOG.debug("SQL query: '%s'", query);        

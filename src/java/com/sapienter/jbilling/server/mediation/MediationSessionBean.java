@@ -40,6 +40,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -432,23 +433,16 @@ public class MediationSessionBean implements IMediationSessionBean {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void normalizeRecordGroup(IMediationProcess processTask, Integer executorId,
-                                     MediationProcess process, List<Record> thisGroup, Integer entityId,
+                                     MediationProcess mediationProcess, List<Record> thisGroup, Integer entityId,
                                      MediationConfiguration cfg) throws TaskException {
 
-        process = new MediationProcessDAS().findNow(process.getId());
+        LOG.debug("Normalizing %s records ...", thisGroup.size());
 
         StopWatch stopWatch = new StopWatch();
         stopWatch.start("Pre-processing");
 
-        LOG.debug("Normalizing " + thisGroup.size() + " records ...");
-
-        // this process came from a different transaction (persistent context)
-        new MediationProcessDAS().reattachUnmodified(process);
-
         // validate that these records have not been already processed
-        for (Iterator<Record> it = thisGroup.iterator(); it.hasNext();) {
-            if (hasBeenProcessed(process, it.next())) it.remove();
-        }
+        thisGroup= thisGroup.parallelStream().filter(it -> !hasBeenProcessed(mediationProcess, it)).collect(Collectors.toList());
 
         if (thisGroup.size() == 0) {
             return; // it could be that they all have been processed already
@@ -468,6 +462,10 @@ public class MediationSessionBean implements IMediationSessionBean {
         LOG.debug("Processing " + thisGroup.size()
                 + " records took: " + stopWatch.getLastTaskTimeMillis() + "ms,"
                 + " or " + new Double(thisGroup.size()) / stopWatch.getLastTaskTimeMillis() * 1000D + " records/sec");
+
+        // this process came from a different transaction (persistent context)
+        MediationProcess process = new MediationProcessDAS().findNow(mediationProcess.getId());
+        new MediationProcessDAS().reattachUnmodified(process);
 
         // go over the results
         for (MediationResult result : results) {

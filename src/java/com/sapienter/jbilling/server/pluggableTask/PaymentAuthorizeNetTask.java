@@ -51,8 +51,9 @@ import java.util.Random;
 
 ;
 
-public class PaymentAuthorizeNetTask extends PluggableTask
-            implements PaymentTask {
+public class PaymentAuthorizeNetTask extends PluggableTask implements PaymentTask {
+
+    private static final FormatLogger LOG = new FormatLogger(PaymentAuthorizeNetTask.class);
 
     // pluggable task parameters names
     public static final ParameterDescription PARAMETER_LOGIN = 
@@ -79,9 +80,7 @@ public class PaymentAuthorizeNetTask extends PluggableTask
     private static final String url = "https://secure.authorize.net/gateway/transact.dll";
     private static final String test_url = "https://test.authorize.net/gateway/transact.dll";
     private static final int timeOut = 10000; // in millisec
-    
-    private static final FormatLogger LOG = new FormatLogger(PaymentAuthorizeNetTask.class);
-    
+
     /* (non-Javadoc)
      * @see com.sapienter.jbilling.server.pluggableTask.PaymentTask#process(com.sapienter.betty.server.payment.PaymentDTOEx)
      */

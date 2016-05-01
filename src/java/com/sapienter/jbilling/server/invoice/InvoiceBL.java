@@ -258,27 +258,18 @@ public class InvoiceBL extends ResultList implements Serializable, InvoiceSQL {
 
     public void createLines(NewInvoiceContext newInvoice) {
         Collection invoiceLines = invoice.getInvoiceLines();
-
         // Now create all the invoice lines, from the lines in the DTO
         // put there by the invoice composition pluggable tasks
-        InvoiceLineDAS invoiceLineDas = new InvoiceLineDAS();
-
-        // get the result DTO lines
-        Iterator dueInvoiceLines = newInvoice.getResultLines().iterator();
-        // go over the DTO lines, creating one invoice line for each
-
-        while (dueInvoiceLines.hasNext()) {
-            InvoiceLineDTO lineToAdd = (InvoiceLineDTO) dueInvoiceLines.next();
-            
+        newInvoice.getResultLines().forEach( lineToAdd -> {
             // create the database row
-            InvoiceLineDTO newLine = invoiceLineDas.create(lineToAdd.getDescription(), lineToAdd.getAmount(), lineToAdd.getQuantity(), lineToAdd.getPrice(),
-                    lineToAdd.getTypeId(), lineToAdd.getItem(), lineToAdd.getSourceUserId(), lineToAdd.getIsPercentage());
-
+            InvoiceLineDTO newLine = new InvoiceLineDAS().create(lineToAdd.getDescription(), lineToAdd.getAmount(),
+                                        lineToAdd.getQuantity(), lineToAdd.getPrice(), lineToAdd.getTypeId(),
+                                        lineToAdd.getItem(), lineToAdd.getSourceUserId(), lineToAdd.getIsPercentage());
             // update the invoice-lines relationship
             newLine.setInvoice(invoice);
             newLine.setOrder(lineToAdd.getOrder());
             invoiceLines.add(newLine);
-        }
+        });
         getHome().save(invoice);
         EventManager.process(new NewInvoiceEvent(invoice));
     }
@@ -420,32 +411,19 @@ public class InvoiceBL extends ResultList implements Serializable, InvoiceSQL {
     }
 
     private BigDecimal calculateTotal() {
-        BigDecimal total = new BigDecimal(0);
-        for (Iterator it = invoice.getInvoiceLines().iterator(); it.hasNext();) {
-            InvoiceLineDTO line = (InvoiceLineDTO) it.next();
-            total = total.add(line.getAmount());
-        }
-        return total;
+        return invoice.getInvoiceLines().stream().map( it -> it.getAmount()).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    public CachedRowSet getPayableInvoicesByUser(Integer userId)
-            throws SQLException, Exception {
-
+    public CachedRowSet getPayableInvoicesByUser(Integer userId) throws Exception {
         prepareStatement(InvoiceSQL.payableByUser);
         cachedResults.setInt(1, userId.intValue());
-
         execute();
         conn.close();
         return cachedResults;
     }
 
     public BigDecimal getTotalPaid() {
-        BigDecimal retValue = new BigDecimal(0);
-        for (Iterator<PaymentInvoiceMapDTO> it = invoice.getPaymentMap().iterator(); it.hasNext();) {
-            PaymentInvoiceMapDTO paymentMap = it.next();
-            retValue = retValue.add(paymentMap.getAmount());
-        }
-        return retValue;
+        return invoice.getPaymentMap().stream().map( it -> it.getAmount()).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     public CachedRowSet getList(Integer orderId) throws SQLException, Exception {
@@ -714,19 +692,18 @@ public class InvoiceBL extends ResultList implements Serializable, InvoiceSQL {
 
 
 
-    public void sendReminders(Date today) throws SQLException,
-            SessionInternalError {
-        GregorianCalendar cal = new GregorianCalendar();
+    public void sendReminders(Date today) throws SQLException, SessionInternalError {
 
-        for (Iterator it = new CompanyDAS().findEntities().iterator(); it.hasNext();) {
-            CompanyDTO thisEntity = (CompanyDTO) it.next();
+        GregorianCalendar cal = new GregorianCalendar();
+        List<CompanyDTO> companyList= new CompanyDAS().findEntities();
+        for (CompanyDTO thisEntity: companyList) {
             Integer entityId = thisEntity.getId();
             int preferenceUseInvoiceReminders = 0;
             try {
                 preferenceUseInvoiceReminders = 
                 	PreferenceBL.getPreferenceValueAsIntegerOrZero(entityId, ServerConstants.PREFERENCE_USE_INVOICE_REMINDERS);
             } catch (EmptyResultDataAccessException e1) {
-            // let it use the defaults
+                // let it use the defaults
             }
             if (preferenceUseInvoiceReminders == 1) {
                 prepareStatement(InvoiceSQL.toRemind);
@@ -759,11 +736,7 @@ public class InvoiceBL extends ResultList implements Serializable, InvoiceSQL {
                                 new Integer(days), invoice.getDueDate(),
                                 invoice.getPublicNumber(), invoice.getTotal(),
                                 invoice.getCreateDatetime(), invoice.getCurrency().getId());
-
-                        INotificationSessionBean notificationSess =
-                                (INotificationSessionBean) Context.getBean(
-                                Context.Name.NOTIFICATION_SESSION);
-
+                        INotificationSessionBean notificationSess= Context.getBean(Context.Name.NOTIFICATION_SESSION);
                         notificationSess.notify(invoice.getBaseUser(), message);
 
                         invoice.setLastReminder(today);
@@ -774,10 +747,9 @@ public class InvoiceBL extends ResultList implements Serializable, InvoiceSQL {
             }
         }
 
-        if (conn != null) { // only if somthing run
+        if (conn != null) { // only if something run
             conn.close();
         }
-
     }
 
     public InvoiceWS getWS() {

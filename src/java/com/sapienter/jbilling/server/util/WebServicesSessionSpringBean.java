@@ -720,14 +720,10 @@ public class WebServicesSessionSpringBean implements IWebServicesSessionBean {
 	public void removeAllPaymentLinks(Integer paymentId)
 			throws SessionInternalError {
 
-		if (paymentId == null) {
-			return;
-		}
+		if (paymentId == null) return;
 
 		PaymentBL bl = new PaymentBL(paymentId);
-		if (bl.getEntity() == null) {
-			return;
-		}
+		if (bl.getEntity() == null) return;
 
 		Iterator it = bl.getEntity().getInvoicesMap().iterator();
 		while (it.hasNext()) {

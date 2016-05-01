@@ -97,11 +97,7 @@ public class EnumerationBL {
      */
     public void updateMetaFields(String oldEnumName, String newEnumName){
         List<Integer> metaFieldIdList = new MetaFieldDAS().getAllIdsByDataTypeAndName(DataType.ENUMERATION, oldEnumName);
-
-        Iterator<Integer> iterator = metaFieldIdList.iterator();
-
-        while(iterator.hasNext()) {
-            Integer metaFieldId = (Integer)iterator.next();
+        for(Integer metaFieldId : metaFieldIdList ) {
             MetaField metaField = new MetaFieldDAS().find(metaFieldId);
             metaField.setName(newEnumName);
             new MetaFieldDAS().save(metaField);

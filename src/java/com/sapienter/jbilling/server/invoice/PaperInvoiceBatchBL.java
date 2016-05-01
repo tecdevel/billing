@@ -239,18 +239,15 @@ public class PaperInvoiceBatchBL {
     }
 
     public String generateBatchPdf(List<InvoiceDTO> invoices, Integer entityId)
-            throws SQLException,
-            SessionInternalError, DocumentException,
-            IOException {
-        String realPath = Util.getSysProp("base_dir") + "invoices" + File.separator;
+            throws SQLException, SessionInternalError, DocumentException, IOException {
 
-        Iterator<InvoiceDTO> iterator = invoices.iterator();
+        String realPath = Util.getSysProp("base_dir") + "invoices" + File.separator;
         NotificationBL notif = new NotificationBL();
         List<Integer> invoicesIdsList = new ArrayList<Integer>();
 
         int generated = 0;
-        while (iterator.hasNext()) {
-            Integer invoiceId = iterator.next().getId();
+        for (InvoiceDTO inv: invoices) {
+            Integer invoiceId = inv.getId();
             InvoiceBL invoice = new InvoiceBL(invoiceId);
             LOG.debug("Generating paper invoice %d", invoiceId);
             notif.generatePaperInvoiceAsFile(invoice.getEntity());
@@ -266,10 +263,7 @@ public class PaperInvoiceBatchBL {
             String hash = String.valueOf(System.currentTimeMillis());
             Integer[] invoicesIds = new Integer[invoicesIdsList.size()];
             invoicesIdsList.toArray(invoicesIds);
-            compileInvoiceFiles(realPath,
-                    entityId + "-" + hash,
-                    entityId,
-                    invoicesIds);
+            compileInvoiceFiles(realPath, entityId + "-" + hash,entityId, invoicesIds);
 
             return entityId + "-" + hash + "-batch.pdf";
         } else {
@@ -279,9 +273,7 @@ public class PaperInvoiceBatchBL {
     }
     
     public String generateFile(CachedRowSet cachedRowSet, Integer entityId, 
-            String realPath) throws SQLException,
-            SessionInternalError, DocumentException,
-            IOException {
+            String realPath) throws SQLException, SessionInternalError, DocumentException, IOException {
         NotificationBL notif = new NotificationBL();
         List invoices = new ArrayList();
 

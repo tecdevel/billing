@@ -269,15 +269,12 @@ public class BillingProcessRunBL  extends ResultList {
         dto.setStatusStr(statusRow.getDescription(language));
         ProcessRunUserDAS processRunUserDAS = new ProcessRunUserDAS();
         dto.setUsersSucceeded(processRunUserDAS.findSuccessfullUsersCount(billingProcessRun.getId()));
-        dto.setUsersFailed(processRunUserDAS.findFailedUsersCount(billingProcessRun.getId()));        
+        dto.setUsersFailed(processRunUserDAS.findFailedUsersCount(billingProcessRun.getId()));
+
         // now the totals
         if (!billingProcessRun.getProcessRunTotals().isEmpty()) {
-            for (Iterator tIt = billingProcessRun.getProcessRunTotals().iterator(); 
-                    tIt.hasNext();) {
-                ProcessRunTotalDTO totalRow = 
-                        (ProcessRunTotalDTO) tIt.next();
-                BillingProcessRunTotalDTOEx totalDto = getTotalDTO(totalRow,
-                        language);
+            for (ProcessRunTotalDTO totalRow: billingProcessRun.getProcessRunTotals() ) {
+                BillingProcessRunTotalDTOEx totalDto = getTotalDTO(totalRow, language);
                 dto.getTotals().add(totalDto);
             }
         }
@@ -285,10 +282,8 @@ public class BillingProcessRunBL  extends ResultList {
         return dto;
     }
     
-    public BillingProcessRunTotalDTOEx getTotalDTO(
-            ProcessRunTotalDTO row, Integer languageId) {
-        BillingProcessRunTotalDTOEx retValue = 
-                new BillingProcessRunTotalDTOEx();
+    public BillingProcessRunTotalDTOEx getTotalDTO(ProcessRunTotalDTO row, Integer languageId) {
+        BillingProcessRunTotalDTOEx retValue = new BillingProcessRunTotalDTOEx();
         retValue.setCurrency(row.getCurrency());
         retValue.setId(row.getId());
         retValue.setTotalInvoiced(row.getTotalInvoiced());
@@ -297,20 +292,14 @@ public class BillingProcessRunBL  extends ResultList {
         
         // now go over the totals by payment method
         Hashtable totals = new Hashtable();
-        for (Iterator it = row.getTotalsPaymentMethod().iterator(); 
-                it.hasNext();) {
-            ProcessRunTotalPmDTO pmTotal =
-                    (ProcessRunTotalPmDTO) it.next();
-            totals.put(pmTotal.getPaymentMethod().getDescription(languageId),
-                    pmTotal.getTotal());
-                    
+        for (ProcessRunTotalPmDTO pmTotal: row.getTotalsPaymentMethod() ) {
+            totals.put(pmTotal.getPaymentMethod().getDescription(languageId), pmTotal.getTotal());
         }
         retValue.setPmTotals(totals);
         
         // add the currency name, it's handy on the client side
         CurrencyBL currency = new CurrencyBL(retValue.getCurrency().getId());
-        retValue.setCurrencyName(currency.getEntity().getDescription(
-                languageId));
+        retValue.setCurrencyName(currency.getEntity().getDescription(languageId));
         
         return retValue;
     }

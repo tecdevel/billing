@@ -53,6 +53,7 @@ import javax.persistence.Table;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 @TableGenerator(
@@ -802,13 +803,9 @@ public class ItemDTO extends AbstractDescription implements MetaContent, Exporta
         for (ItemTypeDTO type : this.itemTypes) {
             itemTypes.append(type.getDescription()).append(' ');
         }
-        StringBuilder prices = new StringBuilder();
-        for (Iterator<ItemPriceDTO> it = this.itemPrices.iterator(); it.hasNext();) {
-    	    ItemPriceDTO price = it.next();
-    	    prices.append(price.getPrice()).append(" ").append(price.getCurrency().getCode());
-    	    if (it.hasNext()) prices.append(",");
-    	}
-        
+        String prices = this.itemPrices.stream().map( it -> it.getPrice() + " " + it.getCurrency().getCode())
+                                .collect(Collectors.joining(","));
+
         Object values[][] = new Object[][] {
             {
                 id,
@@ -817,7 +814,7 @@ public class ItemDTO extends AbstractDescription implements MetaContent, Exporta
                 hasDecimals,
                 priceManual,
                 percentage,
-                prices.toString(),
+                prices,
             }
         };
         

@@ -347,7 +347,7 @@ public class InvoiceDAS extends AbstractDAS<InvoiceDTO> {
  *                       AND a.deleted = 0"
  *             result-type-mapping="Local"
  */
-    public Collection findWithBalanceByUser(UserDTO user) {
+    public Collection<InvoiceDTO> findWithBalanceByUser(UserDTO user) {
 
         Criteria criteria = getSession().createCriteria(InvoiceDTO.class);
         criteria.add(Restrictions.eq("baseUser", user));

@@ -211,10 +211,9 @@ public class NotificationBL extends ResultList implements NotificationSQL {
      * information to generate that particular type of message.
      */
 
-    public MessageDTO[] getInvoiceMessages(Integer entityId, Integer processId,
-            Integer languageId, InvoiceDTO invoice)
-            throws SessionInternalError, NotificationNotFoundException {
-        MessageDTO retValue[] = null;
+    public List<MessageDTO> getInvoiceMessages(Integer entityId, Integer processId,
+            Integer languageId, InvoiceDTO invoice) throws SessionInternalError, NotificationNotFoundException {
+
         Integer deliveryMethod;
         // now see what kind of invoice this customers wants
         if (invoice.getBaseUser().getCustomer() == null) {
@@ -225,28 +224,19 @@ public class NotificationBL extends ResultList implements NotificationSQL {
             deliveryMethod = ServerConstants.D_METHOD_EMAIL;
             LOG.warn("A user that is not a customer is getting an invoice. User id = %s", invoice.getBaseUser().getUserId());
         } else {
-            deliveryMethod = invoice.getBaseUser().getCustomer()
-                    .getInvoiceDeliveryMethod().getId();
+            deliveryMethod = invoice.getBaseUser().getCustomer().getInvoiceDeliveryMethod().getId();
         }
 
-        int index = 0;
-        if (deliveryMethod.equals(ServerConstants.D_METHOD_EMAIL_AND_PAPER)) {
-            retValue = new MessageDTO[2];
-        } else {
-            retValue = new MessageDTO[1];
-        }
+        List<MessageDTO> retValue= new ArrayList( deliveryMethod.equals(ServerConstants.D_METHOD_EMAIL_AND_PAPER) ? 2 : 1 );
+
         if (deliveryMethod.equals(ServerConstants.D_METHOD_EMAIL)
                 || deliveryMethod.equals(ServerConstants.D_METHOD_EMAIL_AND_PAPER)) {
-            retValue[index] = getInvoiceEmailMessage(entityId, languageId,
-                    invoice);
-            index++;
+            retValue.add(getInvoiceEmailMessage(entityId, languageId, invoice));
         }
 
         if (deliveryMethod.equals(ServerConstants.D_METHOD_PAPER)
                 || deliveryMethod.equals(ServerConstants.D_METHOD_EMAIL_AND_PAPER)) {
-            retValue[index] = getInvoicePaperMessage(entityId, processId,
-                    languageId, invoice);
-            index++;
+            retValue.add(getInvoicePaperMessage(entityId, processId, languageId, invoice));
         }
 
         return retValue;
@@ -1295,8 +1285,7 @@ public class NotificationBL extends ResultList implements NotificationSQL {
             LOG.warn("Trying to send email to entity %s but no address was found", entityId);
             return;
         }
-        sendSapienterEmail(address, entityId, messageKey, attachmentFileName,
-                params);
+        sendSapienterEmail(address, entityId, messageKey, attachmentFileName, params);
     }
 
     /**

@@ -2144,7 +2144,7 @@ public class UserBL extends ResultList {
         createdDate = Util.truncateDate(createdDate != null ? createdDate : new Date());
 
         LOG.debug("Initial run date: %s. Next invoice date for user: %s retrieved from orders is: %s ", createdDate,
-                user.getId(), nextInvoiceDate);
+                userDto.getId(), nextInvoiceDate);
 
         Integer customerDayOfInvoice = mainSubscription.getNextInvoiceDayOfPeriod();
         Integer mainSubscriptionPeriodUnit = mainSubscription.getSubscriptionPeriod().getPeriodUnit().getId();
@@ -2181,7 +2181,7 @@ public class UserBL extends ResultList {
             nextInvoiceDate = cal.getTime();
         }
 
-        LOG.debug("Final next invoice date for user %s is: %s ", user.getId(), nextInvoiceDate);
+        LOG.debug("Final next invoice date for user %s is: %s ", userDto.getId(), nextInvoiceDate);
         // user.getCustomer would always update parent customer and hence userDto.getCustomer is used.
         userDto.getCustomer().setNextInvoiceDate(nextInvoiceDate);
     }

@@ -281,25 +281,22 @@ public class UserSessionBean implements IUserSessionBean, ApplicationContextAwar
     public Boolean hasSubAccounts(Integer userId)
             throws SessionInternalError {
         try {
-            boolean hasSubAccounts = false;
             UserBL user = new UserBL(userId);
-            Iterator childs = user.getEntity().getCustomer().getChildren().iterator();
-            while( !hasSubAccounts && childs.hasNext() ){
-                CustomerDTO child = (CustomerDTO)childs.next();
-                if( child.getBaseUser().getDeleted() == 0 ){
-                    hasSubAccounts = true;
-                }
+            UserDTO userDTO= user.getEntity();
+            if ( null != userDTO && null != userDTO.getCustomer()) {
+                return userDTO.getCustomer().getChildren()
+                        .stream().filter(it -> it.getBaseUser().getDeleted() == 0)
+                        .findAny().isPresent();
             }
-            return hasSubAccounts;
         } catch (Exception e) {
             throw new SessionInternalError(e);
         }
+        return false;
     }
 
-    public UserDTOEx getUserDTOEx(String userName, Integer entityId)
-            throws SessionInternalError{
-        UserDTOEx dto = null;
+    public UserDTOEx getUserDTOEx(String userName, Integer entityId) throws SessionInternalError{
 
+        UserDTOEx dto = null;
         try {
             UserBL bl = new UserBL();
             bl.set(userName, entityId);
@@ -308,7 +305,6 @@ public class UserSessionBean implements IUserSessionBean, ApplicationContextAwar
         } catch (Exception e) {
             throw new SessionInternalError(e);
         }
-
         return dto;
     }
 

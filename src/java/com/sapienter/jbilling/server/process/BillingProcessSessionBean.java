@@ -43,9 +43,10 @@ import com.sapienter.jbilling.server.process.task.IScheduledTask;
 import com.sapienter.jbilling.server.system.event.EventManager;
 import com.sapienter.jbilling.server.user.UserBL;
 import com.sapienter.jbilling.server.user.db.*;
-import com.sapienter.jbilling.server.util.ServerConstants;
 import com.sapienter.jbilling.server.util.Context;
+import com.sapienter.jbilling.server.util.ServerConstants;
 import com.sapienter.jbilling.server.util.audit.EventLogger;
+import org.apache.commons.collections.CollectionUtils;
 import org.joda.time.DateTime;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
@@ -89,10 +90,7 @@ public class BillingProcessSessionBean implements IBillingProcessSessionBean {
         for (InvoiceDTO invoice : invoices) {
             invoice.getOrderProcesses().iterator().next().getId(); // it is a touch
         }
-
         return invoices;
-
-        
     }
     
     /**
@@ -133,21 +131,18 @@ public class BillingProcessSessionBean implements IBillingProcessSessionBean {
     }
 
     public void generateReview(Integer entityId, Date billingDate,
-            Integer periodType, Integer periodValue)
-            throws SessionInternalError {
+            Integer periodType, Integer periodValue) throws SessionInternalError {
+
         LOG.debug("Generating review entity %s", entityId);
-        IBillingProcessSessionBean local = (IBillingProcessSessionBean) 
-                Context.getBean(Context.Name.BILLING_PROCESS_SESSION);
-        local.processEntity(entityId, billingDate, periodType, 
-                periodValue, true);
-        // let know this entity that a new reivew is now pending approval
+        IBillingProcessSessionBean local = Context.getBean(Context.Name.BILLING_PROCESS_SESSION);
+        local.processEntity(entityId, billingDate, periodType, periodValue, true);
+        // let know this entity that a new review is now pending approval
+
         try {
-            String params[] = new String[1];
-            params[0] = entityId.toString();
-            NotificationBL.sendSapienterEmail(entityId, "process.new_review", 
-                    null, params);
+            String params[] = new String [] { entityId.toString() };
+            NotificationBL.sendSapienterEmail(entityId, "process.new_review", null, params);
         } catch (Exception e) {
-            LOG.warn("Exception sending email to entity", e);
+            LOG.warn("Exception sending email about a generateReview run to entity", e);
         }
     }
 
@@ -282,29 +277,32 @@ public class BillingProcessSessionBean implements IBillingProcessSessionBean {
         try {
             InvoiceBL invoice = new InvoiceBL(invoiceId);
             Integer userId = invoice.getEntity().getBaseUser().getUserId();
- 
-        LOG.debug("email and payment for user %s invoice %s", userId, invoiceId);
+            LOG.debug("email for user %s invoice %s", userId, invoiceId);
 
-        // last but not least, let this user know about his/her new
-        // invoice.
-        NotificationBL notif = new NotificationBL();
-            
-        try {
-            MessageDTO[] invoiceMessage = notif.getInvoiceMessages(entityId,
-                                                                   processId,
-                                                                   invoice.getEntity().getBaseUser().getLanguageIdField(),
-                                                                   invoice.getEntity());
-
-            INotificationSessionBean notificationSess = (INotificationSessionBean)
-                    Context.getBean(Context.Name.NOTIFICATION_SESSION);
-
-                for (int msg = 0; msg < invoiceMessage.length; msg++) {
-                    notificationSess.notify(userId, invoiceMessage[msg]);
-                }
+            // last but not least, let this user know about his/her new invoice.
+            NotificationBL notif = new NotificationBL();
+            try {
+                List<MessageDTO> invoiceMessages= notif.getInvoiceMessages(entityId, processId,
+                        invoice.getEntity().getBaseUser().getLanguageIdField(), invoice.getEntity());
+                INotificationSessionBean notificationSessionBean = Context.getBean(Context.Name.NOTIFICATION_SESSION);
+                invoiceMessages.forEach( msg -> {
+                    try {
+                        notificationSessionBean.notify(userId, msg);
+                    } catch (Exception e) {
+                        //handle failure to notify
+                        if ( MessageDTO.TYPE_INVOICE_EMAIL.equals( msg.getTypeId() ) ) {
+                            try {
+                                String params[] = new String [] { entityId.toString() };
+                                //NotificationBL.sendSapienterEmail(entityId, "process.failed.new.invoice", null, params);
+                            } catch (Exception ex) {
+                                LOG.warn("Exception sending email to entity", ex);
+                            }
+                        }
+                    }
+                } );
             } catch (NotificationNotFoundException e) {
                 LOG.warn("Invoice message not defined for entity %s Invoice email not sent", entityId);
-            }     
-            
+            }
         } catch (Exception e) {
             LOG.error("sending email and processing payment", e);
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -343,10 +341,10 @@ public class BillingProcessSessionBean implements IBillingProcessSessionBean {
             //Update Next Invoice Date of Customer.
             if (!isReview) {
             	//Update parent next invoice date.
-            	updateNextInvoiceDate(user, user.getDto());
-            	
+            	updateNextInvoiceDate(user.getDto());
+
             	//Update childern next invoice date.
-            	updateChildrenNextInvoiceDate(user, user.getDto());
+            	updateChildrenNextInvoiceDate(user.getDto());
             }
             
             if (newInvoices == null) {
@@ -375,9 +373,9 @@ public class BillingProcessSessionBean implements IBillingProcessSessionBean {
 
         return retValue;
     }
-    
-    public void updateNextInvoiceDate(UserBL userBl, UserDTO user) {
-    	
+
+    public void updateNextInvoiceDate(UserDTO user) {
+        UserBL userBl = new UserBL(user.getId());
     	userBl.setCustomerNextInvoiceDate(user);
     }
 
@@ -504,37 +502,38 @@ public class BillingProcessSessionBean implements IBillingProcessSessionBean {
         boolean isReviewRequired = config.getGenerateReport() == 1;
 
         if (! nextRunDate.after(currentRunDate)) {
-            // there should be a run today 
-            boolean doRun = true;
             EventLogger eLogger = EventLogger.getInstance();
-
             LOG.debug("A process has to be done for entity %s", entityId);
 
             // check that: the configuration requires a review
             // AND, there is no partial run already there (failed)
             if (isReviewRequired && new BillingProcessDAS().isPresent(entityId, 0, nextRunDate) == null) {
-
                 // a review had to be done for the run to go ahead
-                if (! processBL.isReviewPresent(entityId)) {  // review wasn't generated
-                    LOG.warn("Review is required but not present for entity %s", entityId);
-                    eLogger.warning(entityId, null, config.getId(), 
-                                    EventLogger.MODULE_BILLING_PROCESS,
-                                    EventLogger.BILLING_REVIEW_NOT_GENERATED,
-                                    ServerConstants.TABLE_BILLING_PROCESS_CONFIGURATION);
+                if ( ServerConstants.REVIEW_STATUS_DISAPPROVED.equals(config.getReviewStatus())
+                        || !( processBL.isReviewPresent(entityId) )
+                    ) {  // review wasn't generated
+
+                    if ( ServerConstants.REVIEW_STATUS_DISAPPROVED.equals(config.getReviewStatus()) ) {
+                        LOG.debug("The process should run, but the review has been disapproved");
+                    } else {
+                        LOG.warn("Review is required but not present for entity %s", entityId);
+                        eLogger.warning(entityId, null, config.getId(),
+                                EventLogger.MODULE_BILLING_PROCESS,
+                                EventLogger.BILLING_REVIEW_NOT_GENERATED,
+                                ServerConstants.TABLE_BILLING_PROCESS_CONFIGURATION);
+                    }
 
                     generateReview(entityId, nextRunDate, periodUnitId, periodValue);
-
-                    doRun = false;
 
                 } else if (ServerConstants.REVIEW_STATUS_GENERATED.equals(config.getReviewStatus())) {
                     // the review has to be reviewed yet
                     int hourOfDay = new GregorianCalendar().get(GregorianCalendar.HOUR_OF_DAY);
                     LOG.warn("Review is required but is not approved. Entity %s hour is %s", entityId, hourOfDay);
 
-                    eLogger.warning(entityId, null, config.getId(), 
-                                    EventLogger.MODULE_BILLING_PROCESS,
-                                    EventLogger.BILLING_REVIEW_NOT_APPROVED,
-                                    ServerConstants.TABLE_BILLING_PROCESS_CONFIGURATION);
+                    eLogger.warning(entityId, null, config.getId(),
+                            EventLogger.MODULE_BILLING_PROCESS,
+                            EventLogger.BILLING_REVIEW_NOT_APPROVED,
+                            ServerConstants.TABLE_BILLING_PROCESS_CONFIGURATION);
                     try {
                         // only once per day please
                         if (hourOfDay < 1) {
@@ -544,24 +543,16 @@ public class BillingProcessSessionBean implements IBillingProcessSessionBean {
                     } catch (Exception e) {
                         LOG.warn("Exception sending an entity email", e);
                     }
-                    doRun = false;
-
-                } else if (ServerConstants.REVIEW_STATUS_DISAPPROVED.equals(config.getReviewStatus())) {
-                    // is has been disapproved, let's regenerate
-                    LOG.debug("The process should run, but the review has been disapproved");
-                    generateReview(entityId, nextRunDate, periodUnitId, periodValue);
-
-                    doRun = false;
                 }
-            }
-            if (doRun) {
+            } else {
+                LOG.debug("There should be a real run today");
                 IBillingProcessSessionBean local = Context.getBean(Context.Name.BILLING_PROCESS_SESSION);
                 local.processEntity(entityId, nextRunDate, periodUnitId, periodValue, false);
             }
+
         } else {
             // no run, may be then a review generation
             LOG.debug("No run was scheduled. Next run on %s", nextRunDate);
-
             if (isReviewRequired) {
                 Date reviewDate = new DateTime(nextRunDate).minusDays(config.getDaysForReport()).toDate();
                 if (! reviewDate.after(currentRunDate)) {
@@ -714,19 +705,17 @@ public class BillingProcessSessionBean implements IBillingProcessSessionBean {
     
     /**
      * To Update Child Accounts Next Invoice Date
-     * @param user
+     *
      * @param userDto
      */
-    public void updateChildrenNextInvoiceDate(UserBL user, UserDTO userDto) {
+    public void updateChildrenNextInvoiceDate(UserDTO userDto) {
     	
     	Iterator subAccountsIt = null;
         if (userDto.getCustomer().getIsParent() != null &&
         		userDto.getCustomer().getIsParent().intValue() == 1) {
             UserBL parent = new UserBL(userDto.getUserId());
-            subAccountsIt = parent.getEntity().getCustomer().getChildren().
-                    iterator();
             //update child next invoice date
-            updateChildNextInvoiceDate(subAccountsIt, parent);
+            updateChildNextInvoiceDate(parent.getEntity().getCustomer().getChildren(), parent);
         }
     }
     
@@ -737,18 +726,15 @@ public class BillingProcessSessionBean implements IBillingProcessSessionBean {
      * @param subAccountsIt
      * @param user
      */
-    public void  updateChildNextInvoiceDate(Iterator<CustomerDTO> subAccountsIt, UserBL user) {
-    	
-    	CustomerDTO customer = null;
+    public void updateChildNextInvoiceDate(Collection<CustomerDTO> subAccountsIt, UserBL user) {
     	
     	MainSubscriptionDTO parentMainSubscription = user.getDto().getCustomer().getMainSubscription();
         Integer parentBillingCycleUnit = parentMainSubscription.getSubscriptionPeriod().getPeriodUnit().getId();
         Integer parentBillingCycleValue = parentMainSubscription.getSubscriptionPeriod().getValue();
         
-    	if (subAccountsIt != null) { 
-            while (subAccountsIt.hasNext()) {
-                customer = (CustomerDTO) subAccountsIt.next();
-                
+    	if ( CollectionUtils.isNotEmpty(subAccountsIt) ) {
+            for (CustomerDTO customer: subAccountsIt) {
+
                 MainSubscriptionDTO childMainSubscription = customer.getBaseUser().getCustomer().getMainSubscription();
                 Integer childBillingCycleUnit = childMainSubscription.getSubscriptionPeriod().getPeriodUnit().getId();
                 Integer childBillingCycleValue = childMainSubscription.getSubscriptionPeriod().getValue();
@@ -756,23 +742,24 @@ public class BillingProcessSessionBean implements IBillingProcessSessionBean {
                 if ((customer.getInvoiceChild() == null || customer.getInvoiceChild().intValue() == 0) && 
                 		(parentBillingCycleUnit.equals(childBillingCycleUnit) && parentBillingCycleValue.equals(childBillingCycleValue))) {
                 	//update user next invoice date
-                	updateNextInvoiceDate(user, customer.getBaseUser());
+                	updateNextInvoiceDate(customer.getBaseUser());
                 }
                 if (customer.getIsParent() != null &&
                 		customer.getIsParent().intValue() == 1) {
                     UserBL parent = new UserBL(customer.getBaseUser().getUserId());
-                    if (parent != null && parent.getEntity() != null && parent.getEntity().getCustomer() != null &&
-                    		checkIfUserhasAnychildren(parent)) {
-                    	Iterator<CustomerDTO> subAccounts = parent.getEntity().getCustomer().getChildren().iterator();
+                    if (checkIfUserhasAnychildren(parent)) {
+                    	Collection<CustomerDTO> subAccounts = parent.getEntity().getCustomer().getChildren();
                     	updateChildNextInvoiceDate(subAccounts, parent); // Recursive function
                     }
                 }
             }
 		}
 	}
-    
+
     public boolean checkIfUserhasAnychildren(UserBL parent) {
-    	return (parent.getEntity().getCustomer().getChildren() != null && !parent.getEntity().getCustomer().getChildren().isEmpty());
-	}
+        return (parent != null && parent.getEntity() != null
+                && parent.getEntity().getCustomer().getChildren() != null
+                && !parent.getEntity().getCustomer().getChildren().isEmpty());
+    }
 
 }

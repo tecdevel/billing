@@ -60,6 +60,7 @@ import org.hibernate.annotations.Cache;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 @Entity
 @TableGenerator(
@@ -616,17 +617,15 @@ public class InvoiceDTO extends CustomizedEntity implements Serializable, Export
 
     @Transient
     public Object[][] getFieldValues() {
-        StringBuffer delegatedInvoiceIds = new StringBuffer();
-        for (Iterator<InvoiceDTO> it = invoices.iterator(); it.hasNext();) {
-            delegatedInvoiceIds.append(it.next().getId());
-            if (it.hasNext()) delegatedInvoiceIds.append(", ");
-        }
+        StringBuffer delegatedInvoiceIds = new StringBuffer(
+                invoices.stream().map(it -> String.valueOf(it.getId()))
+                .collect(Collectors.joining(", "))
+        );
 
-        StringBuffer paymentIds = new StringBuffer();
-        for (Iterator<PaymentInvoiceMapDTO> it = paymentMap.iterator(); it.hasNext();) {
-            paymentIds.append(it.next().getPayment().getId());
-            if (it.hasNext()) paymentIds.append(", ");
-        }
+        StringBuffer paymentIds = new StringBuffer(
+                paymentMap.stream().map(it -> String.valueOf(it.getPayment().getId()))
+                .collect(Collectors.joining(", "))
+        );
 
         List<Object[]> values = new ArrayList<Object[]>();
 

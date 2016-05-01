@@ -51,6 +51,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 ;
 
@@ -459,15 +460,7 @@ public class Util {
      */
     public static String join(List<String> lst, String separator) {
         if (lst == null) return "";
-        StringBuilder str = new StringBuilder();
-        Iterator<String> iter = lst.iterator();
-        while (iter.hasNext()) {
-            str.append(iter.next());
-            if (iter.hasNext()) {
-                str.append(separator);
-            }
-        }
-        return str.toString();
+        return lst.stream().collect(Collectors.joining(separator));
     }
 
     /**

@@ -37,14 +37,7 @@ import com.sapienter.jbilling.server.order.db.OrderDTO;
 import com.sapienter.jbilling.server.process.PeriodOfTime;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class NewInvoiceDTO extends InvoiceDTO {
 
@@ -172,13 +165,7 @@ public class NewInvoiceDTO extends InvoiceDTO {
     }
 
     public void calculateTotal() {
-        Iterator lines = resultLines.iterator();
-        BigDecimal total = new BigDecimal(0);
-        while (lines.hasNext()) {
-            InvoiceLineDTO line = (InvoiceLineDTO) lines.next();
-            total = total.add(line.getAmount());
-        }
-
+        BigDecimal total = resultLines.stream().map( line -> line.getAmount() ).reduce(BigDecimal.ZERO, BigDecimal::add);
         setTotal(total);
     }
 

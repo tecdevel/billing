@@ -228,15 +228,11 @@ public class AttributeUtils {
     public static void validateRuleAttributes(Map<String, String> attributes, ValidationRuleModel strategy)
             throws SessionInternalError {
         String strategyName = strategy.getClass().getSimpleName();
-        List<String> errors = new ArrayList<String>();
-
-        Iterator iterator = strategy.getAttributeDefinitions().iterator();
-        AttributeDefinition definition;
-        String name, value;
-        while (iterator.hasNext()) {
-            definition = (AttributeDefinition) iterator.next();
-            name = definition.getName();
-            value = attributes.get(name);
+        List<String> errors = new ArrayList<>();
+        List<AttributeDefinition> definitions= strategy.getAttributeDefinitions();
+        for (AttributeDefinition definition: definitions) {
+            String name=definition.getName();
+            String value = attributes.get(name);
 
             // validate required attributes
             if (definition.isRequired() && (value == null || value.trim().equals(""))) {

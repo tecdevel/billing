@@ -9,6 +9,7 @@ import org.springframework.batch.item.ItemReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 ;
 
@@ -72,15 +73,10 @@ public class AgeingProcessUserReader implements ItemReader<Integer> {
      * @return : list of ids that lies within range
      */
     private List<Integer> getIdsInRange(Integer start, Integer end) {
-        List<Integer> required = new ArrayList<Integer>();
-        List<Integer> userIds = (List<Integer>) this.stepExecution.getJobExecution().getExecutionContext().get(ServerConstants.JOBCONTEXT_USERS_LIST_KEY);
-        Iterator<Integer> iterator = userIds.iterator();
-        while (iterator.hasNext()) {
-            Integer id = iterator.next();
-            if (id >= start && id <= end) {
-                required.add(id);
-            }
-        }
-        return required;
+        List<Integer> userIds = (List<Integer>) this.stepExecution.getJobExecution().getExecutionContext()
+                                                        .get(ServerConstants.JOBCONTEXT_USERS_LIST_KEY);
+        return userIds.stream()
+                    .filter(it -> (it >= start && it <= end))
+                    .collect(Collectors.toList());
     }
 }

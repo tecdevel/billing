@@ -23,11 +23,6 @@ along with jbilling.  If not, see <http://www.gnu.org/licenses/>.
 */
 package com.sapienter.jbilling.server.invoice.task;
 
-import java.util.ArrayList;
-import java.util.List;
-
-
-
 import com.sapienter.jbilling.common.FormatLogger;
 import com.sapienter.jbilling.server.invoice.InvoiceBL;
 import com.sapienter.jbilling.server.invoice.db.InvoiceDAS;
@@ -79,13 +74,13 @@ public class DeleteResellerOrderTask extends PluggableTask
 		
 		deleteResellerOrdersAndInvoices(company.getReseller().getId(), orderId);
 	}
-	
-	/**
-	 * finds orders and invoices of reseller for given order and deletes them
-	 * 
-	 * @param reseller	: Reseller User
-	 * @param invoice	: child order for which this order was generated
-	 */
+
+    /**
+     * Finds orders and invoices of reseller for given order and deletes them
+     *
+     * @param userId
+     * @param orderId
+     */
 	private void deleteResellerOrdersAndInvoices(Integer userId, Integer orderId) {
 		
 		OrderBL orderBL = new OrderBL();
