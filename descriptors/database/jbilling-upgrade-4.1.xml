@@ -1424,7 +1424,7 @@
             <column name="create_datetime" valueDate="2009-01-13T11:16:50.976"/>
             <column name="name" value="JDBCReader test"/>
             <column name="order_value" valueNumeric="2"/>
-            <column name="pluggable_task_id" valueNumeric="480"/>
+            <column name="pluggable_task_id" valueNumeric="6020"/>
             <column name="optlock" valueNumeric="0"/>
         </insert>
         <insert tableName="mediation_process">
