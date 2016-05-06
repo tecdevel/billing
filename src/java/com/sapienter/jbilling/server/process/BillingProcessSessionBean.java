@@ -257,9 +257,7 @@ public class BillingProcessSessionBean implements IBillingProcessSessionBean {
         // find the last run date
         BillingProcessBL process = new BillingProcessBL(processId);
         BillingProcessRunBL runBL = new BillingProcessRunBL();
-        ProcessRunDTO lastRun = (ProcessRunDTO) 
-                Collections.max(process.getEntity().getProcessRuns(),
-                    runBL.new DateComparator());
+        ProcessRunDTO lastRun = Collections.max(process.getEntity().getProcessRuns(), runBL.new DateComparator());
         cal.setTime(Util.truncateDate(lastRun.getStarted()));
         LOG.debug("Retry evaluation lastrun = %s", cal.getTime());
         cal.add(GregorianCalendar.DAY_OF_MONTH, retryDays);
@@ -273,17 +271,19 @@ public class BillingProcessSessionBean implements IBillingProcessSessionBean {
 
     
     @Transactional( propagation = Propagation.REQUIRES_NEW )
-    public void email(Integer entityId, Integer invoiceId, Integer processId) {
+    public void email(Integer entityId, final Integer invoiceId, final Integer processId) {
         try {
             InvoiceBL invoice = new InvoiceBL(invoiceId);
             Integer userId = invoice.getEntity().getBaseUser().getUserId();
             LOG.debug("email for user %s invoice %s", userId, invoiceId);
+            UserBL userBL = new UserBL(userId);
+            userBL.getEntity();
 
             // last but not least, let this user know about his/her new invoice.
             NotificationBL notif = new NotificationBL();
             try {
                 List<MessageDTO> invoiceMessages= notif.getInvoiceMessages(entityId, processId,
-                        invoice.getEntity().getBaseUser().getLanguageIdField(), invoice.getEntity());
+                                                    userBL.getEntity().getLanguageIdField(), invoice.getEntity());
                 INotificationSessionBean notificationSessionBean = Context.getBean(Context.Name.NOTIFICATION_SESSION);
                 invoiceMessages.forEach( msg -> {
                     try {
@@ -292,8 +292,8 @@ public class BillingProcessSessionBean implements IBillingProcessSessionBean {
                         //handle failure to notify
                         if ( MessageDTO.TYPE_INVOICE_EMAIL.equals( msg.getTypeId() ) ) {
                             try {
-                                String params[] = new String [] { entityId.toString() };
-                                //NotificationBL.sendSapienterEmail(entityId, "process.failed.new.invoice", null, params);
+                                String params[] = new String [] { processId.toString(), invoiceId.toString() };
+                                NotificationBL.sendSapienterEmail(Util.getSysProp("process.failed.email.to"), entityId, "process.failed.new.invoice", null, params);
                             } catch (Exception ex) {
                                 LOG.warn("Exception sending email to entity", ex);
                             }
@@ -302,6 +302,9 @@ public class BillingProcessSessionBean implements IBillingProcessSessionBean {
                 } );
             } catch (NotificationNotFoundException e) {
                 LOG.warn("Invoice message not defined for entity %s Invoice email not sent", entityId);
+            } catch (Exception e) {
+                LOG.error(e.getMessage());
+                LOG.warn("Email notification of Invoice " + invoiceId + " failed for user " + userId);
             }
         } catch (Exception e) {
             LOG.error("sending email and processing payment", e);

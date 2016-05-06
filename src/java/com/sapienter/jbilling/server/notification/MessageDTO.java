@@ -24,10 +24,10 @@
 
 package com.sapienter.jbilling.server.notification;
 
+import com.sapienter.jbilling.common.CommonConstants;
+
 import java.io.Serializable;
 import java.util.*;
-
-import com.sapienter.jbilling.common.CommonConstants;
 
 public class MessageDTO implements Serializable {
 	
@@ -196,16 +196,7 @@ public class MessageDTO implements Serializable {
     public void setUseFlag(Boolean useFlag) {
         this.useFlag = useFlag;
     }
-    
-    public String toString(){
-        String ret = "language = " + languageId + " type = " + typeId + " use = " +
-                useFlag + " content = ";
-        for (int f = 0; f < content.size(); f++) {
-            ret += "[" + content.get(f) + "]";
-        }
-        
-        return ret;
-    }
+
     public String getAttachmentFile() {
         return attachmentFile;
     }
@@ -258,5 +249,24 @@ public class MessageDTO implements Serializable {
 
     public void setMediumTypes(List<NotificationMediumType> mediumTypes) {
         this.mediumTypes = mediumTypes;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("MessageDTO{");
+        sb.append("attachmentFile='").append(attachmentFile).append('\'');
+        sb.append(", typeId=").append(typeId);
+        sb.append(", languageId=").append(languageId);
+        sb.append(", useFlag=").append(useFlag);
+        sb.append(", deliveryMethodId=").append(deliveryMethodId);
+        sb.append(", includeAttachment=").append(includeAttachment);
+        sb.append(", attachmentDesign='").append(attachmentDesign).append('\'');
+        sb.append(", attachmentType='").append(attachmentType).append('\'');
+        sb.append(", notifyAdmin=").append(notifyAdmin);
+        sb.append(", notifyPartner=").append(notifyPartner);
+        sb.append(", notifyParent=").append(notifyParent);
+        sb.append(", notifyAllParents=").append(notifyAllParents);
+        sb.append('}');
+        return sb.toString();
     }
 }
