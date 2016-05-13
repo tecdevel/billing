@@ -301,6 +301,12 @@
                         	</g:isNotRoot>
                         </div>
 
+                        <g:applyLayout name="form/checkbox">
+                            <content tag="label"><g:message code="product.allow.manual.pricing"/></content>
+                            <content tag="label.for">product.priceManual</content>
+                            <g:checkBox class="cb checkbox" name="product.priceManual" checked="${product?.priceManual > 0}"/>
+                        </g:applyLayout>
+
                         <!-- meta fields -->
                         <div id="product-metafields">
                         	<g:render template="/metaFields/editMetaFields" model="[availableFields: availableFields, fieldValues: product?.metaFields]"/>
@@ -407,11 +413,7 @@
                             </div>
 
                             <div class="column">
-                                <g:applyLayout name="form/checkbox">
-                                    <content tag="label"><g:message code="product.allow.manual.pricing"/></content>
-                                    <content tag="label.for">product.priceManual</content>
-                                    <g:checkBox class="cb checkbox" name="product.priceManual" checked="${product?.priceManual > 0}"/>
-                                </g:applyLayout>
+
                             </div>
                         </div>
                     </div>
