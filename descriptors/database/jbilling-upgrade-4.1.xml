@@ -1334,7 +1334,7 @@
         </insert>
 
         <addColumn tableName="item_price">
-            <column defaultValueDate="1970-01-01" name="start_date" type="java.sql.Types.TIMESTAMP">
+            <column defaultValueDate="1970-01-01 00:00:00" name="start_date" type="java.sql.Types.TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
         </addColumn>
@@ -3259,6 +3259,16 @@
             <column name="next_id" valueComputed="(select coalesce( (max(t.id)/10 + 1), 1) from item t)"/>
             <where>name='item'</where>
         </update>
+    </changeSet>
+
+	<changeSet id="Updating column name in jb_host_master table" author="Vikas Bodani" context="base">
+    	<renameColumn columnDataType="java.sql.Types.CHAR(50)"
+                      newColumnName="jb_tag_name"
+                      oldColumnName="jb_last_git_commit"
+                      tableName="jb_host_master"/>
+        <modifyDataType columnName="jb_tag_name"
+            			newDataType="java.sql.Types.CHAR(50)"
+            			tableName="jb_host_master"/>
     </changeSet>
 
 </databaseChangeLog>

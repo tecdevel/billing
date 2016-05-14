@@ -1,19 +1,15 @@
 package com.sapienter.jbilling.server.migrations;
 
+import com.sapienter.jbilling.common.FormatLogger;
+import liquibase.database.Database;
+import liquibase.exception.CustomChangeException;
+import liquibase.statement.SqlStatement;
+import org.joda.time.DateTime;
+
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
-import liquibase.database.Database;
-import liquibase.exception.CustomChangeException;
-import liquibase.logging.LogFactory;
-import liquibase.logging.Logger;
-import liquibase.statement.SqlStatement;
-
-import org.joda.time.DateTime;
-
-import com.sapienter.jbilling.common.FormatLogger;
 
 /**
  * Created by Fernando G. Morales on 4/1/15.
