@@ -12,7 +12,7 @@
 	<parameter name="owner_email" class="java.lang.String"/>
 	<parameter name="owner_zip" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[SELECT 1]]>
+		<![CDATA[SELECT 1 from entity]]>
 	</queryString>
 	<background>
 		<band splitType="Stretch"/>
