@@ -2819,6 +2819,12 @@ public class WebServicesSessionSpringBean implements IWebServicesSessionBean {
         AccountTypeDTO accountTypeDTO = AccountTypeBL.getDTO(accountType, entityId);
         accountTypeDTO = new AccountTypeBL().create(accountTypeDTO);
 
+        if (CollectionUtils.isNotEmpty(accountType.getDescriptions())) {
+            for (InternationalDescriptionWS desc: accountType.getDescriptions()) {
+                accountTypeDTO.setDescription(desc.getContent(), desc.getLanguageId());
+            }
+        }
+
         return accountTypeDTO.getId();
     }
 

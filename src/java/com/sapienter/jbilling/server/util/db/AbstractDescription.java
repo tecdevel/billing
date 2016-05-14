@@ -152,8 +152,7 @@ public abstract class AbstractDescription implements Serializable {
         JbillingTableDAS tableDas = Context.getBean(Context.Name.JBILLING_TABLE_DAS);
         JbillingTable table = tableDas.findByName(getTable());
 
-        InternationalDescriptionDAS descriptionDas = (InternationalDescriptionDAS) Context
-                .getBean(Context.Name.DESCRIPTION_DAS);
+        InternationalDescriptionDAS descriptionDas = Context.getBean(Context.Name.DESCRIPTION_DAS);
         
         descriptionDas.delete(table.getId(), getId(), "description", languageId);
     }
@@ -162,8 +161,7 @@ public abstract class AbstractDescription implements Serializable {
         JbillingTableDAS tableDas = Context.getBean(Context.Name.JBILLING_TABLE_DAS);
         JbillingTable table = tableDas.findByName(getTable());
 
-        InternationalDescriptionDAS descriptionDas = (InternationalDescriptionDAS) Context
-                .getBean(Context.Name.DESCRIPTION_DAS);
+        InternationalDescriptionDAS descriptionDas = Context.getBean(Context.Name.DESCRIPTION_DAS);
         
         descriptionDas.delete(table.getId(), getId(), label, languageId);
     }
