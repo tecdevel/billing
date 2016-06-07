@@ -30,6 +30,8 @@ import com.sapienter.jbilling.server.invoice.db.InvoiceDTO;
 import com.sapienter.jbilling.server.process.BusinessDays;
 import com.sapienter.jbilling.server.user.db.UserDTO;
 import org.joda.time.format.DateTimeFormat;
+import com.sapienter.jbilling.server.pluggableTask.admin.ParameterDescription;
+import org.apache.commons.lang.StringUtils;
 
 import java.io.File;
 import java.util.Date;
@@ -45,19 +47,32 @@ public class BusinessDayAgeingTask extends BasicAgeingTask {
 
     private static final String PARAM_HOLIDAY_FILE = "holiday_file";
     private static final String PARAM_DATE_FORMAT = "date_format";
+    
+	public static final ParameterDescription PARAMETER_HOLIDAY_FILE = new ParameterDescription(
+			PARAM_HOLIDAY_FILE, false, ParameterDescription.Type.STR);
+
+	public static final ParameterDescription PARAMETER_DATE_FORMAT = new ParameterDescription(
+			PARAM_DATE_FORMAT, false, ParameterDescription.Type.STR);
+
+	// initializer for pluggable params
+	{
+		descriptions.add(PARAMETER_HOLIDAY_FILE);
+		descriptions.add(PARAMETER_DATE_FORMAT);
+	}
 
     private BusinessDays businessDays;
 
     private BusinessDays getBusinessDaysHelper() {
         if (businessDays == null) {
             String dateFormat = getParameter(PARAM_DATE_FORMAT, "yyyy-MM-dd");
-            String holidayFile = getParameter(PARAM_HOLIDAY_FILE, (String) null);
+            String holidayFile = getParameter(PARAM_HOLIDAY_FILE, "");
 
-            if (holidayFile != null) {
-                holidayFile = Util.getSysProp("base_dir") + File.separator + holidayFile;
+            if (StringUtils.isNotEmpty(holidayFile)) {
+                holidayFile = Util.getBaseDir() + File.separator + holidayFile;
+                businessDays= new BusinessDays(new File(holidayFile), DateTimeFormat.forPattern(dateFormat));
+            } else {
+            	businessDays = new BusinessDays();
             }
-
-            businessDays = new BusinessDays(new File(holidayFile), DateTimeFormat.forPattern(dateFormat));
         }
 
         return businessDays;
