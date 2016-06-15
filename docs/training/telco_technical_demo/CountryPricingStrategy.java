@@ -16,6 +16,7 @@
 
 package com.sapienter.jbilling.server.pricing.strategy;
 
+import com.sapienter.jbilling.common.FormatLogger;
 import com.sapienter.jbilling.server.item.PricingField;
 import com.sapienter.jbilling.server.item.tasks.PricingResult;
 import com.sapienter.jbilling.server.order.Usage;
@@ -44,7 +45,7 @@ import static com.sapienter.jbilling.server.pricing.db.AttributeDefinition.Type.
  */
 public class CountryPricingStrategy extends AbstractPricingStrategy {
 
-    private static final Logger LOG = Logger.getLogger(CountryPricingStrategy.class);
+    private static final FormatLogger LOG = new FormatLogger(CountryPricingStrategy.class);
     private static final String DEFAULT_PERCENTAGE = "default";
 
     public CountryPricingStrategy() {

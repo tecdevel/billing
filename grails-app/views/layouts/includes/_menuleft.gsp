@@ -63,6 +63,11 @@
 
     <r:layoutResources/>
     <g:layoutHead/>
+    <style>
+    	.list li img{
+    		float:right;!important
+    	}
+    </style>
 </head>
 <body>
 <div id="wrapper">
@@ -114,6 +119,16 @@
 </div>
 
 <r:layoutResources/>
-
+<script type="text/javascript">
+	$(document).ready(function() {
+		$("#process-false").each(function() {
+			 $("div #process-false").append('<img src="${resource(dir:'images', file:'cross.png')}" />');
+		});
+		$("#process-true").each(function() {
+			$("div #process-true").append('<img src="${resource(dir:'images', file:'icon007.png')}" />');
+		});
+	});
+</script>
 </body>
+
 </html>

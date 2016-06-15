@@ -20,11 +20,10 @@
 
  This source was modified by Web Data Technologies LLP (www.webdatatechnologies.in) since 15 Nov 2015.
  You may download the latest source from webdataconsulting.github.io.
-
-
 --}%
-
+				<%@ page import="com.sapienter.jbilling.common.Util" %>
                 <ul class="list">
+                	
                 	<!-- Menu items, 'All' being first, remaining in alphabetical order -->
                     <li class="${pageProperty(name: 'page.menu.item') == 'all' ? 'active' : ''}"> <!-- All -->
                         <g:link controller="config">
@@ -37,11 +36,13 @@
                          </g:link>
                     </li>
                     <li class="${pageProperty(name: 'page.menu.item') == 'partner' ? 'active' : ''}"><!-- Agent Commission -->
+                        <div id="process-${Util.getSysProp('process.run_commission')}"></div>
                         <g:link controller="config" action="partnerCommission">
                             <g:message code="configuration.menu.partner"/>
                         </g:link>
                     </li>
                     <li class="${pageProperty(name: 'page.menu.item') == 'billing' ? 'active' : ''}"><!-- Billing Process -->
+                        <div id="process-${Util.getSysProp('process.run_billing')}"></div>
                         <g:link controller="billingconfiguration" action="index">
                             <g:message code="configuration.menu.billing"/>
                         </g:link>
@@ -52,9 +53,11 @@
                         </g:link>
                     </li>
                     <li class="${pageProperty(name: 'page.menu.item') == 'aging' ? 'active' : ''}"> <!-- Collections -->
+                        <div id="process-${Util.getSysProp('process.run_ageing')}"></div>
                         <g:link controller="config" action="aging">
                             <g:message code="configuration.menu.collections"/>
                         </g:link>
+                        
                     </li>
                     <li class="${pageProperty(name: 'page.menu.item') == 'company' ? 'active' : ''}"><!-- Company -->
                         <g:link controller="config" action="company">
@@ -87,6 +90,7 @@
                         </g:link>
                     </li>
                     <li class="${pageProperty(name: 'page.menu.item') == 'mediation' ? 'active' : ''}"> <!-- Mediation -->
+                        <div id="process-${Util.getSysProp('process.run_mediation')}"></div>
                         <g:link controller="mediationConfig" action="list">
                             <g:message code="configuration.menu.mediation"/>
                         </g:link>

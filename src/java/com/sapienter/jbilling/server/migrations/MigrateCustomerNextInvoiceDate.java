@@ -35,16 +35,16 @@ public class MigrateCustomerNextInvoiceDate extends AbstractCustomSqlChange {
             if(result!=null && result.isBeforeFirst()) {
                 while(result.next()) {
                     userID = result.getInt("user_id");
-                    log.info("User ID: %s", userID);
+                    log.info("User ID: "+ userID);
                     Date date = result.getDate("create_datetime");
-                    log.info("Next Invoice Date value before update: %s", date);
+                    log.info("Next Invoice Date value before update: "+ date);
                     result.updateDate("next_inovice_date", calculateNextInvoiceDate(date));
-                    log.info("Next Invoice Date value after update: %s", date);
+                    log.info("Next Invoice Date value after update: "+ date);
                     result.updateRow();
                 }
             }
         } catch(SQLException e) {
-            log.info("Cannot update customer id = %s", userID);
+            log.info("Cannot update customer id = "+ userID);
         }
         return new SqlStatement[0];
     }
