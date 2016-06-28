@@ -25,16 +25,21 @@ package jbilling
 
 import com.sapienter.jbilling.client.ViewUtils
 import com.sapienter.jbilling.client.discount.DiscountHelper
+import com.sapienter.jbilling.client.metafield.MetaFieldBindHelper
 import com.sapienter.jbilling.client.util.ClientConstants
 import com.sapienter.jbilling.client.util.DownloadHelper
+import com.sapienter.jbilling.client.util.SortableCriteria
 import com.sapienter.jbilling.common.SessionInternalError
 import com.sapienter.jbilling.server.discount.DiscountWS
 import com.sapienter.jbilling.server.discount.db.DiscountDTO
+import com.sapienter.jbilling.server.metafields.EntityType
+import com.sapienter.jbilling.server.metafields.MetaFieldBL
+import com.sapienter.jbilling.server.metafields.MetaFieldValueWS
 import com.sapienter.jbilling.server.order.db.OrderPeriodDTO
+import com.sapienter.jbilling.server.user.db.CompanyDTO
 import com.sapienter.jbilling.server.util.IWebServicesSessionBean
 import com.sapienter.jbilling.server.util.PreferenceBL
-import com.sapienter.jbilling.server.util.Util;
-import com.sapienter.jbilling.client.util.SortableCriteria
+import com.sapienter.jbilling.server.util.Util
 import com.sapienter.jbilling.server.util.csv.CsvExporter
 import com.sapienter.jbilling.server.util.csv.Exporter
 import grails.converters.JSON
@@ -42,7 +47,6 @@ import grails.plugin.springsecurity.annotation.Secured
 import org.apache.commons.lang.StringUtils
 import org.apache.commons.lang.WordUtils
 import org.codehaus.groovy.grails.web.servlet.mvc.GrailsParameterMap
-import com.sapienter.jbilling.server.user.db.CompanyDTO
 import org.hibernate.criterion.MatchMode
 import org.hibernate.criterion.Restrictions
 
@@ -62,7 +66,6 @@ class DiscountController {
     ViewUtils viewUtils
 
     def breadcrumbService
-    def recentItemService
 
     def index () {
         list()
@@ -89,8 +92,8 @@ class DiscountController {
     }
 
     def list () {
-        
-        
+		
+		
         def selected = params.id ? DiscountDTO.get(params.int("id")) : null
         def crumbDescription = selected ? selected.code : null
         breadcrumbService.addBreadcrumb(controllerName, 'list', null, selected?.id, crumbDescription)
@@ -245,7 +248,7 @@ class DiscountController {
 
         breadcrumbService.addBreadcrumb(controllerName, actionName, params.id ? 'update' : 'create', params.int('id'), discount?.code)
 
-        [ discount: discount ]
+        [ discount: discount, availableFields:retrieveAvailableMetaFields() ]
     }
     
     def deleteDiscount () {
@@ -312,7 +315,6 @@ class DiscountController {
 					}
 				}
 			}
-
             // save or update
             if (!discount.id || discount.id == 0) {
                 log.debug("creating discount ${discount}")
@@ -329,7 +331,7 @@ class DiscountController {
 
         } catch (SessionInternalError e) {
             viewUtils.resolveException(flash, session.locale, e);
-            render view: 'edit', model: [ discount: discount ]
+            render view: 'edit', model: [ discount: discount, availableFields:retrieveAvailableMetaFields() ]
             return
         }
 
@@ -374,14 +376,24 @@ class DiscountController {
 
 	private def bindDiscount(DiscountWS discount, GrailsParameterMap params) {
         bindData(discount, params, 'discount')
-        return DiscountHelper.bindDiscount(discount, params)
+		bindMetaFields(discount, params)
+		return DiscountHelper.bindDiscount(discount, params)
     }	
 	
 	private def retrieveCompany() {
 		CompanyDTO.get(session['company_id'])
 	}
-
-    def csv (){
+	
+	def retrieveAvailableMetaFields() {
+		return MetaFieldBL.getAvailableFieldsList(session['company_id'], EntityType.DISCOUNT);
+	}
+	
+	def bindMetaFields(discountWS, params) {
+		def fieldsArray = MetaFieldBindHelper.bindMetaFields(retrieveAvailableMetaFields(), params);
+        discountWS.metaFields = fieldsArray.toArray(new MetaFieldValueWS[fieldsArray.size()])
+	}
+	
+	def csv (){
         params.sort = viewColumnsToFields[params.sidx] != null ? viewColumnsToFields[params.sidx] : params.sort
         params.order = params.sord
         params.max = CsvExporter.MAX_RESULTS

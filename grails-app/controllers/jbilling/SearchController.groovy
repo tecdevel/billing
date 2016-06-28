@@ -44,7 +44,6 @@ class SearchCommand {
 class SearchController {
 	static scope = "prototype"
     def filterService
-    def recentItemService
     def breadcrumbService
 
     def index (SearchCommand cmd) {

@@ -42,7 +42,6 @@ class BillingconfigurationController {
 	static scope = "prototype"
 	IWebServicesSessionBean webServicesSession
 	def viewUtils
-	def recentItemService
 	def breadcrumbService
     
     def index () {

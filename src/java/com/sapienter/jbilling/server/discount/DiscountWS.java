@@ -2,10 +2,11 @@ package com.sapienter.jbilling.server.discount;
 
 import com.sapienter.jbilling.common.Util;
 import com.sapienter.jbilling.server.discount.strategy.DiscountStrategyType;
+import com.sapienter.jbilling.server.metafields.MetaFieldValueWS;
 import com.sapienter.jbilling.server.order.validator.DateBetween;
 import com.sapienter.jbilling.server.security.WSSecured;
-import com.sapienter.jbilling.server.util.ServerConstants;
 import com.sapienter.jbilling.server.util.InternationalDescriptionWS;
+import com.sapienter.jbilling.server.util.ServerConstants;
 import org.apache.commons.collections.FactoryUtils;
 import org.apache.commons.collections.ListUtils;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -36,7 +37,8 @@ public class DiscountWS implements WSSecured, Serializable {
     private Date endDate;
     private SortedMap<String, String> attributes = new TreeMap<String, String>();
     private String description = null;
-
+    private MetaFieldValueWS[] metaFields;
+    
     @NotNull(message = "validation.error.notnull")
     @NotEmpty(message = "validation.error.notempty")
     private List<InternationalDescriptionWS> descriptions = ListUtils.lazyList(new ArrayList<InternationalDescriptionWS>(), FactoryUtils.instantiateFactory(InternationalDescriptionWS.class));
@@ -119,6 +121,14 @@ public class DiscountWS implements WSSecured, Serializable {
         this.attributes = attributes;
     }
 
+    public MetaFieldValueWS[] getMetaFields() {
+		return metaFields;
+	}
+
+	public void setMetaFields(MetaFieldValueWS[] metaFields) {
+		this.metaFields = metaFields;
+	}
+    
     /**
      * Returns an english description.
      *

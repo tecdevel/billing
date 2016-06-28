@@ -1,3 +1,5 @@
+package com.sapienter.jbilling.server.process;
+
 /*
  jBilling - The Enterprise Open Source Billing System
  Copyright (C) 2003-2011 Enterprise jBilling Software Ltd. and Emiliano Conde
@@ -20,18 +22,16 @@
  This source was modified by Web Data Technologies LLP (www.webdatatechnologies.in) since 15 Nov 2015.
  You may download the latest source from webdataconsulting.github.io.
 
- */
-package com.sapienter.jbilling.server.process;
-
-
-import java.io.Serializable;
-import java.util.Date;
+*/
 
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
 
+import java.io.Serializable;
+import java.util.Date;
+
 public class PeriodOfTime implements Serializable {
-    
+
     private final LocalDate start;
     private final LocalDate end;
     private final int daysInCycle;
@@ -41,10 +41,12 @@ public class PeriodOfTime implements Serializable {
         public Date getStart() {
             return null;
         }
+
         @Override
         public Date getEnd() {
             return null;
         }
+
         @Override
         public int getDaysInPeriod() {
             return 0;
@@ -87,7 +89,7 @@ public class PeriodOfTime implements Serializable {
      * Find the number of days between the period start date to the period end date. This means
      * that the start date is counted as a days within the period, but not the end date. For example, January 01 to
      * January 10th includes 9 days total.
-     *
+     * <p>
      * This method takes into account daylight savings time to ensure that days are counted
      * correctly across DST boundaries.
      *

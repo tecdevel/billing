@@ -39,6 +39,7 @@ You may download the latest source from webdataconsulting.github.io.
 
 	<div class="box">
         <!-- discount info -->
+        <div class="sub-box">
         <table class="dataTable" cellspacing="0" cellpadding="0">
             <tbody>
                 <tr>
@@ -84,7 +85,7 @@ You may download the latest source from webdataconsulting.github.io.
                     <td><g:message code="discount.detail.endDate"/></td>
                     <td class="value"><g:formatDate date="${selected?.endDate}" formatName="date.pretty.format"/></td>
                 </tr>
-                
+                <g:render template="/metaFields/metaFields" model="[metaFields: selected?.metaFields]"/>
                 <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
                 
                 <g:each var="attribute" in="${selected?.attributes?.entrySet()}" status="s">
@@ -124,6 +125,7 @@ You may download the latest source from webdataconsulting.github.io.
     
             </tbody>
         </table>
+    	</div>
     </div>
 
     <div class="btn-box">

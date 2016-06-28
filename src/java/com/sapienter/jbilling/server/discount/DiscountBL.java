@@ -7,6 +7,10 @@ import com.sapienter.jbilling.server.discount.db.DiscountDTO;
 import com.sapienter.jbilling.server.discount.db.DiscountLineDAS;
 import com.sapienter.jbilling.server.discount.db.DiscountLineDTO;
 import com.sapienter.jbilling.server.discount.strategy.DiscountStrategyType;
+import com.sapienter.jbilling.server.metafields.MetaFieldBL;
+import com.sapienter.jbilling.server.metafields.MetaFieldValueWS;
+import com.sapienter.jbilling.server.metafields.MetaFieldWS;
+import com.sapienter.jbilling.server.metafields.db.MetaFieldValue;
 import com.sapienter.jbilling.server.pricing.util.AttributeUtils;
 import com.sapienter.jbilling.server.user.db.CompanyDAS;
 import com.sapienter.jbilling.server.user.db.CompanyDTO;
@@ -17,6 +21,7 @@ import com.sapienter.jbilling.server.util.db.InternationalDescriptionDTO;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -92,23 +97,28 @@ public class DiscountBL {
 
     public Integer createOrUpdate(DiscountWS discountWS, Integer languageId)
             throws SessionInternalError {
-
-        DiscountDTO discountDto = getCreateOrUpdateDTO(discountWS);
-
-        // check that period value is not left blank and that its a valid integer
-        validatePeriodValue(discountDto);
-        checkDiscountRateIsNotZero(discountDto);
-        checkDuplicateDiscountCode(discountDto);
-        checkDuplicateDiscountDescription(discountWS, discountDto);
-
-        discountDto.setLastUpdateDateTime(new Date());
-        discountDto = discountDas.save(discountDto);
-
-        for (InternationalDescriptionWS descriptionWS : discountWS.getDescriptions()) {
-            discountDto.setDescription(descriptionWS.getContent(), descriptionWS.getLanguageId());
-        }
-
-        return discountDto != null ? discountDto.getId() : null;
+    	try {
+	        DiscountDTO discountDto = getCreateOrUpdateDTO(discountWS);
+	
+	        // check that period value is not left blank and that its a valid integer
+	        validatePeriodValue(discountDto);
+	        checkDiscountRateIsNotZero(discountDto);
+	        checkDuplicateDiscountCode(discountDto);
+	        checkDuplicateDiscountDescription(discountWS, discountDto);
+	        
+	        discountDto.setLastUpdateDateTime(new Date());
+	        discountDto = discountDas.save(discountDto);
+	        discountDto.updateMetaFieldsWithValidation(discountDto.getEntityId(),null, discountDto);
+	        for (InternationalDescriptionWS descriptionWS : discountWS.getDescriptions()) {
+	            discountDto.setDescription(descriptionWS.getContent(), descriptionWS.getLanguageId());
+	        }
+	
+	        return discountDto != null ? discountDto.getId() : null;
+    	}catch(Exception e) {
+    		System.out.println("Exception "+e.getMessage());
+    		e.printStackTrace();
+    		return null;
+    	}
     }
 
     /**
@@ -264,6 +274,7 @@ public class DiscountBL {
         ws.setAttributes(new TreeMap<String, String>(dto.getAttributes()));
         ws.setDescription(dto.getDescription());
         ws.setEntityId(dto.getEntityId());
+        ws.setMetaFields(MetaFieldBL.convertMetaFieldsToWS(ws.getEntityId(), dto));
         return ws;
     }
 
@@ -279,6 +290,7 @@ public class DiscountBL {
         if (discountWs.getEntityId() != null) {
             discountDto.setEntity(new CompanyDTO(discountWs.getEntityId()));
         }
+        MetaFieldBL.fillMetaFieldsFromWS(discountWs.getEntityId(), discountDto, discountWs.getMetaFields());
         discountDto.setCode(discountWs.getCode());
         discountDto.setStartDate(discountWs.getStartDate());
         discountDto.setEndDate(discountWs.getEndDate());
@@ -286,9 +298,9 @@ public class DiscountBL {
         discountDto.setType(DiscountStrategyType.getByName(discountWs.getType()));
         discountDto.setAttributes(new TreeMap<String, String>(discountWs.getAttributes()));
         discountDto.setEntity(new CompanyDAS().find(discountWs.getEntityId()));
-
+        
         this.discount = discountDto;
-
+        
         return discountDto;
     }
 
@@ -303,7 +315,7 @@ public class DiscountBL {
             }
         }
     }
-
+    
     public Boolean isDeletable() {
         if (this.discount != null) {
             List<DiscountLineDTO> discountLines =

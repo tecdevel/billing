@@ -1,3 +1,5 @@
+package com.sapienter.jbilling.server.invoice;
+
 /*
  jBilling - The Enterprise Open Source Billing System
  Copyright (C) 2003-2011 Enterprise jBilling Software Ltd. and Emiliano Conde
@@ -20,9 +22,7 @@
  This source was modified by Web Data Technologies LLP (www.webdatatechnologies.in) since 15 Nov 2015.
 You may download the latest source from webdataconsulting.github.io.
 
- */
-
-package com.sapienter.jbilling.server.invoice;
+*/
 
 import com.sapienter.jbilling.common.FormatLogger;
 import com.sapienter.jbilling.common.SessionInternalError;
@@ -50,9 +50,9 @@ import com.sapienter.jbilling.server.user.ContactDTOEx;
 import com.sapienter.jbilling.server.user.EntityBL;
 import com.sapienter.jbilling.server.user.UserBL;
 import com.sapienter.jbilling.server.user.db.*;
-import com.sapienter.jbilling.server.util.ServerConstants;
 import com.sapienter.jbilling.server.util.Context;
 import com.sapienter.jbilling.server.util.PreferenceBL;
+import com.sapienter.jbilling.server.util.ServerConstants;
 import com.sapienter.jbilling.server.util.audit.EventLogger;
 import com.sapienter.jbilling.server.util.db.PreferenceDAS;
 import org.apache.commons.lang.StringUtils;
@@ -64,7 +64,6 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.*;
 
-;
 
 public class InvoiceBL extends ResultList implements Serializable, InvoiceSQL {
 

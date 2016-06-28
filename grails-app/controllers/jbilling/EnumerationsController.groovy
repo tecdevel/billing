@@ -25,7 +25,6 @@ class EnumerationsController {
     IWebServicesSessionBean webServicesSession
     def webServicesValidationAdvice
     def viewUtils
-    def recentItemService
     def breadcrumbService
 
     def index () {

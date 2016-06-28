@@ -2,6 +2,10 @@ package com.sapienter.jbilling.server.discount.db;
 
 import com.sapienter.jbilling.common.CommonConstants;
 import com.sapienter.jbilling.server.discount.strategy.DiscountStrategyType;
+import com.sapienter.jbilling.server.metafields.EntityType;
+import com.sapienter.jbilling.server.metafields.MetaContent;
+import com.sapienter.jbilling.server.metafields.MetaFieldHelper;
+import com.sapienter.jbilling.server.metafields.db.MetaFieldValue;
 import com.sapienter.jbilling.server.pricing.util.AttributeUtils;
 import com.sapienter.jbilling.server.user.db.CompanyDTO;
 import com.sapienter.jbilling.server.util.ServerConstants;
@@ -9,9 +13,9 @@ import com.sapienter.jbilling.server.util.csv.Exportable;
 import com.sapienter.jbilling.server.util.db.AbstractDescription;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.*;
-import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.MapKey;
 
+import javax.persistence.CascadeType;
 import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -29,7 +33,7 @@ import java.util.*;
 )
 @Table(name = "discount")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class DiscountDTO extends AbstractDescription implements Exportable {
+public class DiscountDTO extends AbstractDescription implements Exportable, MetaContent {
 
     private int id;
     private CompanyDTO entity;
@@ -39,6 +43,7 @@ public class DiscountDTO extends AbstractDescription implements Exportable {
     private Date startDate;
     private Date endDate;
     private SortedMap<String, String> attributes = new TreeMap<String, String>();
+    private List<MetaFieldValue> metaFields = new LinkedList<MetaFieldValue>();
 
     private Date lastUpdateDateTime;
 
@@ -55,6 +60,21 @@ public class DiscountDTO extends AbstractDescription implements Exportable {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+    @JoinTable(name = "discount_meta_field_map",
+            joinColumns = @JoinColumn(name = "discount_id"),
+            inverseJoinColumns = @JoinColumn(name = "meta_field_value_id"))
+    @Sort(type = SortType.COMPARATOR, comparator = MetaFieldHelper.MetaFieldValuesOrderComparator.class)
+    public List<MetaFieldValue> getMetaFields() {
+        return metaFields;
+    }
+
+    @Transient
+    public void setMetaFields(List<MetaFieldValue> fields) {
+        this.metaFields = fields;
     }
 
     @Column(name = "code")
@@ -108,7 +128,7 @@ public class DiscountDTO extends AbstractDescription implements Exportable {
     @MapKey(columns = @Column(name = "attribute_name", nullable = true, length = 255))
     @Column(name = "attribute_value", nullable = true, length = 255)
     @Sort(type = SortType.NATURAL)
-    @Cascade(value = {CascadeType.DELETE_ORPHAN, CascadeType.SAVE_UPDATE})
+    @Cascade(value = {org.hibernate.annotations.CascadeType.DELETE_ORPHAN, org.hibernate.annotations.CascadeType.SAVE_UPDATE})
     @Fetch(FetchMode.SELECT)
     public SortedMap<String, String> getAttributes() {
         return attributes;
@@ -211,6 +231,44 @@ public class DiscountDTO extends AbstractDescription implements Exportable {
         }
 
         return Boolean.FALSE;
+    }
+
+    /**
+     * MetaContent Methods
+     */
+    @Transient
+    public MetaFieldValue getMetaField(String name) {
+        return MetaFieldHelper.getMetaField(this, name);
+    }
+
+    @Transient
+    public MetaFieldValue getMetaField(String name, Integer groupId) {
+        return MetaFieldHelper.getMetaField(this, name, groupId);
+    }
+
+    @Transient
+    public MetaFieldValue getMetaField(Integer metaFieldNameId) {
+        return MetaFieldHelper.getMetaField(this, metaFieldNameId);
+    }
+
+    @Transient
+    public void setMetaField(MetaFieldValue field, Integer groupId) {
+        MetaFieldHelper.setMetaField(this, field, groupId);
+    }
+
+    @Transient
+    public void setMetaField(Integer entitId, Integer groupId, String name, Object value) throws IllegalArgumentException {
+        MetaFieldHelper.setMetaField(entitId, groupId, this, name, value);
+    }
+
+    @Transient
+    public void updateMetaFieldsWithValidation(Integer entitId, Integer accountTypeId, MetaContent dto) {
+        MetaFieldHelper.updateMetaFieldsWithValidation(entitId, accountTypeId, this, dto);
+    }
+
+    @Transient
+    public EntityType[] getCustomizedEntityType() {
+        return new EntityType[]{EntityType.DISCOUNT};
     }
 
     /**

@@ -47,7 +47,6 @@ class ContactTypeConfigController {
 
     def webServicesSession
     def viewUtils
-    def recentItemService
     def breadcrumbService
 
     def index () {

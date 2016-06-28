@@ -23,7 +23,7 @@ You may download the latest source from webdataconsulting.github.io.
  
   --}%
 
-<%@ page import="com.sapienter.jbilling.server.discount.strategy.DiscountStrategyType; com.sapienter.jbilling.server.util.db.LanguageDTO; org.apache.commons.lang.WordUtils; org.apache.commons.lang.StringUtils" %>
+<%@ page import="com.sapienter.jbilling.server.discount.strategy.DiscountStrategyType; com.sapienter.jbilling.server.util.db.LanguageDTO; org.apache.commons.lang.WordUtils; org.apache.commons.lang.StringUtils; com.sapienter.jbilling.server.util.db.EnumerationDTO; com.sapienter.jbilling.common.CommonConstants" %>
 <html>
 <head>
     <meta name="layout" content="main" />
@@ -132,6 +132,9 @@ You may download the latest source from webdataconsulting.github.io.
                             <g:textField class="field" name="discount.endDate"
                                          value="${formatDate(date: discount?.endDate, formatName:'datepicker.format')}" onblur="validateDate(this);" />
                         </g:applyLayout>
+                        
+                        <!-- meta fields -->
+                        <g:render template="/metaFields/editMetaFields" model="[ availableFields: availableFields, fieldValues: discount?.metaFields ]"/>
 
                     </div>
                     

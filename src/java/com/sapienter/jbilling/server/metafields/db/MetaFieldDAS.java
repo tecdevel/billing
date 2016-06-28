@@ -185,6 +185,9 @@ public class MetaFieldDAS extends AbstractDAS<MetaField> {
                 deleteEntitiesList.add(" order_line_meta_field_map ");
                 deleteEntitiesList.add(" order_change_meta_field_map ");
                 break;
+            case DISCOUNT:
+            	deleteEntitiesList.add(" discount_meta_field_map ");
+            	break;
         }
 
         String deleteFromSql = "delete from ";
@@ -250,6 +253,9 @@ public class MetaFieldDAS extends AbstractDAS<MetaField> {
            case ORDER_LINE:
                deleteEntitiesList.add(" order_line_meta_field_map where asset_id = " + id);
                break;
+           case DISCOUNT:
+        	   deleteEntitiesList.add(" discount_meta_field_map where discount_id = " + id);
+        	   break;
         }
         
         String deleteFromSql = "delete from ";
@@ -376,6 +382,9 @@ public class MetaFieldDAS extends AbstractDAS<MetaField> {
             case ORDER_LINE:
                 entityTypes.add(" order_line_meta_field_map ");
                 break;
+            case DISCOUNT:
+            	entityTypes.add(" discount_meta_field_map ");
+            	break;
             case PAYMENT_METHOD_TYPE:
 	        case PAYMENT_METHOD_TEMPLATE:
                 entityTypes.add(" payment_information_meta_fields_map ");

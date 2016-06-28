@@ -77,7 +77,6 @@ class InvoiceController {
     IWebServicesSessionBean webServicesSession
     def viewUtils
     def filterService
-    def recentItemService
     def breadcrumbService
     def subAccountService
 

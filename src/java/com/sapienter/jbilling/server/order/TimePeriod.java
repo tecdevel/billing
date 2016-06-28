@@ -32,9 +32,9 @@ import java.util.Calendar;
 
 /**
  * @author Emil
- *
  */
 public class TimePeriod {
+
     private Integer unitId = null;
     private Integer value = null;
     private Boolean df_fm = null;
@@ -112,8 +112,8 @@ public class TimePeriod {
     @Override
     public String toString() {
         return "TimePeriod{" +
-               "unitId=" + unitId +
-               ", value=" + value +
-               '}';
+                "unitId=" + unitId +
+                ", value=" + value +
+                '}';
     }
 }

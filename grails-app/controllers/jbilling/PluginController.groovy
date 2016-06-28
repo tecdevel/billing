@@ -57,7 +57,6 @@ class PluginController {
     PluginAwareResourceBundleMessageSource messageSource
     PluggableTaskDAS pluggableTaskDAS
     ViewUtils viewUtils
-    RecentItemService recentItemService;
     BreadcrumbService breadcrumbService;
     
     def index () {

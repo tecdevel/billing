@@ -64,7 +64,6 @@ class ReportController {
 	
     def viewUtils
     def filterService
-    def recentItemService
     def breadcrumbService
 
     def index () {
@@ -265,17 +264,19 @@ class ReportController {
 		}
 		
 		if(report.type.name  == 'user') {
-			if(StringUtils.isEmpty((params.start_year).trim()) || StringUtils.isEmpty((params.end_year).trim())) {
-				flash.error = message(code: 'report.start.end.year.not.blank')
-				render view: 'list', model: [types: types, reports: reports, selected: report, selectedTypeId: typeId]
-				return
+			if(params.file_name == 'total_invoiced_per_customer_over_years') {
+				if(StringUtils.isEmpty((params.start_year).trim()) || StringUtils.isEmpty((params.end_year).trim())) {
+					flash.error = message(code: 'report.start.end.year.not.blank')
+					render view: 'list', model: [types: types, reports: reports, selected: report, selectedTypeId: typeId]
+					return
+				}
 			}
 		}
 
         if (params.format) {
             // export to selected format
             def format = ReportExportFormat.valueOf(params.format)
-            def export = runner.export(format);
+            def export = runner.export(format)
             DownloadHelper.sendFile(response, export?.fileName, export?.contentType, export?.bytes)
 
         } else {

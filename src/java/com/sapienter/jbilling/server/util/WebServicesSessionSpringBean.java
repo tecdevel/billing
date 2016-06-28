@@ -1,3 +1,5 @@
+package com.sapienter.jbilling.server.util;
+
 /*
  jBilling - The Enterprise Open Source Billing System
  Copyright (C) 2003-2011 Enterprise jBilling Software Ltd. and Emiliano Conde
@@ -20,13 +22,7 @@
  This source was modified by Web Data Technologies LLP (www.webdatatechnologies.in) since 15 Nov 2015.
  You may download the latest source from webdataconsulting.github.io.
 
- */
-
-/*
- * Created on Jan 27, 2005
- * One session bean to expose as a single web service, thus, one wsdl
- */
-package com.sapienter.jbilling.server.util;
+*/
 
 import com.sapienter.jbilling.common.*;
 import com.sapienter.jbilling.server.item.*;
@@ -682,7 +678,7 @@ public class WebServicesSessionSpringBean implements IWebServicesSessionBean {
 		// Check if the payment owing user is from the same entity as the caller
 		// user.
 		Integer userId = payment.getOwningUserId();
-		UserDTO user = new UserDAS().find(userId);
+        UserDTO user = new UserDAS().find(userId);
 		if (null == user) {
 			LOG.debug("No owning user for payment id: %d", paymentId);
 			throw new SessionInternalError(
@@ -3623,18 +3619,18 @@ public class WebServicesSessionSpringBean implements IWebServicesSessionBean {
 			result = user.getUserTransitionsById(entityId, last, to);
 		} else {
 			result = user.getUserTransitionsByDate(entityId, from, to);
-		}
+        }
 
-		if (result == null) {
-			LOG.info("Data retrieved but resultset is null");
-		} else {
-			LOG.info("Data retrieved. Result size = %s", result.length);
+        if (result == null) {
+            LOG.info("Data retrieved but resultset is null");
+        } else {
+            LOG.info("Data retrieved. Result size = %s", result.length);
 		}
 
 		// Log the last value returned if there was any. This happens always,
 		// unless the returned array is empty.
 		if (result != null && result.length > 0) {
-			LOG.info("Registering transition list event");
+            LOG.info("Registering transition list event");
 			evLog.audit(callerId, null, ServerConstants.TABLE_EVENT_LOG, callerId,
 					EventLogger.MODULE_WEBSERVICES,
 					EventLogger.USER_TRANSITIONS_LIST,
@@ -4877,7 +4873,7 @@ public class WebServicesSessionSpringBean implements IWebServicesSessionBean {
 
 	@Transactional(readOnly = true)
 	public ItemTypeWS[] getAllItemCategories() {
-		return getAllItemCategoriesByEntityId(getCallerCompanyId());
+        return getAllItemCategoriesByEntityId(getCallerCompanyId());
 	}
 
 	public ValidatePurchaseWS validatePurchase(Integer userId, Integer itemId,
@@ -5074,7 +5070,7 @@ public class WebServicesSessionSpringBean implements IWebServicesSessionBean {
 	@Transactional(readOnly = true)
 	public boolean isBillingRunning(Integer entityId) {
 		IBillingProcessSessionBean processBean = Context
-				.getBean(Context.Name.BILLING_PROCESS_SESSION);
+                .getBean(Context.Name.BILLING_PROCESS_SESSION);
 		return processBean.isBillingRunning(entityId);
 	}
 
@@ -5084,8 +5080,8 @@ public class WebServicesSessionSpringBean implements IWebServicesSessionBean {
 			IBillingProcessSessionBean processBean = Context
 					.getBean(Context.Name.BILLING_PROCESS_SESSION);
 
-			public void run() {
-				processBean.trigger(runDate, companyId);
+            public void run() {
+                processBean.trigger(runDate, companyId);
 			}
 		});
 
@@ -5127,7 +5123,7 @@ public class WebServicesSessionSpringBean implements IWebServicesSessionBean {
 	public boolean isAgeingProcessRunning() {
 		IBillingProcessSessionBean processBean = Context
 				.getBean(Context.Name.BILLING_PROCESS_SESSION);
-		return processBean.isAgeingProcessRunning(getCallerCompanyId());
+        return processBean.isAgeingProcessRunning(getCallerCompanyId());
 	}
 
 	/**
@@ -5140,7 +5136,7 @@ public class WebServicesSessionSpringBean implements IWebServicesSessionBean {
 	public ProcessStatusWS getBillingProcessStatus() {
 		IBillingProcessSessionBean processBean = Context
 				.getBean(Context.Name.BILLING_PROCESS_SESSION);
-		return processBean.getBillingProcessStatus(getCallerCompanyId());
+        return processBean.getBillingProcessStatus(getCallerCompanyId());
 	}
 
 	/**
@@ -5156,7 +5152,7 @@ public class WebServicesSessionSpringBean implements IWebServicesSessionBean {
 	public ProcessStatusWS getAgeingProcessStatus() {
 		IBillingProcessSessionBean processBean = Context
 				.getBean(Context.Name.BILLING_PROCESS_SESSION);
-		return processBean.getAgeingProcessStatus(getCallerCompanyId());
+        return processBean.getAgeingProcessStatus(getCallerCompanyId());
 	}
 
 	@Transactional(readOnly = true)
@@ -5167,7 +5163,7 @@ public class WebServicesSessionSpringBean implements IWebServicesSessionBean {
 		BillingProcessConfigurationDTO configuration = processBean
 				.getConfigurationDto(getCallerCompanyId());
 
-		return ConfigurationBL.getWS(configuration);
+        return ConfigurationBL.getWS(configuration);
 	}
 
 	public Integer createUpdateBillingProcessConfiguration(
@@ -5216,7 +5212,7 @@ public class WebServicesSessionSpringBean implements IWebServicesSessionBean {
 	public void calculatePartnerCommissions() {
 		IUserSessionBean userSession = Context
 				.getBean(Context.Name.USER_SESSION);
-		userSession.calculatePartnerCommissions(getCallerCompanyId());
+        userSession.calculatePartnerCommissions(getCallerCompanyId());
 	}
 
 	/**
@@ -5256,7 +5252,7 @@ public class WebServicesSessionSpringBean implements IWebServicesSessionBean {
 	@Transactional(readOnly = true)
 	public CommissionProcessRunWS[] getAllCommissionRuns() {
 		List<CommissionProcessRunDTO> commissionProcessRuns = new CommissionProcessRunDAS()
-				.findAllByEntity(new CompanyDAS().find(getCallerCompanyId()));
+                .findAllByEntity(new CompanyDAS().find(getCallerCompanyId()));
 
 		if (commissionProcessRuns != null && commissionProcessRuns.size() > 0) {
 			CommissionProcessRunWS[] commissionProcessRunWSes = new CommissionProcessRunWS[commissionProcessRuns
@@ -5282,8 +5278,8 @@ public class WebServicesSessionSpringBean implements IWebServicesSessionBean {
 	@Transactional(readOnly = true)
 	public CommissionWS[] getCommissionsByProcessRunId(Integer processRunId) {
 		List<CommissionDTO> commissions = new CommissionDAS()
-				.findAllByProcessRun(
-						new CommissionProcessRunDAS().find(processRunId),
+                .findAllByProcessRun(
+                        new CommissionProcessRunDAS().find(processRunId),
 						getCallerCompanyId());
 
 		if (commissions != null && commissions.size() > 0) {
@@ -5312,8 +5308,8 @@ public class WebServicesSessionSpringBean implements IWebServicesSessionBean {
 	@Transactional(readOnly = true)
 	public Integer getLastBillingProcess() throws SessionInternalError {
 		IBillingProcessSessionBean processBean = Context
-				.getBean(Context.Name.BILLING_PROCESS_SESSION);
-		return processBean.getLast(getCallerCompanyId());
+                .getBean(Context.Name.BILLING_PROCESS_SESSION);
+        return processBean.getLast(getCallerCompanyId());
 	}
 
 	@Transactional(readOnly = true)
@@ -5343,7 +5339,7 @@ public class WebServicesSessionSpringBean implements IWebServicesSessionBean {
 		for (OrderProcessDTO process : invoice.getOrderProcesses())
 			ws.add(OrderBL.getOrderProcessWS(process));
 
-		return ws.toArray(new OrderProcessWS[ws.size()]);
+        return ws.toArray(new OrderProcessWS[ws.size()]);
 	}
 
 	@Transactional(readOnly = true)
@@ -5351,7 +5347,7 @@ public class WebServicesSessionSpringBean implements IWebServicesSessionBean {
 		IBillingProcessSessionBean processBean = Context
 				.getBean(Context.Name.BILLING_PROCESS_SESSION);
 		BillingProcessDTOEx dto = processBean.getReviewDto(
-				getCallerCompanyId(), getCallerLanguageId());
+                getCallerCompanyId(), getCallerLanguageId());
 
 		return BillingProcessBL.getWS(dto);
 	}
@@ -5848,7 +5844,7 @@ public class WebServicesSessionSpringBean implements IWebServicesSessionBean {
 
 	public Integer createPlugin(PluggableTaskWS plugin) {
 		Integer pluginId = new PluggableTaskBL().create(getCallerId(),
-				new PluggableTaskDTO(getCallerCompanyId(), plugin));
+                new PluggableTaskDTO(getCallerCompanyId(), plugin));
 
 		if (!com.sapienter.jbilling.common.Util
 				.getSysPropBooleanTrue(ServerConstants.PROPERTY_RUN_API_ONLY_BUT_NO_BATCH)) {
@@ -6135,7 +6131,7 @@ public class WebServicesSessionSpringBean implements IWebServicesSessionBean {
 	 */
 	@Transactional(readOnly = true)
 	public Integer[] getAssetsForCategory(Integer categoryId) {
-		return new AssetBL().getAssetsForCategory(categoryId);
+        return new AssetBL().getAssetsForCategory(categoryId);
 	}
 
 	/**
@@ -6146,7 +6142,7 @@ public class WebServicesSessionSpringBean implements IWebServicesSessionBean {
 	 */
 	@Transactional(readOnly = true)
 	public Integer[] getAssetsForItem(Integer itemId) {
-		return new AssetBL().getAssetsForItem(itemId);
+        return new AssetBL().getAssetsForItem(itemId);
 	}
 
 	/**
@@ -6246,7 +6242,7 @@ public class WebServicesSessionSpringBean implements IWebServicesSessionBean {
 	 * @return
 	 */
 	public AssetSearchResult findAssets(int productId, SearchCriteria criteria) {
-		return new AssetBL().findAssets(productId, criteria);
+        return new AssetBL().findAssets(productId, criteria);
 	}
 
 	/*
@@ -6465,7 +6461,7 @@ public class WebServicesSessionSpringBean implements IWebServicesSessionBean {
 		if (null == assetId || null == startDate || null == endDate)
 			return null;
 		List<OrderDTO> orders = (new AssetAssignmentBL())
-				.findOrdersForAssetAndDateRange(assetId, startDate, endDate);
+                .findOrdersForAssetAndDateRange(assetId, startDate, endDate);
 		Integer[] ids = new Integer[orders.size()];
 		for (int i = 0; i < orders.size(); i++) {
 			ids[i] = orders.get(i).getId();
@@ -6502,7 +6498,7 @@ public class WebServicesSessionSpringBean implements IWebServicesSessionBean {
 
 	public void updateMetaFieldGroup(MetaFieldGroupWS metafieldGroupWs) {
 		MetaFieldGroup mfGroup = MetaFieldGroupBL.getDTO(metafieldGroupWs);
-		mfGroup.setEntity(new CompanyDAS().find(getCallerCompanyId()));
+        mfGroup.setEntity(new CompanyDAS().find(getCallerCompanyId()));
 		new MetaFieldGroupBL().update(mfGroup);
 
 	}
@@ -6638,15 +6634,15 @@ public class WebServicesSessionSpringBean implements IWebServicesSessionBean {
 	@Transactional(readOnly = true)
 	public MetaFieldWS[] getMetaFieldsForEntity(String entityType) {
 		List<MetaField> metaFields = MetaFieldBL.getAvailableFieldsList(
-				getCallerCompanyId(),
-				new EntityType[] { EntityType.valueOf(entityType) });
+                getCallerCompanyId(),
+                new EntityType[] { EntityType.valueOf(entityType) });
 		return MetaFieldBL.convertMetaFieldsToWS(metaFields);
 	}
 
 	@Transactional(readOnly = true)
 	public MetaFieldGroupWS[] getMetaFieldGroupsForEntity(String entityType) {
 		List<MetaFieldGroup> metaFieldGroups = new MetaFieldGroupBL()
-				.getAvailableFieldGroups(getCallerCompanyId(),
+                .getAvailableFieldGroups(getCallerCompanyId(),
 						EntityType.valueOf(entityType));
 		return MetaFieldGroupBL.convertMetaFieldGroupsToWS(metaFieldGroups);
 	}
@@ -6728,7 +6724,7 @@ public class WebServicesSessionSpringBean implements IWebServicesSessionBean {
 	@Transactional(readOnly = true)
 	public OrderChangeStatusWS[] getOrderChangeStatusesForCompany() {
 		List<OrderChangeStatusDTO> statusDTOs = new OrderChangeStatusDAS()
-				.findOrderChangeStatuses(getCallerCompanyId());
+                .findOrderChangeStatuses(getCallerCompanyId());
 		List<OrderChangeStatusWS> results = new LinkedList<OrderChangeStatusWS>();
 		List<LanguageDTO> languages = new LanguageDAS().findAll();
 		for (OrderChangeStatusDTO status : statusDTOs) {
@@ -6780,7 +6776,7 @@ public class WebServicesSessionSpringBean implements IWebServicesSessionBean {
 				}
 				orderChangeStatusDTO.setDescription(desc.getContent(),
 						desc.getLanguageId());
-			}
+            }
 		}
 
 		return orderChangeStatusDTO.getId();
@@ -6972,9 +6968,9 @@ public class WebServicesSessionSpringBean implements IWebServicesSessionBean {
 		PaymentMethodTemplateDTO dto = das.findNow(templateId);
 
 		if (templateId == null || dto == null) {
-			return null;
-		}
-		return bl.getWS(dto, getCallerCompanyId());
+            return null;
+        }
+        return bl.getWS(dto, getCallerCompanyId());
 	}
 
 	/**
@@ -7000,7 +6996,7 @@ public class WebServicesSessionSpringBean implements IWebServicesSessionBean {
 		PaymentMethodTypeBL bl = new PaymentMethodTypeBL(paymentMethodType);
 
 		List<PaymentMethodTypeDTO> paymentMethodTypeDTOs = new PaymentMethodTypeDAS()
-				.findByMethodName(paymentMethodType.getMethodName().trim(),
+                .findByMethodName(paymentMethodType.getMethodName().trim(),
 						getCallerCompanyId());
 
 		if (paymentMethodTypeDTOs != null && paymentMethodTypeDTOs.size() > 0) {
@@ -7011,7 +7007,7 @@ public class WebServicesSessionSpringBean implements IWebServicesSessionBean {
 		}
 
 		PaymentMethodTypeDTO dto = bl.getDTO(getCallerCompanyId());
-		dto = bl.create(dto);
+        dto = bl.create(dto);
 
 		return dto.getId();
 	}
@@ -7245,7 +7241,7 @@ public class WebServicesSessionSpringBean implements IWebServicesSessionBean {
 	@Transactional(readOnly = true)
 	public PluggableTaskTypeCategoryWS getPluginTypeCategory(Integer id) {
 		PluggableTaskTypeCategoryDAS das = new PluggableTaskTypeCategoryDAS();
-		PluggableTaskTypeCategoryDTO dto = das.find(id);
+        PluggableTaskTypeCategoryDTO dto = das.find(id);
 		return PluggableTaskBL.getPluggableTaskTypeCategoryWS(dto);
 	}
 
@@ -7441,9 +7437,9 @@ public class WebServicesSessionSpringBean implements IWebServicesSessionBean {
 			metaFields.add(ws.clone());
 		}
 		clone.setMetaFields(metaFields.toArray(new MetaFieldValueWS[metaFields
-				.size()]));
+                .size()]));
 
-		clone.setTimelineDatesMap(user.getTimelineDatesMap());
+        clone.setTimelineDatesMap(user.getTimelineDatesMap());
 
 		return clone;
 	}
@@ -7460,7 +7456,7 @@ public class WebServicesSessionSpringBean implements IWebServicesSessionBean {
 	}
 
 	public AssetStatusDTOEx[] findAssetStatuses(String identifier) {
-		return new AssetBL().findAssetStatuses(identifier);
+        return new AssetBL().findAssetStatuses(identifier);
 	}
 
 	public AssetWS findAssetByProductCodeAndIdentifier(String productCode,
@@ -7575,7 +7571,7 @@ public class WebServicesSessionSpringBean implements IWebServicesSessionBean {
 			OrderPeriodDTO orderPeriodDto) {
 
 		Integer entityId = getCallerCompanyId();
-		Integer languageId = getCallerLanguageId();
+        Integer languageId = getCallerLanguageId();
 
 		OrderPeriodDAS periodDas = new OrderPeriodDAS();
 		List<OrderPeriodDTO> orderPeriods = periodDas.getOrderPeriods(entityId);
@@ -7613,11 +7609,11 @@ public class WebServicesSessionSpringBean implements IWebServicesSessionBean {
 			throw new SessionInternalError("Null parameter");
 		}
 
-		OrderDTO orderDto = new OrderDAS().find(order.getId());
+        OrderDTO orderDto = new OrderDAS().find(order.getId());
 
 		// Get Minimum Period start date of order for non-review records.
 		Date firstInvoicePeriodStartDate = new OrderProcessDAS()
-				.getFirstInvoicePeriodStartDateByOrderId(order.getId());
+                .getFirstInvoicePeriodStartDateByOrderId(order.getId());
 
 		if (null != firstInvoicePeriodStartDate
 				&& !firstInvoicePeriodStartDate.equals(order.getActiveSince())) {

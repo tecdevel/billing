@@ -3253,5 +3253,24 @@
     <changeSet author="Web Data" id="sqlFile-update_jbilling_seqs" context="post_base">
         <sqlFile path="sql/update_jbilling_seqs.sql"/>
     </changeSet>
+    
+    <changeSet id="Creating new table for discount meta fields" author="Mayur Mamoria" context="base">
+    	<createTable tableName="discount_meta_field_map">
+    		<column name="discount_id" type="java.sql.Types.INTEGER">
+    			<constraints primaryKey="true" />
+    		</column>
+    		<column name="meta_field_value_id" type="java.sql.Types.INTEGER">
+    			<constraints primaryKey="true" />
+    		</column>
+    	</createTable>
+    	<addForeignKeyConstraint constraintName="discount_meta_field_map_fk1" 
+    							 baseTableName="discount_meta_field_map" baseColumnNames="discount_id" 
+    							 referencedTableName="discount" referencedColumnNames="id" deferrable="false"  
+    							 onDelete="NO ACTION" onUpdate="NO ACTION" />
+    	<addForeignKeyConstraint constraintName="discount_meta_field_map_fk2" 
+    							 baseTableName="discount_meta_field_map" baseColumnNames="meta_field_value_id" 
+    							 referencedTableName="meta_field_value" referencedColumnNames="id" 
+    							 onDelete="NO ACTION" onUpdate="NO ACTION" />
+    </changeSet>
 
 </databaseChangeLog>

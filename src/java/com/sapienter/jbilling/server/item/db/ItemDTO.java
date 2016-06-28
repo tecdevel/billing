@@ -1,3 +1,5 @@
+package com.sapienter.jbilling.server.item.db;
+
 /*
  jBilling - The Enterprise Open Source Billing System
  Copyright (C) 2003-2011 Enterprise jBilling Software Ltd. and Emiliano Conde
@@ -22,26 +24,19 @@
 
  */
 
-package com.sapienter.jbilling.server.item.db;
-
-import com.sapienter.jbilling.common.CommonConstants;
-import com.sapienter.jbilling.server.item.ItemDependencyType;
-import com.sapienter.jbilling.server.metafields.MetaContent;
-import com.sapienter.jbilling.server.metafields.MetaFieldHelper;
-import com.sapienter.jbilling.server.metafields.EntityType;
-import com.sapienter.jbilling.server.metafields.db.MetaField;
 import com.sapienter.jbilling.server.invoice.db.InvoiceLineDTO;
+import com.sapienter.jbilling.server.item.ItemDependencyType;
 import com.sapienter.jbilling.server.metafields.EntityType;
 import com.sapienter.jbilling.server.metafields.MetaContent;
 import com.sapienter.jbilling.server.metafields.MetaFieldHelper;
+import com.sapienter.jbilling.server.metafields.db.MetaField;
 import com.sapienter.jbilling.server.metafields.db.MetaFieldValue;
-import com.sapienter.jbilling.server.user.db.AccountTypeDTO;
 import com.sapienter.jbilling.server.order.db.OrderLineDTO;
+import com.sapienter.jbilling.server.user.db.AccountTypeDTO;
 import com.sapienter.jbilling.server.user.db.CompanyDTO;
 import com.sapienter.jbilling.server.util.ServerConstants;
 import com.sapienter.jbilling.server.util.csv.Exportable;
 import com.sapienter.jbilling.server.util.db.AbstractDescription;
-
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.*;
 
@@ -50,7 +45,6 @@ import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
-
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;

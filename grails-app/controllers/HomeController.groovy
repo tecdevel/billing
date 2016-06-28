@@ -35,7 +35,6 @@ import jbilling.Breadcrumb
  */
 class HomeController {
 	static scope = "prototype"
-    def recentItemService
     def breadcrumbService
 
     @Secured(["isAuthenticated()"])

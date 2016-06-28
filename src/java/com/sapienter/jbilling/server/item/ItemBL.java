@@ -24,53 +24,25 @@
 
 package com.sapienter.jbilling.server.item;
 
-import java.math.BigDecimal;
-
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.TreeMap;
-import com.sapienter.jbilling.common.Util;
-import com.sapienter.jbilling.server.metafields.EntityType;
-import com.sapienter.jbilling.server.item.db.*;
-import org.apache.commons.lang.ArrayUtils;
-;
-
 import com.sapienter.jbilling.common.CommonConstants;
-import com.sapienter.jbilling.server.account.AccountTypeBL;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-
 import com.sapienter.jbilling.common.FormatLogger;
 import com.sapienter.jbilling.common.SessionInternalError;
-import com.sapienter.jbilling.server.item.db.ItemDAS;
-import com.sapienter.jbilling.server.item.db.ItemDTO;
-import com.sapienter.jbilling.server.item.db.ItemPriceDAS;
-import com.sapienter.jbilling.server.item.db.ItemPriceDTO;
-import com.sapienter.jbilling.server.item.db.ItemTypeDTO;
+import com.sapienter.jbilling.common.Util;
+import com.sapienter.jbilling.server.account.AccountTypeBL;
+import com.sapienter.jbilling.server.item.db.*;
 import com.sapienter.jbilling.server.item.event.ItemDeletedEvent;
 import com.sapienter.jbilling.server.item.event.ItemUpdatedEvent;
 import com.sapienter.jbilling.server.item.event.NewItemEvent;
-import com.sapienter.jbilling.server.item.tasks.PricingResult;
-import com.sapienter.jbilling.server.pricing.tasks.IPricing;
 import com.sapienter.jbilling.server.metafields.MetaFieldBL;
 import com.sapienter.jbilling.server.metafields.MetaFieldValueWS;
 import com.sapienter.jbilling.server.metafields.MetaFieldWS;
 import com.sapienter.jbilling.server.metafields.db.MetaField;
-import com.sapienter.jbilling.server.order.Usage;
 import com.sapienter.jbilling.server.order.db.OrderDTO;
 import com.sapienter.jbilling.server.order.db.OrderLineDAS;
 import com.sapienter.jbilling.server.order.db.OrderLineDTO;
 import com.sapienter.jbilling.server.pluggableTask.admin.PluggableTaskManager;
 import com.sapienter.jbilling.server.pricing.PricingContext;
+import com.sapienter.jbilling.server.pricing.tasks.IPricing;
 import com.sapienter.jbilling.server.system.event.EventManager;
 import com.sapienter.jbilling.server.user.EntityBL;
 import com.sapienter.jbilling.server.user.UserBL;
@@ -78,13 +50,12 @@ import com.sapienter.jbilling.server.user.db.AccountTypeDTO;
 import com.sapienter.jbilling.server.user.db.CompanyDAS;
 import com.sapienter.jbilling.server.user.db.CompanyDTO;
 import com.sapienter.jbilling.server.user.db.UserDAS;
-import com.sapienter.jbilling.server.util.ServerConstants;
 import com.sapienter.jbilling.server.util.Context;
 import com.sapienter.jbilling.server.util.PreferenceBL;
+import com.sapienter.jbilling.server.util.ServerConstants;
 import com.sapienter.jbilling.server.util.audit.EventLogger;
 import com.sapienter.jbilling.server.util.db.CurrencyDAS;
 import com.sapienter.jbilling.server.util.db.CurrencyDTO;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springmodules.cache.CachingModel;
@@ -93,7 +64,8 @@ import org.springmodules.cache.provider.CacheProviderFacade;
 
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.stream.Collectors;
+
+;
 
 public class ItemBL {
 

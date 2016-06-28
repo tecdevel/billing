@@ -1,3 +1,5 @@
+package com.sapienter.jbilling.server.order.event;
+
 /*
  jBilling - The Enterprise Open Source Billing System
  Copyright (C) 2003-2011 Enterprise jBilling Software Ltd. and Emiliano Conde
@@ -21,7 +23,6 @@
 You may download the latest source from webdataconsulting.github.io.
 
  */
-package com.sapienter.jbilling.server.order.event;
 
 import com.sapienter.jbilling.server.order.db.OrderDTO;
 import com.sapienter.jbilling.server.system.event.Event;
@@ -30,29 +31,29 @@ import com.sapienter.jbilling.server.system.event.Event;
  * This event is triggered when an new active until is entered in an order that
  * is before (smaller) than the next invoice date. This is, the order is being
  * cancelled for a date that has been already invoiced.
- * 
+ *
  * @author emilc
- * 
  */
 public class PeriodCancelledEvent implements Event {
 
     private final Integer entityId;
     private final Integer executorId;
     private final OrderDTO order;
-    
+
     public PeriodCancelledEvent(OrderDTO order, Integer entityId, Integer executorId) {
         this.entityId = entityId;
         this.order = order;
         this.executorId = executorId;
     }
+
     public Integer getEntityId() {
         return entityId;
     }
-    
+
     public Integer getExecutorId() {
         return executorId;
     }
-    
+
     public OrderDTO getOrder() {
         return order;
     }
@@ -60,7 +61,7 @@ public class PeriodCancelledEvent implements Event {
     public String getName() {
         return "Perdiod Cancelled Event - entity " + entityId;
     }
-    
+
     public String toString() {
         return getName() + " - entity " + entityId;
     }
