@@ -65,6 +65,7 @@
     <g:layoutHead/>
     <style>
     	.list li img{
+    		width:10px;
     		float:right;!important
     	}
     </style>
@@ -122,10 +123,10 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		$("#process-false").each(function() {
-			 $("div #process-false").append('<img src="${resource(dir:'images', file:'cross.png')}" />');
+			 $("div #process-false").append('<img src="${resource(dir:'images', file:'icon_red.png')}" />');
 		});
 		$("#process-true").each(function() {
-			$("div #process-true").append('<img src="${resource(dir:'images', file:'icon007.png')}" />');
+			$("div #process-true").append('<img src="${resource(dir:'images', file:'icon_green.png')}" />');
 		});
 	});
 </script>
