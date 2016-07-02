@@ -320,6 +320,10 @@ public class Util {
         return retValue;
     }
 
+    public static String getBaseDir() {
+        return Util.getSysProp("base_dir");
+    }
+
     public static String getSysProp(String key) {
         try {
             return SystemProperties.getSystemProperties().get(key);

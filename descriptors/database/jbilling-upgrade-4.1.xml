@@ -1334,7 +1334,7 @@
         </insert>
 
         <addColumn tableName="item_price">
-            <column defaultValueDate="1970-01-01" name="start_date" type="java.sql.Types.TIMESTAMP">
+            <column defaultValueDate="1970-01-01 00:00:00" name="start_date" type="java.sql.Types.TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
         </addColumn>
@@ -1456,7 +1456,7 @@
     	</addColumn>
     	
         <insert tableName="language">
-            <column name="id" valueNumeric="(select max(l.id)+1 from language l)"/>
+            <column name="id" valueComputed="(select max(l.id)+1 from language l)"/>
             <column name="code" value="hi"/>
             <column name="description" value="Hindi"/>
         </insert>
@@ -2354,7 +2354,7 @@
     
     <changeSet author="Manisha Gupta" id="Chinese Translation Texts" context="base">
         <insert tableName="language">
-            <column name="id" valueNumeric="(select max(l.id)+1 from language l)"/>
+            <column name="id" valueComputed="(select max(l.id)+1 from language l)"/>
             <column name="code" value="zh"/>
             <column name="description" value="Chinese"/>
         </insert>
