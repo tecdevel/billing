@@ -1914,7 +1914,6 @@ public class UserBL extends ResultList {
         userWS.setMainRoleId(dto.getMainRoleId());
         userWS.setLanguage(dto.getLanguageStr());
         userWS.setStatus(dto.getStatusStr());
-        userWS.setRole(dto.getMainRoleStr());
         userWS.setStatusId(dto.getStatusId());
         userWS.setSubscriberStatusId(dto.getSubscriptionStatusId());
 

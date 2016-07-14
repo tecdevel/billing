@@ -246,9 +246,16 @@ class Filter implements Serializable {
                     return Restrictions.isNotNull(field)
                 }
                 break
+
             case FilterConstraint.IN:
                 if(stringValue){
-                    return Restrictions.in(field, stringValue.split(',').collect {Integer.parseInt(it)})
+                    if(stringValue.contains(",")){
+                        String values = stringValue.replaceAll("\\s+","")
+                        return Restrictions.in(field, values.split(',').collect {Integer.parseInt(it)})
+                    }else{
+                        String values = stringValue.replaceAll("\\s+",",")
+                        return Restrictions.in(field, values.split(',').collect {Integer.parseInt(it)})
+                    }
                 }
                 break
         }

@@ -39,7 +39,7 @@ class FilterFactory {
 
     static baseFilters = ([
         ALL: [
-            new Filter(type: FilterType.ALL, constraintType: FilterConstraint.EQ, field: 'id', template: 'id', visible: true)
+            new Filter(type: FilterType.ALL, constraintType: FilterConstraint.IN, field: 'id', template: 'id', visible: true)
         ],
         INVOICE: [
             new Filter(type: FilterType.INVOICE, constraintType: FilterConstraint.DATE_BETWEEN, field: 'dueDate', template: 'date', visible: true),

@@ -142,24 +142,14 @@ You may download the latest source from webdataconsulting.github.io.
 	                            <g:else>
 	                                <g:userStatus name="user.statusId" value="${user?.statusId}" languageId="${session['language_id']}" />
 	                            </g:else>
-	                            <g:if test="${params.id}">
-	                                <g:userStatus name="user.statusId" value="${user?.statusId}" languageId="${session['language_id']}" disabled="true"/>
-	                            </g:if>
-	                            <g:else>
-	                                <g:userStatus name="user.statusId" value="${user?.statusId}" languageId="${session['language_id']}"
-																								 disabled="true"/>
-	                            </g:else>
-	                            <g:hiddenField name="user.statusId" value="${user?.statusId}"/>
-                        </g:applyLayout>
+	                    </g:applyLayout>
 
                         <g:applyLayout name="form/select">
                             <content tag="label"><g:message code="prompt.user.language"/></content>
                             <content tag="label.for">user.languageId</content>
 	                            <g:select name="user.languageId" from="${LanguageDTO.list()}"
 	                                    optionKey="id" optionValue="description" value="${user?.languageId}" />
-	                            <g:select name="user.languageId" from="${LanguageDTO.list()}"
-	                                    optionKey="id" optionValue="description" value="${user?.languageId}" disabled="true"/>
-                        </g:applyLayout>
+	                    </g:applyLayout>
 
                         <g:applyLayout name="form/select">
                             <content tag="label"><g:message code="prompt.user.role"/></content>
@@ -170,12 +160,7 @@ You may download the latest source from webdataconsulting.github.io.
                                       optionKey="roleTypeId"
                                       optionValue="${{ it.getTitle(session['language_id']) }}"
                                       value="${user?.mainRoleId}"/>
-	                            <g:select name="user.mainRoleId"
-                                      from="${roles}"
-                                      optionKey="roleTypeId"
-                                      optionValue="${{ it.getTitle(session['language_id']) }}"
-                                      value="${user?.mainRoleId}" disabled="true"/>
-								<g:hiddenField name="user.mainRoleId" value="${user?.mainRoleId}"/>
+								<g:hiddenField name="user.role" value="${user?.role}"/>
                         </g:applyLayout>
                         <g:set var="isReadOnly" value="true"/>
                             <g:set var="isReadOnly" value="false"/>
