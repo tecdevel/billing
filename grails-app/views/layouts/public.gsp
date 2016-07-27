@@ -42,22 +42,9 @@
         <g:layoutHead/>
         <r:layoutResources/>
     </head>
-    <body>
-        <div id="wrapper">
-            <!-- header -->
-            <div id="header">
-                <h1><a href="${resource(dir:'')}"></a></h1>
-            </div>
-            <div id="navigation">
-                <ul></ul>
-            </div>
-
-            <!-- content -->
-            <div id="main">
-                <g:layoutBody />
-            </div>
-        </div>
-        <div id="footer">
+    <body class="login">
+        <g:layoutBody />
+        <div id="" class="copyright">
 			Web Data Technologies LLP - Version - <g:meta name="app.version"/>
 		</div>
         <r:layoutResources/>

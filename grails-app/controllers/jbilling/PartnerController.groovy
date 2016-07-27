@@ -23,41 +23,32 @@
  */
 
 package jbilling
-
+import com.sapienter.jbilling.client.ViewUtils
+import com.sapienter.jbilling.client.user.UserHelper
 import com.sapienter.jbilling.client.util.ClientConstants
 import com.sapienter.jbilling.client.util.DownloadHelper
+import com.sapienter.jbilling.client.util.SortableCriteria
+import com.sapienter.jbilling.common.SessionInternalError
+import com.sapienter.jbilling.server.metafields.EntityType
+import com.sapienter.jbilling.server.metafields.MetaFieldBL
 import com.sapienter.jbilling.server.user.UserBL
+import com.sapienter.jbilling.server.user.UserWS
+import com.sapienter.jbilling.server.user.contact.db.ContactDTO
+import com.sapienter.jbilling.server.user.db.CompanyDTO
+import com.sapienter.jbilling.server.user.db.UserDTO
+import com.sapienter.jbilling.server.user.db.UserStatusDTO
+import com.sapienter.jbilling.server.user.partner.PartnerWS
+import com.sapienter.jbilling.server.user.partner.db.*
 import com.sapienter.jbilling.server.user.partner.validator.PartnerCommissionsValidator
-import com.sapienter.jbilling.server.user.partner.db.CommissionDAS
-import com.sapienter.jbilling.server.user.partner.db.CommissionDTO
-import com.sapienter.jbilling.server.user.partner.db.CommissionProcessRunDTO
-import com.sapienter.jbilling.server.user.partner.db.CommissionProcessRunDAS
-import com.sapienter.jbilling.server.user.partner.db.InvoiceCommissionDAS
+import com.sapienter.jbilling.server.util.IWebServicesSessionBean
 import com.sapienter.jbilling.server.util.PreferenceBL
 import com.sapienter.jbilling.server.util.csv.CsvExporter
 import com.sapienter.jbilling.server.util.csv.Exporter
 import grails.converters.JSON
+import grails.plugin.springsecurity.annotation.Secured
 import org.codehaus.groovy.grails.web.servlet.mvc.GrailsParameterMap
 import org.hibernate.criterion.MatchMode
 import org.hibernate.criterion.Restrictions
-import grails.plugin.springsecurity.annotation.Secured
-import com.sapienter.jbilling.client.ViewUtils
-import com.sapienter.jbilling.client.user.UserHelper
-import com.sapienter.jbilling.client.util.SortableCriteria
-import com.sapienter.jbilling.common.SessionInternalError
-import com.sapienter.jbilling.server.user.UserWS
-import com.sapienter.jbilling.server.user.contact.db.ContactDTO
-import com.sapienter.jbilling.server.user.db.CompanyDTO
-import com.sapienter.jbilling.server.user.partner.PartnerWS
-import com.sapienter.jbilling.server.user.partner.db.PartnerDTO
-import com.sapienter.jbilling.server.user.db.UserDTO
-import com.sapienter.jbilling.server.user.db.UserStatusDTO
-import com.sapienter.jbilling.server.util.ServerConstants
-import com.sapienter.jbilling.server.util.IWebServicesSessionBean
-import grails.plugin.springsecurity.SpringSecurityUtils
-import com.sapienter.jbilling.server.metafields.MetaFieldBL
-import com.sapienter.jbilling.server.metafields.EntityType
-
 
 @Secured(["isAuthenticated()"])
 class PartnerController {
@@ -74,7 +65,6 @@ class PartnerController {
     ViewUtils viewUtils
 
     def filterService
-    def recentItemService
     def breadcrumbService
     def springSecurityService
 

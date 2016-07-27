@@ -92,8 +92,8 @@ update jbilling_seqs set next_id=coalesce((select round(max(id)/100)+1 from matc
 update jbilling_seqs set next_id=coalesce((select round(max(id)/100)+1 from route), 1) where name='route';
 update jbilling_seqs set next_id=coalesce((select round(max(id)/100)+1 from order_change_type), 1) where name='order_change_type';
 update jbilling_seqs set next_id=coalesce((select round(max(id)/100)+1 from pluggable_task_type), 1) where name='pluggable_task_type';
-update jbilling_seqs set next_id=coalesce((select round(max(id)/100)+1 from breadcrumb), 1) where name='breadcrumb';
+update jbilling_seqs set next_id=coalesce((select round(max(id)/1)+1 from breadcrumb), 1) where name='breadcrumb';
 update jbilling_seqs set next_id=coalesce((select round(max(id)/10)+1 from item_type), 1) where name='item_type';
-update jbilling_seqs set next_id=coalesce((select round(max(id)/10)+1 from item), 1) where name='item';
+update jbilling_seqs set next_id=coalesce((select round(max(id)/100)+1 from item), 1) where name='item';
 update jbilling_seqs set next_id=coalesce((select round(max(id)/10)+1 from mediation_cfg), 1) where name='mediation_cfg';
 update jbilling_seqs set next_id=coalesce((select round(max(id)/1000)+1 from event_log), 1) where name='event_log';

@@ -78,6 +78,7 @@ class InvoiceController {
     def viewUtils
     def filterService
     def breadcrumbService
+    def recentItemService
     def subAccountService
 
     def auditBL
@@ -388,7 +389,6 @@ class InvoiceController {
             redirect(action: 'list')
             return
         }
-        recentItemService.addRecentItem(invoice.id, RecentItemType.INVOICE)
         breadcrumbService.addBreadcrumb(controllerName, 'list', null, invoice.id, invoice.number)
 
         InvoiceBL invoiceBl = new InvoiceBL((InvoiceDTO)invoice);

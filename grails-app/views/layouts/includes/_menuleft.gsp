@@ -68,27 +68,20 @@
     		width:10px;
     		float:right;!important
     	}
+    	.process-true, .process-false{
+    	    margin: 5px 0 0 10px;
+    	    float:left;
+    	}
     </style>
 </head>
-<body>
+<body class="page-sidebar-closed">
 <div id="wrapper">
     <g:render template="/layouts/includes/header"/>
 
-    <div id="main">
-        <g:render template="/layouts/includes/breadcrumbs"/>
-
+    <div id="main" style="padding:10px 0 0 0">
         <div id="left-column">
             <!-- configuration menu -->
-            <div class="menu-items">
-                <g:render template="${menuContent}"/>
-            </div>
 
-            <!-- shortcuts -->
-            <!-- <g:render template="/layouts/includes/shortcuts"/> -->
-            <inc:include controller="shortcut" action="index"/>
-            
-            <!-- recently viewed items -->
-            <g:render template="/layouts/includes/recent"/>
         </div>
 
         <!-- content columns -->
@@ -118,18 +111,17 @@
         </div>
     </div>
 </div>
-
+<div class="footer footer1">
+    <div class="footer-inner">
+         Web Data Technologies LLP - Version - community-4.1.2
+    </div>
+    <div class="footer-tools">
+        <span class="go-top">
+        <i class="fa fa-angle-up"></i>
+        </span>
+    </div>
+</div>
 <r:layoutResources/>
-<script type="text/javascript">
-	$(document).ready(function() {
-		$("#process-false").each(function() {
-			 $("div #process-false").append('<img src="${resource(dir:'images', file:'icon_red.png')}" />');
-		});
-		$("#process-true").each(function() {
-			$("div #process-true").append('<img src="${resource(dir:'images', file:'icon_green.png')}" />');
-		});
-	});
-</script>
 </body>
 
 </html>

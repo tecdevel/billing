@@ -452,7 +452,6 @@ class PluginController {
         PluggableTaskDTO dto =  pluggableTaskDAS.find(params.id as Integer);
         if (dto != null) {
             breadcrumbService.addBreadcrumb("plugin", "edit", null, dto.getId());
-            recentItemService.addRecentItem(dto.getId(), RecentItemType.PLUGIN);
             PluggableTaskTypeCategoryDTO category =  dto.getType().getCategory();
             render (view: "form", model:
                     [description: category.getDescription(session.language_id),

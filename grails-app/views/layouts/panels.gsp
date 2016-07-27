@@ -72,12 +72,11 @@ You may download the latest source from webdataconsulting.github.io.
     <r:layoutResources/>
     <g:layoutHead/>
 </head>
-<body>
+<body class="page-sidebar-closed">
 <div id="wrapper">
     <g:render template="/layouts/includes/header"/>
 
     <div id="main">
-        <g:render template="/layouts/includes/breadcrumbs"/>
 
         <div id="left-column">
             <!-- filters -->
@@ -93,22 +92,7 @@ You may download the latest source from webdataconsulting.github.io.
 
                 <g:render template="/layouts/includes/filterSaveDialog"/>
             </g:if>
-             <g:else>
-                 <g:if test="${isFromConfiguration}">
-            	 <div class="menu-items">
-	                <g:render template="/layouts/includes/configMenu"/>
-	            </div>
-	           </g:if>
-            </g:else>
 
-            <!-- shortcuts -->
-            <g:if test="${session['shortcuts']}">
-                <g:render template="/layouts/includes/shortcuts"/>
-                <inc:include controller="shortcut" action="index"/>
-            </g:if>
-
-            <!-- recently viewed items -->
-            <g:render template="/layouts/includes/recent"/>
         </div>
 
 
@@ -139,7 +123,16 @@ You may download the latest source from webdataconsulting.github.io.
         </div>
     </div>
 </div>
-
+<div class="footer footer1">
+    <div class="footer-inner">
+         Web Data Technologies LLP - Version - community-4.1.2
+    </div>
+    <div class="footer-tools">
+        <span class="go-top">
+        <i class="fa fa-angle-up"></i>
+        </span>
+    </div>
+</div>
 <r:layoutResources/>
 
 </body>

@@ -35,12 +35,11 @@ You may download the latest source from webdataconsulting.github.io.
     <g:layoutHead/>
     <r:layoutResources/>
 </head>
-<body>
+<body class="page-sidebar-closed">
 <div id="wrapper">
     <g:render template="/layouts/includes/header"/>
 
     <div id="main">
-        <g:render template="/layouts/includes/breadcrumbs"/>
 
         <!-- optional top section -->
         <g:if test="${pageProperty(name: 'page.top')}">

@@ -30,7 +30,7 @@ You may download the latest source from webdataconsulting.github.io.
   @since  12-Feb-2012
 --%>
 
-<div id="error-messages" class="msg-box error" style="display: none;">
+<div id="error-messages" class="alert alert-danger" style="display: none;">
     <img src="${resource(dir:'images', file:'icon14.gif')}" alt="${message(code:'error.icon.alt',default:'Error')}"/>
     <strong><g:message code="flash.error.title"/></strong>
     <ul></ul>

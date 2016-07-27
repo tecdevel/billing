@@ -34,6 +34,27 @@ You may download the latest source from webdataconsulting.github.io.
 
 <title><g:layoutTitle default="jBilling" /></title>
 
+<!-- BEGIN GLOBAL MANDATORY STYLES -->
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="${resource(dir:'assets/plugins/font-awesome/css', file:'font-awesome.min.css')}" />
+    <link rel="stylesheet" type="text/css" href="${resource(dir:'assets/plugins/simple-line-icons', file:'simple-line-icons.min.css')}" />
+    <link rel="stylesheet" type="text/css" href="${resource(dir:'assets/plugins/bootstrap/css', file:'bootstrap.min.css')}" />
+    <link rel="stylesheet" type="text/css" href="${resource(dir:'assets/plugins/uniform/css', file:'uniform.default.css')}" />
+    <link rel="stylesheet" type="text/css" href="${resource(dir:'assets/plugins/fullcalendar/fullcalendar', file:'fullcalendar.css')}" />
+    <link rel="stylesheet" type="text/css" href="${resource(dir:'assets/plugins/bootstrap-datepicker/css', file:'datepicker.css')}" />
+<!-- END GLOBAL MANDATORY STYLES -->
+
+<link rel="stylesheet" type="text/css" href="${resource(dir:'assets/plugins/datatables/plugins/bootstrap', file:'dataTables.bootstrap.css')}" />
+
+<!-- BEGIN THEME STYLES -->
+    <link rel="stylesheet" type="text/css" href="${resource(dir:'assets/css', file:'style-conquer.css')}" />
+    <link rel="stylesheet" type="text/css" href="${resource(dir:'assets/css', file:'style.css')}" />
+    <link rel="stylesheet" type="text/css" href="${resource(dir:'assets/css', file:'style-responsive.css')}" />
+    <link rel="stylesheet" type="text/css" href="${resource(dir:'assets/css', file:'plugins.css')}" />
+    <link rel="stylesheet" type="text/css" href="${resource(dir:'assets/css/themes', file:'default.css')}" />
+    <link rel="stylesheet" type="text/css" href="${resource(dir:'assets/css', file:'custom.css')}" />
+<!-- END THEME STYLES -->
+
 <link rel="shortcut icon" href="${resource(dir:'images', file:'favicon.ico')}" type="image/x-icon" />
 
 <r:require modules="jquery, core, ui, input"/>
@@ -90,3 +111,33 @@ You may download the latest source from webdataconsulting.github.io.
         });
     })
 </r:script>
+
+<!-- BEGIN CORE PLUGINS -->
+    <script src="${resource(dir:'assets/plugins', file:'jquery-1.11.0.min.js')}" type="text/javascript"></script>
+    <script src="${resource(dir:'assets/plugins', file:'jquery-migrate-1.2.1.min.js')}" type="text/javascript"></script>
+    <!-- IMPORTANT! Load jquery-ui-1.10.3.custom.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
+    <script src="${resource(dir:'assets/plugins/jquery-ui', file:'jquery-ui-1.10.3.custom.min.js')}" type="text/javascript"></script>
+    <script src="${resource(dir:'assets/plugins/bootstrap/js', file:'bootstrap.min.js')}" type="text/javascript"></script>
+    <script src="${resource(dir:'assets/plugins/bootstrap-hover-dropdown', file:'bootstrap-hover-dropdown.min.js')}" type="text/javascript"></script>
+    <script src="${resource(dir:'assets/plugins/jquery-slimscroll', file:'jquery.slimscroll.min.js')}" type="text/javascript"></script>
+    <script src="${resource(dir:'assets/plugins', file:'jquery.blockui.min.js')}" type="text/javascript"></script>
+    <script src="${resource(dir:'assets/plugins/uniform', file:'jquery.uniform.min.js')}" type="text/javascript"></script>
+    <script src="${resource(dir:'assets/plugins/fullcalendar/fullcalendar', file:'fullcalendar.min.js')}" type="text/javascript"></script>
+    <script src="${resource(dir:'assets/plugins/bootstrap-datepicker/js', file:'bootstrap-datepicker.js')}" type="text/javascript"></script>
+<!-- END CORE PLUGINS -->
+
+<script src="${resource(dir:'assets/plugins/bootstrap-maxlength', file:'bootstrap-maxlength.min.js')}" type="text/javascript"></script>
+<script src="${resource(dir:'assets/plugins/bootstrap-touchspin', file:'bootstrap.touchspin.js')}" type="text/javascript"></script>
+<script src="${resource(dir:'assets/plugins/typeahead', file:'handlebars.min.js')}" type="text/javascript"></script>
+<script src="${resource(dir:'assets/plugins/typeahead', file:'typeahead.bundle.min.js')}" type="text/javascript"></script>
+
+<script src="${resource(dir:'assets/scripts', file:'app.js')}" type="text/javascript"></script>
+<script src="${resource(dir:'assets/scripts', file:'form-components.js')}" type="text/javascript"></script>
+
+<script>
+    jQuery(document).ready(function() {
+       // initiate layout and plugins
+       App.init();
+       FormComponents.init();
+    });
+</script>

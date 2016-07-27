@@ -44,6 +44,13 @@ You may download the latest source from webdataconsulting.github.io.
 
     <content tag="column1">
        <g:render template="allTemplate" />
+       <script src="${resource(dir:'assets/plugins/datatables/media/js', file:'jquery.dataTables.min.js')}" type="text/javascript"></script>
+       <script src="${resource(dir:'assets/plugins/datatables/extensions/TableTools/js', file:'dataTables.tableTools.min.js')}" type="text/javascript"></script>
+       <script>
+           $(document).ready(function() {
+               $('#example').DataTable();
+           } );
+       </script>
     </content>
 
     <content tag="column2">

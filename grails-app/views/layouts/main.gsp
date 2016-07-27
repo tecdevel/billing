@@ -34,15 +34,15 @@
     <r:layoutResources/>
     <g:layoutHead/>
 </head>
-<body>
+<body class="page-sidebar-closed">
 <div id="wrapper">
     <g:render template="/layouts/includes/header"/>
 
-    <div id="main">
-        <g:render template="/layouts/includes/breadcrumbs"/>
-        <g:render template="/layouts/includes/messages"/>
-        <g:render template="/layouts/includes/errors"/>
-        <g:layoutBody />
+
+                    <g:layoutBody />
+                </div>
+            </div>
+        </div>
     </div>
 
 </div>
@@ -50,4 +50,5 @@
 <r:layoutResources/>
 
 </body>
+
 </html>

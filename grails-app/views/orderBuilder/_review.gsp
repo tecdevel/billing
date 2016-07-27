@@ -76,7 +76,7 @@
     </div>
 
     <!-- order header -->
-    <div class="header">
+    <div class="header" style="background-color:white">
         <div class="column">
             <h1><g:message code="order.review.id" args="${[order?.id > 0 ? order.id : '']}"/></h1>
             <h3>

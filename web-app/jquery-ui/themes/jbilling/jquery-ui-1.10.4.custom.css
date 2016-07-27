@@ -415,7 +415,7 @@ button.ui-button::-moz-focus-inner {
     background: url(/images/theme/calendar-arrows.png) no-repeat;
 }
 .ui-datepicker .ui-datepicker-prev {
-    top: 0px;
+    top: -1px;
     left: 0px;
     border-right: 1px solid #c2dca2;
     -webkit-box-shadow: inset -1px 0 0 #B800B8;
@@ -423,7 +423,7 @@ button.ui-button::-moz-focus-inner {
     box-shadow: inset -1px 0 0 #B800B8;
 }
 .ui-datepicker .ui-datepicker-next {
-    top: 0px;
+    top: -1px;
     right: 0px;
     border-left: 1px solid #B800B8;
     -webkit-box-shadow: inset 1px 0 0 #c2dca2;

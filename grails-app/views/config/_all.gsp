@@ -33,7 +33,7 @@ You may download the latest source from webdataconsulting.github.io.
 --%>
 
 <div class="table-box">
-    <table id="users" cellspacing="0" cellpadding="0">
+    <table id="example" cellspacing="0" cellpadding="0">
         <thead>
             <tr>
                 <th><g:message code="preference.th.type"/></th>
@@ -44,14 +44,14 @@ You may download the latest source from webdataconsulting.github.io.
         <tbody>
             <g:each var="type" in="${preferenceTypes}">
                 <tr id="type-${type.id}" class="${selected?.id == type.id ? 'active' : ''}">
-                    <td>
+                    <td class="large">
                         <g:remoteLink class="cell double" action="show" id="${type.id}" before="register(this);" onSuccess="render(data, next); \$('html, body').animate({ scrollTop: 0 }, 'fast');">
                             <strong>${StringUtils.abbreviate(StringEscapeUtils.escapeHtml(type.getDescription(session['language_id'])), 50)}</strong>
                             <em>Id: ${type.id}</em>
                         </g:remoteLink>
                     </td>
 
-                    <td class="medium2">
+                    <td class="medium">
                         <g:remoteLink class="cell" action="show" id="${type.id}" before="register(this);" onSuccess="render(data, next);">
 
                             <g:if test="${type.preferences}">

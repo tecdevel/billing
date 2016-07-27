@@ -21,13 +21,14 @@
  This source was modified by Web Data Technologies LLP (www.webdatatechnologies.in) since 15 Nov 2015.
  You may download the latest source from webdataconsulting.github.io.
 --}%
-				<%@ page import="com.sapienter.jbilling.common.Util" %>
-                <ul class="list">
+
+                <%@ page import="com.sapienter.jbilling.common.Util" %>
+
                 	
                 	<!-- Menu items, 'All' being first, remaining in alphabetical order -->
                     <li class="${pageProperty(name: 'page.menu.item') == 'all' ? 'active' : ''}"> <!-- All -->
                         <g:link controller="config">
-                            <g:message code="configuration.menu.all"/>
+                            <g:message code="configuration.menu.pref"/>
                         </g:link>
                     </li>
                     <li class="${pageProperty(name: 'page.menu.item') == 'accountType' ? 'active' : ''}"><!-- Account Types -->
@@ -151,4 +152,4 @@
                         </g:link>
                     </li>
                     
-                </ul>
+

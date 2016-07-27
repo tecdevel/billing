@@ -31,7 +31,7 @@
 --%>
 
 <!-- breadcrumbs -->
-<div id="breadcrumbs" class="breadcrumbs top-hold">
+<div id="breadcrumbs" class="page-bar">
     <div id="spinner" style="display: none;">
         <img src="${resource(dir:'images', file:'spinner.gif')}" alt="loading..." />
     </div>
@@ -41,12 +41,12 @@
         jQuery(document).ajaxStop(function() {$("#spinner").hide('fade');})
     </script>
 
-    <ul>
+    <ul class="page-breadcrumb">
         <g:each var="crumb" in="${session['breadcrumbs'].reverse()}">
             <li>
                 <g:link controller="${crumb.controller}" action="${crumb.action}" id="${crumb.objectId}">
                     <g:message code="${crumb.messageCode}" args="[crumb.description ?: crumb.objectId]"/>
-                </g:link>
+                </g:link><i class="fa fa-angle-right"></i>
             </li>
         </g:each>
 

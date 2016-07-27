@@ -52,7 +52,7 @@ import java.util.*;
         pkColumnName = "name",
         valueColumnName = "next_id",
         pkColumnValue = "item_type",
-        allocationSize = 100
+        allocationSize = 10
 )
 @Table(name = "item_type")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
