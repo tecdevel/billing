@@ -123,6 +123,11 @@ class OrderStatusController {
 
     def edit (){
         def orderStatus = params.id ? OrderStatusDTO.get(params.int('id')) : null
+		
+	def crumbName = params.id ? 'update' : 'create'
+	def crumbDescription = params.id ? orderStatus?.getDescription(session['language_id']) : null
+	breadcrumbService.addBreadcrumb(controllerName, actionName, crumbName, params.int('id'), crumbDescription)
+		
         render template: 'edit', model: [orderStatusWS: orderStatus]
     }
 
